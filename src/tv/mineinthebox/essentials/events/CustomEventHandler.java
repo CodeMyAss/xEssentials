@@ -12,6 +12,7 @@ import tv.mineinthebox.essentials.events.customEvents.CallEssentialsPlayerMoveEv
 import tv.mineinthebox.essentials.events.customEvents.CallMojangStatus;
 import tv.mineinthebox.essentials.events.customEvents.CallPlayerChatSmilleyEvent;
 import tv.mineinthebox.essentials.events.customEvents.CallPlayerHighLightEvent;
+import tv.mineinthebox.essentials.events.customEvents.CallPlayerOpenBookEvent;
 import tv.mineinthebox.essentials.events.customEvents.CallRssFeedEvent;
 
 public class CustomEventHandler {
@@ -20,6 +21,7 @@ public class CustomEventHandler {
 		//this will loadup our custom movement for players
 		setListener(new CallChunkMoveEvent());
 		setListener(new CallEssentialsPlayerMoveEvent());
+		setListener(new CallPlayerOpenBookEvent());
 		CallAfkSchedulerEvent scheduler = new CallAfkSchedulerEvent();
 		setListener(scheduler);
 		scheduler.onStartAfkScheduler();

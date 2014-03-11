@@ -8,6 +8,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+
 import tv.mineinthebox.essentials.xEssentials;
 import tv.mineinthebox.essentials.events.customEvents.PlayerOpenBookEvent;
 import tv.mineinthebox.essentials.instances.xEssentialsOfflinePlayer;
@@ -37,6 +39,13 @@ public class AntiAddvertiseEvent implements Listener {
 					}
 				}
 			}
+		}
+	}
+	
+	@EventHandler
+	public void onPreprocess(PlayerCommandPreprocessEvent e) {
+		if(e.getMessage().startsWith("/")) {
+			e.setMessage(ipcheck(e.getMessage(), xEssentials.get(e.getPlayer().getName())));
 		}
 	}
 	

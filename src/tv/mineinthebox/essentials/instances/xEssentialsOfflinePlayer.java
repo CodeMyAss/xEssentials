@@ -115,11 +115,14 @@ public class xEssentialsOfflinePlayer {
 
 	public boolean isGreyListed() {
 		update();
-		if(!con.getBoolean("isDefault")) {
-			return true;
-		} else {
-			return false;
+		if(con.contains("isDefault")) {
+			if(!con.getBoolean("isDefault")) {
+				return true;
+			} else {
+				return false;
+			}
 		}
+		return true;
 	}
 
 	public void setGreyListed(Boolean bol) {
@@ -827,7 +830,7 @@ public class xEssentialsOfflinePlayer {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param set the silence state of the player
@@ -844,7 +847,7 @@ public class xEssentialsOfflinePlayer {
 		}
 		update();
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param returns true whenever the player has silenced the chat
@@ -857,7 +860,7 @@ public class xEssentialsOfflinePlayer {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param add a player to this players ignore list, this means that this player ignores the chat by the called name.
@@ -887,7 +890,7 @@ public class xEssentialsOfflinePlayer {
 			update();	
 		}
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param get a list of all player names which get ignored by this player
@@ -896,7 +899,7 @@ public class xEssentialsOfflinePlayer {
 	public List<String> getIgnoredPlayers() {
 		return con.getStringList("IgnoredPlayers");
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param returns true whenever the player ignores a player
@@ -909,7 +912,7 @@ public class xEssentialsOfflinePlayer {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param remove a player from the ignore list
@@ -938,7 +941,7 @@ public class xEssentialsOfflinePlayer {
 			update();
 		}
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param returns true whenever the player is freezed
@@ -950,7 +953,7 @@ public class xEssentialsOfflinePlayer {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param freezes the player or unfreeze the player
@@ -966,14 +969,14 @@ public class xEssentialsOfflinePlayer {
 		}
 		update();
 	}
-	
+
 	public boolean isTrollMode() {
 		if(con.contains("isTrollmode")) {
 			return con.getBoolean("isTrollmode");
 		}
 		return false;
 	}
-	
+
 	public void setTrollMode(Boolean bol) {
 		con.set("isTrollmode", bol);
 		try {
@@ -984,7 +987,7 @@ public class xEssentialsOfflinePlayer {
 		}
 		update();
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param returns true if the player has command restrictions
@@ -1000,7 +1003,7 @@ public class xEssentialsOfflinePlayer {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param command - the command+args which needs to be disabled
@@ -1033,7 +1036,7 @@ public class xEssentialsOfflinePlayer {
 			update();
 		}
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param returns a list of all command restrictions for this player
@@ -1048,7 +1051,7 @@ public class xEssentialsOfflinePlayer {
 		}
 		return restricts.toArray(new RestrictedCommand[restricts.size()]);
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param check if the player has a restriction inside the list, make sure to use hasCommandRestrictions() first.
@@ -1062,7 +1065,7 @@ public class xEssentialsOfflinePlayer {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param remove the command restriction

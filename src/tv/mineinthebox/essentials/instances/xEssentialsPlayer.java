@@ -110,11 +110,14 @@ public class xEssentialsPlayer {
 	 */
 	public boolean isGreyListed() {
 		update();
-		if(!con.getBoolean("isDefault")) {
-			return true;
-		} else {
-			return false;
+		if(con.contains("isDefault")) {
+			if(!con.getBoolean("isDefault")) {
+				return true;
+			} else {
+				return false;
+			}
 		}
+		return true;
 	}
 
 	/**
@@ -1525,7 +1528,7 @@ public class xEssentialsPlayer {
 		update();
 		return xEssentials.getOfflinePlayer(con.getString("isCompass.follow"));
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param set the silence state of the player
@@ -1542,7 +1545,7 @@ public class xEssentialsPlayer {
 		}
 		update();
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param returns true whenever the player has silenced the chat
@@ -1555,7 +1558,7 @@ public class xEssentialsPlayer {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param add a player to this players ignore list, this means that this player ignores the chat by the called name.
@@ -1585,7 +1588,7 @@ public class xEssentialsPlayer {
 			update();	
 		}
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param get a list of all player names which get ignored by this player
@@ -1594,7 +1597,7 @@ public class xEssentialsPlayer {
 	public List<String> getIgnoredPlayers() {
 		return con.getStringList("IgnoredPlayers");
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param returns true whenever the player ignores a player
@@ -1607,7 +1610,7 @@ public class xEssentialsPlayer {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param remove a player from the ignore list
@@ -1636,7 +1639,7 @@ public class xEssentialsPlayer {
 			update();
 		}
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param returns true whenever the player is freezed
@@ -1648,7 +1651,7 @@ public class xEssentialsPlayer {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param freezes the player or unfreeze the player
@@ -1664,7 +1667,7 @@ public class xEssentialsPlayer {
 		}
 		update();
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param returns true whenever a player has trollmode enabled!
@@ -1676,7 +1679,7 @@ public class xEssentialsPlayer {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param enabled trollmode or disable trollmode
@@ -1692,7 +1695,7 @@ public class xEssentialsPlayer {
 		}
 		update();
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param returns true if the player has command restrictions
@@ -1708,7 +1711,7 @@ public class xEssentialsPlayer {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param command - the command+args which needs to be disabled
@@ -1741,7 +1744,7 @@ public class xEssentialsPlayer {
 			update();
 		}
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param returns a list of all command restrictions for this player
@@ -1756,7 +1759,7 @@ public class xEssentialsPlayer {
 		}
 		return restricts;
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param check if the player has a restriction inside the list, make sure to use hasCommandRestrictions() first.
@@ -1770,7 +1773,7 @@ public class xEssentialsPlayer {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param remove the command restriction

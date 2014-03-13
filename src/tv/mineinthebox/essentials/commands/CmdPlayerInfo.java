@@ -1,5 +1,8 @@
 package tv.mineinthebox.essentials.commands;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -13,6 +16,30 @@ import tv.mineinthebox.essentials.instances.xEssentialsOfflinePlayer;
 import tv.mineinthebox.essentials.utils.AlternateAccount;
 
 public class CmdPlayerInfo {
+	
+	private List<String> getPlayerByName(String p) {
+		List<String> s = new ArrayList<String>();
+		for(xEssentialsOfflinePlayer name : xEssentials.getOfflinePlayers()) {
+			if(name.getUser().toUpperCase().startsWith(p.toUpperCase())) {
+				s.add(name.getUser());
+			}
+		}
+		return s;
+	}
+	
+	public List<String> onTabComplete(CommandSender sender, Command cmd, String[] args) {
+		if(cmd.getName().equalsIgnoreCase("playerinfo")) {
+			if(args.length == 1) {
+				if(sender.hasPermission(PermissionKey.CMD_PLAYER_INFO.getPermission())) {
+					if(!args[0].equalsIgnoreCase("help")) {
+						List<String> list = getPlayerByName(args[0]);
+						return list;	
+					}
+				}
+			}
+		}
+		return null;
+	}
 	
 	public boolean execute(CommandSender sender, Command cmd, String[] args) {
 		if(cmd.getName().equalsIgnoreCase("playerinfo")) {

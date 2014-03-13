@@ -221,6 +221,9 @@ public class command implements CommandExecutor, TabCompleter {
 		} else if(cmd.getName().equalsIgnoreCase("freeze")) {
 			CmdFreeze freeze = new CmdFreeze();
 			return freeze.onTabComplete(sender, cmd, args);
+		} else if(cmd.getName().equalsIgnoreCase("playerinfo")) {
+			CmdPlayerInfo info = new CmdPlayerInfo();
+			return info.onTabComplete(sender, cmd, args);
 		}
 		return null;
 	}

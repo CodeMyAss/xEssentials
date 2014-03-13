@@ -65,6 +65,10 @@ public class CmdHome {
 							}
 						}
 					}
+				} else {
+					if(sender.hasPermission(PermissionKey.IS_ADMIN.getPermission())) {
+						return getPlayers(args[1]);
+					}
 				}
 			}
 		}
@@ -228,9 +232,8 @@ public class CmdHome {
 							if(xEssentials.isEssentialsPlayer(args[1])) {
 								xEssentialsOfflinePlayer off = xEssentials.getOfflinePlayer(args[1]);
 								if(off.hasHome()) {
-									xEssentialsPlayer xp = xEssentials.get(sender.getName());
 									List<String> list = new ArrayList<String>();
-									for(Home home : xp.getAllHomes()) {
+									for(Home home : off.getAllHomes()) {
 										list.add(home.getHomeName());
 									}
 									String[] homes = list.toArray(new String[list.size()]);

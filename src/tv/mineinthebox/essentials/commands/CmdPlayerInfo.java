@@ -55,6 +55,7 @@ public class CmdPlayerInfo {
 						if(xEssentials.isEssentialsPlayer(args[0])) {
 							xEssentialsOfflinePlayer off = xEssentials.getOfflinePlayer(args[0]);
 							sender.sendMessage(ChatColor.GOLD + ".oO___[showing information about " + off.getUser() + "]___Oo.");
+							sender.sendMessage(ChatColor.GRAY + "file name: " + ChatColor.GREEN + off.getUniqueId()+".yml");
 							if(Configuration.getGrayListConfig().isEnabled()) {
 								sender.sendMessage(ChatColor.GRAY + "is greylisted: " + off.isGreyListed());
 							}

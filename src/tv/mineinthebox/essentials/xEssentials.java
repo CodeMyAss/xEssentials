@@ -44,7 +44,7 @@ public class xEssentials extends JavaPlugin {
 		Handler.start();
 		customhandler.startCustomEvents();
 		if(Bukkit.getOnlinePlayers().length > 0) {
-			Configuration.reloadConfiguration();
+			reloadPlayerBase();
 		}
 		for(String cmd : cmdlist.getAllCommands) {
 			getCommand(cmd).setExecutor(new command());	

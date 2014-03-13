@@ -185,4 +185,12 @@
 		<developerConnection>scm:git:ssh://git@github.com/xize/xEssentials.git</developerConnection>
 	</scm>
 	<version>3.1</version>
+	<organization>
+		<name>xEssentials</name>
+		<url>https://github.com/xEssentials</url>
+	</organization>
+	<ciManagement>
+		<system>jenkins</system>
+		<url>http://ci.mineinthebox.tv:8080/</url>
+	</ciManagement>
 </project>

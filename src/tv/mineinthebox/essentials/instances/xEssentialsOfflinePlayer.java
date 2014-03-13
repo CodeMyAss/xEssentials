@@ -477,15 +477,13 @@ public class xEssentialsOfflinePlayer {
 	}
 
 	/**
-	 * 
 	 * @author xize
 	 * @param get the Unique ID of this player
 	 * @return Long
-	 * 
 	 */
-	public Long getUniqueId() {
+	public String getUniqueId() {
 		update();
-		return con.getLong("uniqueID");
+		return f.getName().replace(".yml", "");
 	}
 
 	/**

@@ -755,12 +755,10 @@ public class xEssentialsPlayer {
 	 * 
 	 * @author xize
 	 * @param get the Unique ID of this player
-	 * @deprecated
 	 * @return Long
-	 * 
 	 */
-	public Long getUniqueId() {
-		return con.getLong("uniqueID");
+	public String getUniqueId() {
+		return f.getName().replace(".yml", "");
 	}
 
 	/**

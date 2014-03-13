@@ -14,7 +14,7 @@ public class CallPlayerOpenBookEvent implements Listener {
 	public void onCallPlayerOpenBookEvent(PlayerInteractEvent e) {
 		if(e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
 			if(e.getItem() != null) {
-				if(e.getItem().getType() == Material.WRITTEN_BOOK || e.getItem().getType() == Material.BOOK_AND_QUILL) {
+				if(e.getItem().getType() == Material.WRITTEN_BOOK) {
 					BookMeta meta = (BookMeta)e.getItem().getItemMeta();
 					Bukkit.getPluginManager().callEvent(new PlayerOpenBookEvent(e.getPlayer(), e.getItem(), meta));
 				}

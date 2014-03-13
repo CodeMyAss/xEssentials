@@ -45,7 +45,7 @@ public class CmdSethome {
 									if(xp.isStaff()) {
 										xp.setHome(args[0]);
 										sender.sendMessage(ChatColor.GREEN + "you successfully set your new custom home!");
-									} else if(!(xp.getAmountOfHomes() > Configuration.getPlayerConfig().getMaxHomesAllowed())) {
+									} else if(!(xp.getAmountOfHomes() > (Configuration.getPlayerConfig().getMaxHomesAllowed())-1)) {
 										xp.setHome(args[0]);
 										sender.sendMessage(ChatColor.GREEN + "you successfully set your new custom home!");
 									} else {

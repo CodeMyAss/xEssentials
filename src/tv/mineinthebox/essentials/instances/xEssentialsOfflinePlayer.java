@@ -579,7 +579,7 @@ public class xEssentialsOfflinePlayer {
 	 */
 	public int getAmountOfHomes() {
 		//returns a fixed version for permissions;)
-		return (this.getAllHomes().size()+1);
+		return (this.getAllHomes().size());
 	}
 
 	/**

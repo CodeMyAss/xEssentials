@@ -35,7 +35,7 @@ public class Configuration {
 	//this will used by events and in events without instancing every time a new object this will be painfully awful in PlayerMoveEvent.
 	private static final EnumMap<ConfigEnum, HashMap<String, Object>> configure = new EnumMap<ConfigEnum, HashMap<String, Object>>(ConfigEnum.class);
 	private static List<String> materials = new ArrayList<String>();
-	
+
 	/**
 	 * 
 	 * @author xize
@@ -98,7 +98,7 @@ public class Configuration {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private void createEntityConfig() {
 		try {
 			File f = new File(xEssentials.getPlugin().getDataFolder() + File.separator + "entity.yml");
@@ -125,6 +125,30 @@ public class Configuration {
 					}
 				}
 				con.save(f);
+			} else {
+				//because if the file exist we go check if the entitys are up to date if its not we surely update it.
+				FileConfiguration con = YamlConfiguration.loadConfiguration(f);
+				List<String> entitys = Arrays.asList(con.getConfigurationSection("mobs.allowToSpawn").getKeys(true).toArray(new String[0]));
+				List<String> newentities = new ArrayList<String>();
+				for(EntityType entity : EntityType.values()) {
+					if(entity.isAlive()) {
+						if(entity != EntityType.PLAYER) {
+							newentities.add(serialize_name(entity.name()));
+						}
+					}
+				}
+				if(entitys.size() != newentities.size()) {
+					xEssentials.getPlugin().log("new entities detected!, adding them right now inside the entity config!", LogType.INFO);
+					for(String entity : newentities) {
+						if(!entitys.contains(newentities)) {
+							xEssentials.getPlugin().log("found new entity: " + entity + " adding now to entity.yml", LogType.INFO);
+							con.set("mobs.allowToSpawn."+entity, true);
+						}
+					}
+					con.save(f);
+				} else {
+					xEssentials.getPlugin().log("there where no newer entitys found to be added in entity.yml", LogType.INFO);
+				}
 			}
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -446,7 +470,7 @@ public class Configuration {
 			configure.put(ConfigEnum.BLOCKS, hash);
 		}
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param returns a new list with updated materials against data values
@@ -485,7 +509,7 @@ public class Configuration {
 		}
 		return updatedMaterialList;
 	}
-	
+
 	private static boolean isValidMaterial(String s) {
 		try {
 			Material mat = Material.getMaterial(s.toUpperCase());
@@ -497,7 +521,7 @@ public class Configuration {
 		}
 		return false;
 	}
-	
+
 	private static Boolean isNumberic(String s) {
 		if(s.contains(":")) {
 			String[] split = s.split(":");
@@ -515,7 +539,7 @@ public class Configuration {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param returns a list with Material names, this can be used for auto complete functions in commands
@@ -565,7 +589,7 @@ public class Configuration {
 		GreylistConfig grey = new GreylistConfig();
 		return grey;
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param returns the BlockConfig
@@ -645,7 +669,7 @@ public class Configuration {
 		RulesConfig config = new RulesConfig();
 		return config;
 	}
-	
+
 	public static boolean isSilenceToggled = false;
 
 	public boolean reload() {

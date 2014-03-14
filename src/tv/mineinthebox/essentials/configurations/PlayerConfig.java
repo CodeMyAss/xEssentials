@@ -1,7 +1,7 @@
 package tv.mineinthebox.essentials.configurations;
 
 import tv.mineinthebox.essentials.Configuration;
-import tv.mineinthebox.essentials.enums.ConfigEnum;
+import tv.mineinthebox.essentials.enums.ConfigType;
 
 public class PlayerConfig {
 	
@@ -11,7 +11,7 @@ public class PlayerConfig {
 	 * @return boolean
 	 */
 	public boolean isSeperatedInventorysEnabled() {
-		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigEnum.PLAYER, "useSeperatedInventorys");
+		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigType.PLAYER, "useSeperatedInventorys");
 		return bol;
 	}
 	
@@ -21,7 +21,7 @@ public class PlayerConfig {
 	 * @return boolean
 	 */
 	public boolean isSaveInventoryEnabled() {
-		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigEnum.PLAYER, "savePlayerInventory");
+		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigType.PLAYER, "savePlayerInventory");
 		return bol;
 	}
 	
@@ -31,7 +31,7 @@ public class PlayerConfig {
 	 * @return boolean
 	 */
 	public boolean isGodModeInAfkEnabled() {
-		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigEnum.PLAYER, "godmodeInAfk");
+		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigType.PLAYER, "godmodeInAfk");
 		return bol;
 	}
 	
@@ -42,7 +42,7 @@ public class PlayerConfig {
 	 * @deprecated
 	 */
 	public boolean isSteveHurtSoundEnabled() {
-		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigEnum.PLAYER, "steve-hurt-sound");
+		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigType.PLAYER, "steve-hurt-sound");
 		return bol;
 	}
 	
@@ -52,7 +52,7 @@ public class PlayerConfig {
 	 * @return Boolean
 	 */
 	public boolean isHungerCancelled() {
-		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigEnum.PLAYER, "hunger");
+		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigType.PLAYER, "hunger");
 		return bol;
 	}
 	
@@ -62,7 +62,7 @@ public class PlayerConfig {
 	 * @return Boolean
 	 */
 	public boolean isKeepInventoryOnDeathEnabled() {
-		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigEnum.PLAYER, "keepinv");
+		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigType.PLAYER, "keepinv");
 		return bol;
 	}
 	
@@ -72,7 +72,7 @@ public class PlayerConfig {
 	 * @return boolean
 	 */
 	public boolean isCanEntityStealHatOnPlayersDeath() {
-		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigEnum.PLAYER, "entitysCanUseHeadOnPlayerDeath");
+		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigType.PLAYER, "entitysCanUseHeadOnPlayerDeath");
 		return bol;
 	}
 	
@@ -82,7 +82,7 @@ public class PlayerConfig {
 	 * @return boolean
 	 */
 	public boolean isRealisticGlassEnabled() {
-		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigEnum.PLAYER, "enableRealisticGlass");
+		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigType.PLAYER, "enableRealisticGlass");
 		return bol;
 	}
 	
@@ -92,7 +92,7 @@ public class PlayerConfig {
 	 * @return boolean
 	 */
 	public boolean canUseMoreHomes() {
-		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigEnum.PLAYER, "canDefaultUseMoreHomes");
+		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigType.PLAYER, "canDefaultUseMoreHomes");
 		return bol;
 	}
 	
@@ -102,7 +102,7 @@ public class PlayerConfig {
 	 * @return int
 	 */
 	public int getMaxHomesAllowed() {
-		int i = (Integer) Configuration.getConfigValue(ConfigEnum.PLAYER, "maxHomes");
+		int i = (Integer) Configuration.getConfigValue(ConfigType.PLAYER, "maxHomes");
 		return i;
 	}
 	
@@ -112,7 +112,7 @@ public class PlayerConfig {
 	 * @return Boolean
 	 */
 	public boolean isPortalsDisabled() {
-		return (Boolean) Configuration.getConfigValue(ConfigEnum.PLAYER, "DisablePortals");
+		return (Boolean) Configuration.getConfigValue(ConfigType.PLAYER, "DisablePortals");
 	}
 	
 	/**
@@ -121,7 +121,7 @@ public class PlayerConfig {
 	 * @return Boolean
 	 */
 	public boolean isCustomPortalSizeDisabled() {
-		return (Boolean) Configuration.getConfigValue(ConfigEnum.PLAYER, "DisableCustomSize");
+		return (Boolean) Configuration.getConfigValue(ConfigType.PLAYER, "DisableCustomSize");
 	}
 	
 	/**
@@ -130,7 +130,7 @@ public class PlayerConfig {
 	 * @return boolean
 	 */
 	public boolean isBroadcastAchievementsEnabled() {
-		return (Boolean) Configuration.getConfigValue(ConfigEnum.PLAYER, "PlayerAchievements");
+		return (Boolean) Configuration.getConfigValue(ConfigType.PLAYER, "PlayerAchievements");
 	}
 	
 	/**
@@ -139,7 +139,7 @@ public class PlayerConfig {
 	 * @return booelan
 	 */
 	public boolean isAutoAnvilEnabled() {
-		return (Boolean) Configuration.getConfigValue(ConfigEnum.PLAYER, "anvil");
+		return (Boolean) Configuration.getConfigValue(ConfigType.PLAYER, "anvil");
 	}
 
 }

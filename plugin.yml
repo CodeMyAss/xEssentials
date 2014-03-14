@@ -239,3 +239,11 @@ commands:
      description: shows the player info of a player
      aliases: [info]
      permission: xEssentials.command.playerinfo
+  kit:
+     description: get a kit
+     aliases: []
+     permission: xEssentials.command.kit
+  kits:
+     description: shows a list of kits
+     aliases: []
+     permission: xEssentials.command.kits

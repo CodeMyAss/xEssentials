@@ -1,6 +1,6 @@
 package tv.mineinthebox.essentials.enums;
 
-public enum ConfigEnum {
+public enum ConfigType {
 	ENTITY,
 	PLAYER,
 	BAN,
@@ -10,5 +10,6 @@ public enum ConfigEnum {
 	PVP,
 	RULES,
 	GREYLIST,
-	BLOCKS
+	BLOCKS,
+	KITS
 }

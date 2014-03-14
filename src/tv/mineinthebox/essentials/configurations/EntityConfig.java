@@ -3,7 +3,7 @@ package tv.mineinthebox.essentials.configurations;
 import java.util.HashMap;
 
 import tv.mineinthebox.essentials.Configuration;
-import tv.mineinthebox.essentials.enums.ConfigEnum;
+import tv.mineinthebox.essentials.enums.ConfigType;
 
 
 public class EntityConfig {
@@ -14,7 +14,7 @@ public class EntityConfig {
 	 * @return boolean
 	 */
 	public boolean isWeatherDisabled() {
-		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigEnum.ENTITY, "disableWeather");
+		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigType.ENTITY, "disableWeather");
 		return bol;
 	}
 	
@@ -24,7 +24,7 @@ public class EntityConfig {
 	 * @return boolean
 	 */
 	public boolean isFireSpreadDisabled() {
-		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigEnum.ENTITY, "disableFirespread");
+		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigType.ENTITY, "disableFirespread");
 		return bol;
 	}
 	
@@ -34,7 +34,7 @@ public class EntityConfig {
 	 * @return boolean
 	 */
 	public boolean isExplosionsDisabled() {
-		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigEnum.ENTITY, "disableExplosion");
+		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigType.ENTITY, "disableExplosion");
 		return bol;
 	}
 	
@@ -44,7 +44,7 @@ public class EntityConfig {
 	 * @return boolean
 	 */
 	public boolean isFireworksDisabled() {
-		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigEnum.ENTITY, "disableFirework");
+		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigType.ENTITY, "disableFirework");
 		return bol;
 	}
 	
@@ -54,7 +54,7 @@ public class EntityConfig {
 	 * @return boolean
 	 */
 	public boolean isWitherGriefDisabled() {
-		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigEnum.ENTITY, "disableWitherGrief");
+		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigType.ENTITY, "disableWitherGrief");
 		return bol;
 	}
 	
@@ -64,7 +64,7 @@ public class EntityConfig {
 	 * @return boolean
 	 */
 	public boolean isEnderManGriefDisabled() {
-		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigEnum.ENTITY, "disableEndermanGrief");
+		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigType.ENTITY, "disableEndermanGrief");
 		return bol;
 	}
 	
@@ -74,7 +74,7 @@ public class EntityConfig {
 	 * @return boolean
 	 */
 	public boolean isEnderDragonGriefDisabled() {
-		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigEnum.ENTITY, "disableEnderdragonGrief");
+		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigType.ENTITY, "disableEnderdragonGrief");
 		return bol;
 	}
 	
@@ -84,7 +84,7 @@ public class EntityConfig {
 	 * @return boolean
 	 */
 	public boolean isCustomZombieAggroRangeEnabled() {
-		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigEnum.ENTITY, "zombieCustomAggroEnable");
+		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigType.ENTITY, "zombieCustomAggroEnable");
 		return bol;
 	}
 	
@@ -94,7 +94,7 @@ public class EntityConfig {
 	 * @return Integer
 	 */
 	public Integer getCustomZombieAggroRange() {
-		int number = (Integer) Configuration.getConfigValue(ConfigEnum.ENTITY, "zombieCustomAggroRange");
+		int number = (Integer) Configuration.getConfigValue(ConfigType.ENTITY, "zombieCustomAggroRange");
 		return number;
 	}
 	
@@ -104,7 +104,7 @@ public class EntityConfig {
 	 * @return boolean
 	 */
 	public boolean isSpawnEggsDisabled() {
-		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigEnum.ENTITY, "disableSpawnEggs");
+		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigType.ENTITY, "disableSpawnEggs");
 		return bol;
 	}
 	
@@ -114,7 +114,7 @@ public class EntityConfig {
 	 * @return boolean
 	 */
 	public boolean isLoggingSpawnEggsEnabled() {
-		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigEnum.ENTITY, "logSpawnEggs");
+		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigType.ENTITY, "logSpawnEggs");
 		return bol;
 	}
 	
@@ -124,7 +124,7 @@ public class EntityConfig {
 	 * @return boolean
 	 */
 	public boolean isCriticalsEnabled() {
-		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigEnum.ENTITY, "useCriticals");
+		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigType.ENTITY, "useCriticals");
 		return bol;
 	}
 	
@@ -134,7 +134,7 @@ public class EntityConfig {
 	 * @return boolean
 	 */
 	public boolean isChunkProtectionEnabled() {
-		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigEnum.ENTITY, "AntiFireball");
+		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigType.ENTITY, "AntiFireball");
 		return bol;
 	}
 	
@@ -145,7 +145,7 @@ public class EntityConfig {
 	 */
 	@SuppressWarnings("unchecked")
 	public HashMap<String, Boolean> getEntitys() {
-		return (HashMap<String, Boolean>) Configuration.getConfigValue(ConfigEnum.ENTITY, "allowToSpawn");
+		return (HashMap<String, Boolean>) Configuration.getConfigValue(ConfigType.ENTITY, "allowToSpawn");
 	}
 
 }

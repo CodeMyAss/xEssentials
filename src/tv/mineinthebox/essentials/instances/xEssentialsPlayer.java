@@ -1789,6 +1789,59 @@ public class xEssentialsPlayer {
 		}
 		update();
 	}
+	
+	/**
+	 * @author xize
+	 * @param set the kit cooldown
+	 * @return void
+	 */
+	public void setKitCooldown(Long cooldown) {
+		con.set("kitCooldown", cooldown);
+		try {
+			con.save(f);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		update();
+	}
+	
+	/**
+	 * @author xize
+	 * @param remove the kit cooldown
+	 * @return void
+	 */
+	public void removeKitCoolDown() {
+		con.set("kitCooldown", null);
+		try {
+			con.save(f);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		update();
+	}
+	
+	/**
+	 * @author xize
+	 * @param return the saved cooldown of this player
+	 * @return Long
+	 */
+	public Long getKitCooldown() {
+		return con.getLong("kitCooldown");
+	}
+	
+	/**
+	 * @author xize
+	 * @param returns true whenever the player has the cooldown else false
+	 * @return Boolean
+	 */
+	public Boolean hasKitCooldown() {
+		if(con.contains("kitCooldown")) {
+			return true;
+		}
+		return false;
+	}
 
 	/**
 	 * @author xize

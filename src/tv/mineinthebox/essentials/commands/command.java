@@ -182,6 +182,12 @@ public class command implements CommandExecutor, TabCompleter {
 		} else if(cmd.getName().equalsIgnoreCase("playerinfo")) {
 			CmdPlayerInfo info = new CmdPlayerInfo();
 			return info.execute(sender, cmd, args);
+		} else if(cmd.getName().equalsIgnoreCase("kit")) {
+			CmdKit kit = new CmdKit();
+			return kit.execute(sender, cmd, args);
+		} else if(cmd.getName().equalsIgnoreCase("kits")) {
+			CmdKits kits = new CmdKits();
+			return kits.execute(sender, cmd, args);
 		}
 		return false;
 	}
@@ -224,6 +230,9 @@ public class command implements CommandExecutor, TabCompleter {
 		} else if(cmd.getName().equalsIgnoreCase("playerinfo")) {
 			CmdPlayerInfo info = new CmdPlayerInfo();
 			return info.onTabComplete(sender, cmd, args);
+		} else if(cmd.getName().equalsIgnoreCase("kit")) {
+			CmdKit kit = new CmdKit();
+			return kit.onTabComplete(sender, cmd, args);
 		}
 		return null;
 	}

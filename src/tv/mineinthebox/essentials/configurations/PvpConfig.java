@@ -1,7 +1,7 @@
 package tv.mineinthebox.essentials.configurations;
 
 import tv.mineinthebox.essentials.Configuration;
-import tv.mineinthebox.essentials.enums.ConfigEnum;
+import tv.mineinthebox.essentials.enums.ConfigType;
 
 public class PvpConfig {
 	
@@ -11,7 +11,7 @@ public class PvpConfig {
 	 * @return boolean
 	 */
 	public boolean isPvpDisabled() {
-		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigEnum.PVP, "disablePvp");
+		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigType.PVP, "disablePvp");
 		return bol;
 	}
 	
@@ -21,7 +21,7 @@ public class PvpConfig {
 	 * @return boolean
 	 */
 	public boolean isClientGravesEnabled() {
-		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigEnum.PVP, "createClientSideGraveyard");
+		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigType.PVP, "createClientSideGraveyard");
 		return bol;
 	}
 	
@@ -31,7 +31,7 @@ public class PvpConfig {
 	 * @return boolean
 	 */
 	public boolean isKillBountyEnabled() {
-		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigEnum.PVP, "killBountyEnable");
+		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigType.PVP, "killBountyEnable");
 		return bol;
 	}
 	
@@ -41,7 +41,7 @@ public class PvpConfig {
 	 * @return Double
 	 */
 	public Double getKillBountyPrice() {
-		Double d = (Double) Configuration.getConfigValue(ConfigEnum.PVP, "killBountyEarn");
+		Double d = (Double) Configuration.getConfigValue(ConfigType.PVP, "killBountyEarn");
 		return d;
 	}
 	
@@ -51,7 +51,7 @@ public class PvpConfig {
 	 * @return boolean
 	 */
 	public boolean isReplaceNpcEnabled() {
-		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigEnum.PVP, "npcReplaceLoggers");
+		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigType.PVP, "npcReplaceLoggers");
 		return bol;
 	}
 

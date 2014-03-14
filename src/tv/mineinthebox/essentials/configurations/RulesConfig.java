@@ -5,7 +5,7 @@ import java.util.List;
 import org.bukkit.ChatColor;
 
 import tv.mineinthebox.essentials.Configuration;
-import tv.mineinthebox.essentials.enums.ConfigEnum;
+import tv.mineinthebox.essentials.enums.ConfigType;
 
 public class RulesConfig {
 
@@ -15,7 +15,7 @@ public class RulesConfig {
 	 * @return String
 	 */
 	public String getPrefix() {
-		String s = ChatColor.translateAlternateColorCodes('&', (String) Configuration.getConfigValue(ConfigEnum.RULES, "prefix"));
+		String s = ChatColor.translateAlternateColorCodes('&', (String) Configuration.getConfigValue(ConfigType.RULES, "prefix"));
 		return s;
 	}
 	
@@ -25,7 +25,7 @@ public class RulesConfig {
 	 * @return String
 	 */
 	public String getSuffix() {
-		String s = ChatColor.translateAlternateColorCodes('&', (String) Configuration.getConfigValue(ConfigEnum.RULES, "suffix"));
+		String s = ChatColor.translateAlternateColorCodes('&', (String) Configuration.getConfigValue(ConfigType.RULES, "suffix"));
 		return s;
 	}
 	
@@ -36,7 +36,7 @@ public class RulesConfig {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<String> getRules() {
-		List<String> list = (List<String>)Configuration.getConfigValue(ConfigEnum.RULES, "rules");
+		List<String> list = (List<String>)Configuration.getConfigValue(ConfigType.RULES, "rules");
 		return list;
 	}
 }

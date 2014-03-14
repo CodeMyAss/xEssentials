@@ -59,7 +59,9 @@ public class CommandList {
 			"freeze",
 			"trollmode",
 			"commandrestrict",
-			"playerinfo"
+			"playerinfo",
+			"kit",
+			"kits"
 	};
 
 }

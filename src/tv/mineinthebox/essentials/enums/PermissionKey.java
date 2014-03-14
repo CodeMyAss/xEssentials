@@ -8,6 +8,8 @@ public enum PermissionKey {
 	CMD_AFK("xEssentials.command.afk"),
 	CMD_BAN("xEssentials.command.ban"),
 	CMD_GREYLIST("xEssentials.command.greylist"),
+	CMD_KIT("xEssentials.command.kit"),
+	CMD_KITS("xEssentials.command.kits"),
 	CMD_CHECK("xEssentials.command.check"),
 	CMD_SILENCE("xEssentials.command.silence"),
 	CMD_BROADCAST("xEssentials.command.broadcast"),

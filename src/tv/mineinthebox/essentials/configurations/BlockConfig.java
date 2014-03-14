@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.bukkit.ChatColor;
 import tv.mineinthebox.essentials.Configuration;
-import tv.mineinthebox.essentials.enums.ConfigEnum;
+import tv.mineinthebox.essentials.enums.ConfigType;
 
 public class BlockConfig {
 	
@@ -14,7 +14,7 @@ public class BlockConfig {
 	 * @return Boolean
 	 */
 	public boolean isBedrockPlaceDisabled() {
-		return (Boolean) Configuration.getConfigValue(ConfigEnum.BLOCKS, "DisableBedrockPlace");
+		return (Boolean) Configuration.getConfigValue(ConfigType.BLOCKS, "DisableBedrockPlace");
 	}
 	
 	/**
@@ -23,7 +23,7 @@ public class BlockConfig {
 	 * @return Boolean
 	 */
 	public boolean isBedrockBreakDisabled() {
-		return (Boolean) Configuration.getConfigValue(ConfigEnum.BLOCKS, "DisableBedrockBreak");
+		return (Boolean) Configuration.getConfigValue(ConfigType.BLOCKS, "DisableBedrockBreak");
 	}
 	
 	/**
@@ -32,7 +32,7 @@ public class BlockConfig {
 	 * @return Boolean
 	 */
 	public boolean isNotifyOnBreakEnabled() {
-		return (Boolean) Configuration.getConfigValue(ConfigEnum.BLOCKS, "NotifyOnBreak");
+		return (Boolean) Configuration.getConfigValue(ConfigType.BLOCKS, "NotifyOnBreak");
 	}
 	
 	/**
@@ -41,7 +41,7 @@ public class BlockConfig {
 	 * @return String
 	 */
 	public String getNotifyOnBreakMessage() {
-		return ChatColor.translateAlternateColorCodes('&', (String)Configuration.getConfigValue(ConfigEnum.BLOCKS, "NotifyOnBreakMessage"));
+		return ChatColor.translateAlternateColorCodes('&', (String)Configuration.getConfigValue(ConfigType.BLOCKS, "NotifyOnBreakMessage"));
 	}
 	
 	/**
@@ -51,7 +51,7 @@ public class BlockConfig {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<String> getBlocksFromNotify() {
-		return (List<String>) Configuration.getConfigValue(ConfigEnum.BLOCKS, "NotifyOnBreakBlocks");
+		return (List<String>) Configuration.getConfigValue(ConfigType.BLOCKS, "NotifyOnBreakBlocks");
 	}
 	
 	/**
@@ -60,7 +60,7 @@ public class BlockConfig {
 	 * @return Boolean
 	 */
 	public boolean isNotifyOnConsumeEnabled() {
-		return (Boolean) Configuration.getConfigValue(ConfigEnum.BLOCKS, "NotifyOnItemUse");
+		return (Boolean) Configuration.getConfigValue(ConfigType.BLOCKS, "NotifyOnItemUse");
 	}
 	
 	/**
@@ -69,7 +69,7 @@ public class BlockConfig {
 	 * @return String
 	 */
 	public String getNotifyOnConsumeMessage() {
-		return ChatColor.translateAlternateColorCodes('&', (String) Configuration.getConfigValue(ConfigEnum.BLOCKS, "NotifyOnItemUseMessage"));
+		return ChatColor.translateAlternateColorCodes('&', (String) Configuration.getConfigValue(ConfigType.BLOCKS, "NotifyOnItemUseMessage"));
 	}
 	
 	/**
@@ -79,7 +79,7 @@ public class BlockConfig {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<String> getConsumedItemsFromNotify() {
-		return (List<String>) Configuration.getConfigValue(ConfigEnum.BLOCKS, "NotifyOnItemUseItems");
+		return (List<String>) Configuration.getConfigValue(ConfigType.BLOCKS, "NotifyOnItemUseItems");
 	}
 	
 	/**
@@ -88,7 +88,7 @@ public class BlockConfig {
 	 * @return Boolean
 	 */
 	public boolean isBlockBlacklistEnabled() {
-		return (Boolean) Configuration.getConfigValue(ConfigEnum.BLOCKS, "isBlockBlackListEnabled");
+		return (Boolean) Configuration.getConfigValue(ConfigType.BLOCKS, "isBlockBlackListEnabled");
 	}
 	
 	/**
@@ -98,7 +98,7 @@ public class BlockConfig {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<String> getBlockBlackList() {
-		return (List<String>)Configuration.getConfigValue(ConfigEnum.BLOCKS, "getBlockBlacklist");
+		return (List<String>)Configuration.getConfigValue(ConfigType.BLOCKS, "getBlockBlacklist");
 	}
 	
 	/**
@@ -107,7 +107,7 @@ public class BlockConfig {
 	 * @return Boolean
 	 */
 	public boolean isItemBlacklistEnabled() {
-		return (Boolean) Configuration.getConfigValue(ConfigEnum.BLOCKS, "getItemBlackListEnabled");
+		return (Boolean) Configuration.getConfigValue(ConfigType.BLOCKS, "getItemBlackListEnabled");
 	}
 	
 	/**
@@ -117,7 +117,7 @@ public class BlockConfig {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<String> getItemBlackList() {
-		return (List<String>)Configuration.getConfigValue(ConfigEnum.BLOCKS, "getItemBlacklist");
+		return (List<String>)Configuration.getConfigValue(ConfigType.BLOCKS, "getItemBlacklist");
 	}
 
 }

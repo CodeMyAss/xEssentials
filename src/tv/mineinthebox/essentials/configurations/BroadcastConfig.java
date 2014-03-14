@@ -5,7 +5,7 @@ import java.util.List;
 import org.bukkit.ChatColor;
 
 import tv.mineinthebox.essentials.Configuration;
-import tv.mineinthebox.essentials.enums.ConfigEnum;
+import tv.mineinthebox.essentials.enums.ConfigType;
 
 public class BroadcastConfig {
 	
@@ -17,7 +17,7 @@ public class BroadcastConfig {
 	 * 
 	 */
 	public boolean isBroadcastEnabled() {
-		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigEnum.BROADCAST, "enable");
+		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigType.BROADCAST, "enable");
 		return bol;
 	}
 	
@@ -29,7 +29,7 @@ public class BroadcastConfig {
 	 * 
 	 */
 	public String getPrefix() {
-		String s = ChatColor.translateAlternateColorCodes('&', (String)Configuration.getConfigValue(ConfigEnum.BROADCAST, "prefix"));
+		String s = ChatColor.translateAlternateColorCodes('&', (String)Configuration.getConfigValue(ConfigType.BROADCAST, "prefix"));
 		return s;
 	}
 	
@@ -41,7 +41,7 @@ public class BroadcastConfig {
 	 * 
 	 */
 	public String getSuffix() {
-		String s = ChatColor.translateAlternateColorCodes('&', (String)Configuration.getConfigValue(ConfigEnum.BROADCAST, "suffix"));
+		String s = ChatColor.translateAlternateColorCodes('&', (String)Configuration.getConfigValue(ConfigType.BROADCAST, "suffix"));
 		return s;
 	}
 	
@@ -54,7 +54,7 @@ public class BroadcastConfig {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<String> getMessages() {
-		List<String> list = (List<String>)Configuration.getConfigValue(ConfigEnum.BROADCAST, "messages");
+		List<String> list = (List<String>)Configuration.getConfigValue(ConfigType.BROADCAST, "messages");
 		return list;
 	}
 

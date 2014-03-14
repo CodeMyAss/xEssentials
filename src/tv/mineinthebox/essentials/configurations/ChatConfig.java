@@ -3,7 +3,7 @@ package tv.mineinthebox.essentials.configurations;
 import org.bukkit.ChatColor;
 
 import tv.mineinthebox.essentials.Configuration;
-import tv.mineinthebox.essentials.enums.ConfigEnum;
+import tv.mineinthebox.essentials.enums.ConfigType;
 
 public class ChatConfig {
 	
@@ -13,7 +13,7 @@ public class ChatConfig {
 	 * @return Boolean
 	 */
 	public boolean isChatHighLightEnabled() {
-		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigEnum.CHAT, "enable");
+		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigType.CHAT, "enable");
 		return bol;
 	}
 	
@@ -23,7 +23,7 @@ public class ChatConfig {
 	 * @return Boolean
 	 */
 	public boolean isSmilleysEnabled() {
-		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigEnum.CHAT, "smilleysEnable");
+		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigType.CHAT, "smilleysEnable");
 		return bol;
 	}
 	
@@ -33,7 +33,7 @@ public class ChatConfig {
 	 * @return String
 	 */
 	public String getHashTag() {
-		String hashTag = ChatColor.translateAlternateColorCodes('&', (String)Configuration.getConfigValue(ConfigEnum.CHAT, "hashTag"));
+		String hashTag = ChatColor.translateAlternateColorCodes('&', (String)Configuration.getConfigValue(ConfigType.CHAT, "hashTag"));
 		return hashTag;
 	}
 	
@@ -43,7 +43,7 @@ public class ChatConfig {
 	 * @return boolean
 	 */
 	public boolean isAntiAdvertiseEnabled() {
-		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigEnum.CHAT, "antiAddvertiseEnabled");
+		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigType.CHAT, "antiAddvertiseEnabled");
 		return bol;
 	}
 	
@@ -53,7 +53,7 @@ public class ChatConfig {
 	 * @return Boolean
 	 */
 	public boolean isRssBroadcastEnabled() {
-		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigEnum.CHAT, "RssEnabled");
+		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigType.CHAT, "RssEnabled");
 		return bol;
 	}
 	
@@ -63,7 +63,7 @@ public class ChatConfig {
 	 * @return String
 	 */
 	public String getRssUrl() {
-		return (String)Configuration.getConfigValue(ConfigEnum.CHAT, "RssUrl");
+		return (String)Configuration.getConfigValue(ConfigType.CHAT, "RssUrl");
 	}
 	
 	/**
@@ -72,7 +72,7 @@ public class ChatConfig {
 	 * @return Boolean
 	 */
 	public boolean isMojangStatusEnabled() {
-		return (Boolean)Configuration.getConfigValue(ConfigEnum.CHAT, "MojangStatus");
+		return (Boolean)Configuration.getConfigValue(ConfigType.CHAT, "MojangStatus");
 	}
 
 }

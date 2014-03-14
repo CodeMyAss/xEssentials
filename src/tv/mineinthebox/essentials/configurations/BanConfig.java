@@ -1,7 +1,7 @@
 package tv.mineinthebox.essentials.configurations;
 
 import tv.mineinthebox.essentials.Configuration;
-import tv.mineinthebox.essentials.enums.ConfigEnum;
+import tv.mineinthebox.essentials.enums.ConfigType;
 
 public class BanConfig {
 	
@@ -13,7 +13,7 @@ public class BanConfig {
 	 * 
 	 */
 	public boolean isPwnAgeEnabled() {
-		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigEnum.BAN, "enablePwnAgeProtection");
+		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigType.BAN, "enablePwnAgeProtection");
 		return bol;
 	}
 	
@@ -25,7 +25,7 @@ public class BanConfig {
 	 *
 	 */
 	public boolean isFloodSpamEnabled() {
-		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigEnum.BAN, "enableAntiFloodSpam");
+		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigType.BAN, "enableAntiFloodSpam");
 		return bol;
 	}
 	
@@ -37,7 +37,7 @@ public class BanConfig {
 	 * 
 	 */
 	public boolean isHumanSpamEnabled() {
-		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigEnum.BAN, "enableHumanSpamProtection");
+		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigType.BAN, "enableHumanSpamProtection");
 		return bol;
 	}
 	
@@ -49,7 +49,7 @@ public class BanConfig {
 	 * 
 	 */
 	public String getPwnAgeSpamBanMessage() {
-		String s = (String) Configuration.getConfigValue(ConfigEnum.BAN, "PwnAgeProtectionBanMessage");
+		String s = (String) Configuration.getConfigValue(ConfigType.BAN, "PwnAgeProtectionBanMessage");
 		return s;
 	}
 	
@@ -61,7 +61,7 @@ public class BanConfig {
 	 * 
 	 */
 	public String getFloodSpamBanMessage() {
-		String s = (String) Configuration.getConfigValue(ConfigEnum.BAN, "AntiFloodSpamBanMessage");
+		String s = (String) Configuration.getConfigValue(ConfigType.BAN, "AntiFloodSpamBanMessage");
 		return s;
 	}
 	
@@ -72,7 +72,7 @@ public class BanConfig {
 	 * @return String
 	 */
 	public String getHumanSpamBanMessage() {
-		String s = (String) Configuration.getConfigValue(ConfigEnum.BAN, "HumanSpamProtectionBanMessage");
+		String s = (String) Configuration.getConfigValue(ConfigType.BAN, "HumanSpamProtectionBanMessage");
 		return s;
 	}
 	
@@ -84,7 +84,7 @@ public class BanConfig {
 	 * 
 	 */
 	public boolean isAlternateAccountsEnabled() {
-		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigEnum.BAN, "showAlternateAccounts");
+		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigType.BAN, "showAlternateAccounts");
 		return bol;
 	}
 }

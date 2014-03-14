@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.ListIterator;
 
 import tv.mineinthebox.essentials.Configuration;
-import tv.mineinthebox.essentials.enums.ConfigEnum;
+import tv.mineinthebox.essentials.enums.ConfigType;
 
 public class MotdConfig {
 	
@@ -14,7 +14,7 @@ public class MotdConfig {
 	 * @return boolean
 	 */
 	public boolean isNormalMotdEnabled() {
-		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigEnum.MOTD, "NormalEnable");
+		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigType.MOTD, "NormalEnable");
 		return bol;
 	}
 	
@@ -24,7 +24,7 @@ public class MotdConfig {
 	 * @return boolean
 	 */
 	public boolean isRandomMotdEnabled() {
-		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigEnum.MOTD, "RandomEnable");
+		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigType.MOTD, "RandomEnable");
 		return bol;
 	}
 	
@@ -35,7 +35,7 @@ public class MotdConfig {
 	 */
 	@SuppressWarnings("unchecked")
 	public ListIterator<String> getMotdMessages() {
-		ArrayList<String> list = (ArrayList<String>) Configuration.getConfigValue(ConfigEnum.MOTD, "messages");
+		ArrayList<String> list = (ArrayList<String>) Configuration.getConfigValue(ConfigType.MOTD, "messages");
 		return list.listIterator();
 	}
 	
@@ -45,7 +45,7 @@ public class MotdConfig {
 	 * @return String
 	 */
 	public String getMotdMessage() {
-		String s = (String) Configuration.getConfigValue(ConfigEnum.MOTD, "message");
+		String s = (String) Configuration.getConfigValue(ConfigType.MOTD, "message");
 		return s;
 	}
 

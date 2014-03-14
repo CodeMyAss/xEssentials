@@ -2,9 +2,10 @@ package tv.mineinthebox.essentials;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -119,27 +120,57 @@ public class xEssentials extends JavaPlugin {
 		return pl;
 	}
 
+	private static HashSet<xEssentialsOfflinePlayer> offliners = new HashSet<xEssentialsOfflinePlayer>();
+
 	/**
 	 * @author xize
 	 * @param get all the offline players in a array
 	 * @return xEssentialsOfflinePlayer[]
 	 */
 	public static xEssentialsOfflinePlayer[] getOfflinePlayers() {
-		List<xEssentialsOfflinePlayer> players = new ArrayList<xEssentialsOfflinePlayer>();
-		try {
+		if(offliners.isEmpty()) {
+			List<xEssentialsOfflinePlayer> players = new ArrayList<xEssentialsOfflinePlayer>();
+			try {
+				File dir = new File(xEssentials.getPlugin().getDataFolder() + File.separator + "players");
+				File[] list = dir.listFiles();
+				for(File f : list) {
+					FileConfiguration con = YamlConfiguration.loadConfiguration(f);
+					if(con.isSet("user")) {
+						xEssentialsOfflinePlayer off = new xEssentialsOfflinePlayer(con.getString("user"));
+						players.add(off);
+					}
+				}
+				xEssentialsOfflinePlayer[] xplayers = players.toArray(new xEssentialsOfflinePlayer[players.size()]);
+				offliners.addAll(players);
+				return xplayers;
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+		} else {
 			File dir = new File(xEssentials.getPlugin().getDataFolder() + File.separator + "players");
 			File[] list = dir.listFiles();
-			for(File f : list) {
-				FileConfiguration con = YamlConfiguration.loadConfiguration(f);
-				if(con.isSet("user")) {
-					xEssentialsOfflinePlayer off = new xEssentialsOfflinePlayer(con.getString("user"));
-					players.add(off);
+			if(list.length == offliners.size()) {
+				//since its equals we don't need to for loop again!
+				return offliners.toArray(new xEssentialsOfflinePlayer[offliners.size()]);
+			} else {
+				//since there are new offlineplayers we need to reset our system.
+				offliners.clear();
+				List<xEssentialsOfflinePlayer> players = new ArrayList<xEssentialsOfflinePlayer>();
+				try {
+					for(File f : list) {
+						FileConfiguration con = YamlConfiguration.loadConfiguration(f);
+						if(con.isSet("user")) {
+							xEssentialsOfflinePlayer off = new xEssentialsOfflinePlayer(con.getString("user"));
+							players.add(off);
+						}
+					}
+					xEssentialsOfflinePlayer[] xplayers = players.toArray(new xEssentialsOfflinePlayer[players.size()]);
+					offliners.addAll(players);
+					return xplayers;
+				} catch(Exception e) {
+					e.printStackTrace();
 				}
 			}
-			xEssentialsOfflinePlayer[] xplayers = players.toArray(new xEssentialsOfflinePlayer[players.size()]);
-			return xplayers;
-		} catch(Exception e) {
-			e.printStackTrace();
 		}
 		return null;
 	}
@@ -196,7 +227,7 @@ public class xEssentials extends JavaPlugin {
 		return null;
 	}
 
-	private static HashMap<String, xEssentialsPlayer> players = new HashMap<String, xEssentialsPlayer>();
+	private static Map<String, xEssentialsPlayer> players = new ConcurrentHashMap<String, xEssentialsPlayer>();
 
 	/**
 	 * @author xize
@@ -278,16 +309,6 @@ public class xEssentials extends JavaPlugin {
 			xEssentialsPlayer xp = new xEssentialsPlayer(p);
 			players.put(p.getName().toLowerCase(), xp);
 		}
-	}
-
-	/**
-	 * @author xize
-	 * @param get all the user names in the current hashmap!
-	 * @return Iterator<String>
-	 */
-	public static Iterator<String> getKeys() {
-		Iterator<String> it = players.keySet().iterator();
-		return it;
 	}
 
 	/**

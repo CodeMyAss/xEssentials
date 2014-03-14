@@ -7,6 +7,7 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
@@ -85,6 +86,7 @@ public class CmdMenu {
 								p.sendMessage(ChatColor.GREEN + "opening menu for player " + ChatColor.GRAY + xp.getUser());
 
 								p.openInventory(inv);
+								p.playSound(p.getLocation(), Sound.CHEST_OPEN, 1, 0);
 							} else {
 								xEssentialsOfflinePlayer off = xEssentials.getOfflinePlayer(args[0]);
 								Inventory inv = Bukkit.createInventory(p, 36, ChatColor.DARK_PURPLE + "Quick menu: " + off.getUser());
@@ -96,6 +98,7 @@ public class CmdMenu {
 								p.sendMessage(ChatColor.GREEN + "opening menu for player " + ChatColor.GRAY + off.getUser());
 
 								p.openInventory(inv);
+								p.playSound(p.getLocation(), Sound.CHEST_OPEN, 1, 0);
 							}
 						} else {
 							sender.sendMessage(ChatColor.RED + "this player has never played before!");

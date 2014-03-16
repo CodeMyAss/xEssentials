@@ -18,7 +18,7 @@ import tv.mineinthebox.essentials.enums.LogType;
 import tv.mineinthebox.essentials.instances.RssFeed;
 
 public class CallRssFeedEvent  {
-	
+
 	protected static boolean isItemFound = false;
 	private static RssFeed feed;
 
@@ -44,40 +44,40 @@ public class CallRssFeedEvent  {
 							isItemFound = true;
 						}
 						if(isItemFound) {
-	                         if(line.contains("<title>")) {
-                                 text = "";
-                                 int firstPos = line.indexOf("<title>");
-                                 String temp = line.substring(firstPos);
-                                 temp = temp.replace("<title>", "");
-                                 int lastPos = temp.indexOf("</title>");
-                                 temp = temp.substring(0,lastPos);
-                                 title = text+= temp;
-                         }
-                         if(line.contains("<link>")) {
-                                 text = "";
-                                 int firstPos = line.indexOf("<link>");
-                                 String temp = line.substring(firstPos);
-                                 temp = temp.replace("<link>", "");
-                                 int lastPos = temp.indexOf("</link>");
-                                 temp = temp.substring(0,lastPos);
-                                 link = text+= temp;
-                         }
-                         if(line.contains("<author>")) {
-                                 text = "";
-                                 int firstPos = line.indexOf("<author>");
-                                 String temp = line.substring(firstPos);
-                                 temp = temp.replace("<author>", "");
-                                 int lastPos = temp.indexOf("</author>");
-                                 temp = temp.substring(0,lastPos);
-                                 author = text+= temp;
-                                 break;
-                         }
+							if(line.contains("<title>")) {
+								text = "";
+								int firstPos = line.indexOf("<title>");
+								String temp = line.substring(firstPos);
+								temp = temp.replace("<title>", "");
+								int lastPos = temp.indexOf("</title>");
+								temp = temp.substring(0,lastPos);
+								title = text+= temp;
+							}
+							if(line.contains("<link>")) {
+								text = "";
+								int firstPos = line.indexOf("<link>");
+								String temp = line.substring(firstPos);
+								temp = temp.replace("<link>", "");
+								int lastPos = temp.indexOf("</link>");
+								temp = temp.substring(0,lastPos);
+								link = text+= temp;
+							}
+							if(line.contains("<author>")) {
+								text = "";
+								int firstPos = line.indexOf("<author>");
+								String temp = line.substring(firstPos);
+								temp = temp.replace("<author>", "");
+								int lastPos = temp.indexOf("</author>");
+								temp = temp.substring(0,lastPos);
+								author = text+= temp;
+								break;
+							}
 						}
 					}
 					reader.close();
 					input.close();
 					httpcon.disconnect();
-					RssFeed afeed = new RssFeed(title, author, link);
+					RssFeed afeed = new RssFeed(title, author.replaceAll("[^a-zA-Z0-9]", ""), link);
 					if(feed != null) {
 						if(!feed.getTitle().equalsIgnoreCase(afeed.getTitle())) {
 							feed = afeed;
@@ -107,7 +107,7 @@ public class CallRssFeedEvent  {
 		try {
 			File f = new File(xEssentials.getPlugin().getDataFolder() + File.separator + "lastRssFeed.yml");
 			YamlConfiguration con = YamlConfiguration.loadConfiguration(f);
-			con.set("author", feed.getAuthor());
+			con.set("author", feed.getAuthor().replaceAll("[^a-zA-Z0-9]", ""));
 			con.set("title", feed.getTitle());
 			con.set("link", feed.getLink());
 			con.save(f);
@@ -121,7 +121,7 @@ public class CallRssFeedEvent  {
 			File f = new File(xEssentials.getPlugin().getDataFolder() + File.separator + "lastRssFeed.yml");
 			if(f.exists()) {
 				FileConfiguration con = YamlConfiguration.loadConfiguration(f);
-				RssFeed rss = new RssFeed(con.getString("title"), con.getString("author"), con.getString("link"));
+				RssFeed rss = new RssFeed(con.getString("title"), con.getString("author").replaceAll("[^a-zA-Z0-9]", ""), con.getString("link"));
 				feed = rss;
 				f.delete();
 			}

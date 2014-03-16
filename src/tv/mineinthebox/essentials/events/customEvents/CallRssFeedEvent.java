@@ -34,7 +34,7 @@ public class CallRssFeedEvent  {
 					String title = null;
 					URL url = new URL(Configuration.getChatConfig().getRssUrl());
 					HttpURLConnection httpcon = (HttpURLConnection) url.openConnection();
-					httpcon.addRequestProperty("User-Agent", "Mozilla/4.76");
+					httpcon.addRequestProperty("User-Agent", xEssentials.getPlugin().getName() + " " + xEssentials.getPlugin().getDescription().getVersion() + " robot (By xize)");
 					InputStreamReader input = new InputStreamReader(httpcon.getInputStream());
 					BufferedReader reader = new BufferedReader(input);
 					String line;

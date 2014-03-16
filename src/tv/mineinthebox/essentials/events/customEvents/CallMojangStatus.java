@@ -31,6 +31,7 @@ public class CallMojangStatus {
 				try {
 					URL url = new URL("http://status.mojang.com/check");
 					HttpURLConnection httpcon = (HttpURLConnection) url.openConnection();
+					httpcon.addRequestProperty("User-Agent", xEssentials.getPlugin().getName() + " " + xEssentials.getPlugin().getDescription().getVersion() + " status checker (By xize)");
 					InputStreamReader rd = new InputStreamReader(httpcon.getInputStream());
 					BufferedReader reader = new BufferedReader(rd);
 					JSONArray json = (JSONArray) parser.parse(reader);

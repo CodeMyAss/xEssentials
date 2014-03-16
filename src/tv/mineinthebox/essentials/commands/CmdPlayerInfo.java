@@ -66,7 +66,7 @@ public class CmdPlayerInfo {
 							sender.sendMessage(ChatColor.GRAY + "has alternate accounts: " +ChatColor.GREEN+ off.hasAlternateAccounts());
 							if(off.hasAlternateAccounts()) {
 								AlternateAccount acount = off.getAlternateAccounts();
-								sender.sendMessage(ChatColor.GRAY + "alternate accounts: " + acount.getAltsDetailed());
+								sender.sendMessage(ChatColor.GRAY + "alternate accounts: " + ChatColor.GREEN + acount.getAltsDetailed());
 							}
 							sender.sendMessage(ChatColor.GRAY + "has ignored players: " +ChatColor.GREEN+ off.hasIgnoredPlayers());
 							if(off.hasIgnoredPlayers()) {

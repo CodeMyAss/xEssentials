@@ -61,7 +61,9 @@ public class PlayerChatSmilleyEvent extends PlayerEvent implements Cancellable {
 	 */
 	public Smilley getSmilley(String smilley) {
 		if(smilley.length() == 2) {
-			if(smilley.equalsIgnoreCase(":D")) {
+			if(smilley.equalsIgnoreCase(":)")) {
+				return Smilley.HAPPY;
+			}else if(smilley.equalsIgnoreCase(":D")) {
 				return Smilley.HAPPY;
 			} else if(smilley.equalsIgnoreCase(":@")) {
 				return Smilley.ANGRY;

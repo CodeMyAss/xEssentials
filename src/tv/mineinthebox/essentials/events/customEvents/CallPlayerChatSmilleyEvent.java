@@ -21,6 +21,8 @@ public class CallPlayerChatSmilleyEvent implements Listener {
 				SmilleyList.add(args[i]);
 			} else if(args[i].equalsIgnoreCase("<3")) {
 				SmilleyList.add(args[i]);
+			} else if(args[i].equalsIgnoreCase(":)")) {
+				SmilleyList.add(args[i]);
 			}
 		}
 		String[] SmilleyNames = SmilleyList.toArray(new String[SmilleyList.size()]);

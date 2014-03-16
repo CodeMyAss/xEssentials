@@ -10,6 +10,9 @@ public class ChatSmilleyEvent implements Listener {
 	
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = false)
 	public void onChatSmilley(PlayerChatSmilleyEvent e) {
+		if(e.getMessage().contains(":)")) {
+			e.setMessage(e.getMessage().replaceAll(":\\)", e.getSmilley(":)").getChar() + e.getSuffix()));
+		}
 		if(e.getMessage().toLowerCase().contains(":d")) {
 			e.setMessage(e.getMessage().replaceAll(":d", e.getSmilley(":D").getChar() + e.getSuffix()));
 			e.setMessage(e.getMessage().replaceAll(":D", e.getSmilley(":D").getChar() + e.getSuffix()));

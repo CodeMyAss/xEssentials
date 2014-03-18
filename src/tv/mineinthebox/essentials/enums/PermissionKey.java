@@ -4,6 +4,7 @@ package tv.mineinthebox.essentials.enums;
 public enum PermissionKey {
 	
 	IS_ADMIN("xEssentials.isAdmin"),
+	CMD_WILD("xEssentials.command.wild"),
 	MULTIPLE_HOMES("xEssentials.MultipleHomes"),
 	CMD_AFK("xEssentials.command.afk"),
 	CMD_BAN("xEssentials.command.ban"),
@@ -76,6 +77,8 @@ public enum PermissionKey {
 	SIGN_COLOR("xEssentials.signs.color"),
 	SIGN_FREE("xEssentials.signs.free"),
 	SIGN_WARP_SIGN("xEssentials.signs.warp"),
+	SIGN_WILD_SIGN("xEssentials.signs.wild"),
+	SIGN_WILD_SIGN_USE("xEssentials.signs.wild.use"),
 	SIGN_GETYOURHEAD("xEssentials.signs.getyourhead");
 	
 	private final String permission;

@@ -263,3 +263,7 @@ commands:
      description: shows a list of all warps
      aliases: []
      permission: xEssentials.command.warps
+  wild:
+     description: teleport to the wild!
+     aliases: []
+     permission: xEssentials.command.wild

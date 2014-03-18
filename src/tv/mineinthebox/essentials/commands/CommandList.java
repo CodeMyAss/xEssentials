@@ -65,7 +65,8 @@ public class CommandList {
 			"warp",
 			"setwarp",
 			"delwarp",
-			"warps"
+			"warps",
+			"wild"
 	};
 
 }

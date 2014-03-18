@@ -200,6 +200,9 @@ public class command implements CommandExecutor, TabCompleter {
 		} else if(cmd.getName().equalsIgnoreCase("warps")) {
 			CmdWarps warps = new CmdWarps();
 			return warps.execute(sender, cmd, args);
+		} else if(cmd.getName().equalsIgnoreCase("wild")) {
+			CmdWild wild = new CmdWild();
+			return wild.execute(sender, cmd, args);
 		}
 		return false;
 	}

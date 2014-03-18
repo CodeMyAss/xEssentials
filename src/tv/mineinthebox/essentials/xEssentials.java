@@ -2,6 +2,7 @@ package tv.mineinthebox.essentials;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +24,7 @@ import tv.mineinthebox.essentials.events.customEvents.CallEssentialsBroadcastEve
 import tv.mineinthebox.essentials.events.customEvents.CallRssFeedEvent;
 import tv.mineinthebox.essentials.events.players.RealisticGlass;
 import tv.mineinthebox.essentials.greylist.GreyListServer;
+import tv.mineinthebox.essentials.instances.Warp;
 import tv.mineinthebox.essentials.instances.xEssentialsOfflinePlayer;
 import tv.mineinthebox.essentials.instances.xEssentialsPlayer;
 import tv.mineinthebox.essentials.utils.TPS;
@@ -319,5 +321,51 @@ public class xEssentials extends JavaPlugin {
 	public static xEssentialsPlayer[] getPlayers() {
 		xEssentialsPlayer[] users = players.values().toArray(new xEssentialsPlayer[players.size()]);
 		return users;
+	}
+	
+	/**
+	 * @author xize
+	 * @param get all the warps
+	 * @return Warp[]
+	 */
+	public static Warp[] getWarps() {
+		List<Warp> warps = new ArrayList<Warp>();
+		for(xEssentialsOfflinePlayer off : getOfflinePlayers()) {
+			if(off.hasOwnedWarps()) {
+				warps.addAll(Arrays.asList(off.getWarps()));
+			}
+		}
+		return warps.toArray(new Warp[warps.size()]);
+	}
+
+	/**
+	 * @author xize
+	 * @param check if the warp exist
+	 * @return Boolean
+	 */
+	public static boolean doesWarpExist(String key) {
+		for(Warp warp : getWarps()) {
+			if(warp.getWarpName().equalsIgnoreCase(key)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * @author xize
+	 * @param get the warp by using the name
+	 * @return Warp
+	 * @throws NullPointerException - when the warp does not exist!
+	 */
+	public static Warp getWarpByName(String name) {
+		if(doesWarpExist(name)) {
+			for(Warp warp : getWarps()) {
+				if(warp.getWarpName().equalsIgnoreCase(name)) {
+					return warp;
+				}
+			}
+		}
+		throw new NullPointerException("warp does not exist");
 	}
 }

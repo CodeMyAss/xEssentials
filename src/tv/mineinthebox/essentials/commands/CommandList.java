@@ -61,7 +61,11 @@ public class CommandList {
 			"commandrestrict",
 			"playerinfo",
 			"kit",
-			"kits"
+			"kits",
+			"warp",
+			"setwarp",
+			"delwarp",
+			"warps"
 	};
 
 }

@@ -247,3 +247,19 @@ commands:
      description: shows a list of kits
      aliases: []
      permission: xEssentials.command.kits
+  warp:
+     description: warp to a location
+     aliases: []
+     permission: xEssentials.command.warp
+  setwarp:
+     description: setwarp to a location
+     aliases: []
+     permission: xEssentials.command.setwarp
+  delwarp:
+     description: delete a warp
+     aliases: []
+     permission: xEssentials.command.delwarp
+  warps:
+     description: shows a list of all warps
+     aliases: []
+     permission: xEssentials.command.warps

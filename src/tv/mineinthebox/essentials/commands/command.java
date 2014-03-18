@@ -188,6 +188,18 @@ public class command implements CommandExecutor, TabCompleter {
 		} else if(cmd.getName().equalsIgnoreCase("kits")) {
 			CmdKits kits = new CmdKits();
 			return kits.execute(sender, cmd, args);
+		} else if(cmd.getName().equalsIgnoreCase("warp")) {
+			CmdWarp warp = new CmdWarp();
+			return warp.execute(sender, cmd, args);
+		} else if(cmd.getName().equalsIgnoreCase("setwarp")) {
+			CmdSetWarp setwarp = new CmdSetWarp();
+			return setwarp.execute(sender, cmd, args);
+		} else if(cmd.getName().equalsIgnoreCase("delwarp")) {
+			CmdDelWarp delwarp = new CmdDelWarp();
+			return delwarp.execute(sender, cmd, args);
+		} else if(cmd.getName().equalsIgnoreCase("warps")) {
+			CmdWarps warps = new CmdWarps();
+			return warps.execute(sender, cmd, args);
 		}
 		return false;
 	}
@@ -233,6 +245,12 @@ public class command implements CommandExecutor, TabCompleter {
 		} else if(cmd.getName().equalsIgnoreCase("kit")) {
 			CmdKit kit = new CmdKit();
 			return kit.onTabComplete(sender, cmd, args);
+		} else if(cmd.getName().equalsIgnoreCase("warp")) {
+			CmdWarp warp = new CmdWarp();
+			return warp.onTabComplete(sender, cmd, args);
+		} else if(cmd.getName().equalsIgnoreCase("delwarp")) {
+			CmdDelWarp delwarp = new CmdDelWarp();
+			return delwarp.onTabComplete(sender, cmd, args);
 		}
 		return null;
 	}

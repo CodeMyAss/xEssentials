@@ -130,6 +130,15 @@ public class EntityConfig {
 	
 	/**
 	 * @author xize
+	 * @param returns true when the clean up on unloaded chunks is enabled
+	 * @return Boolean
+	 */
+	public boolean isCleanUpOnChunkUnloadEnabled() {
+		return (Boolean) Configuration.getConfigValue(ConfigType.ENTITY, "cleanup");
+	}
+	
+	/**
+	 * @author xize
 	 * @param returns true whenever the configuration 'Remove-Flying-Projectiles-On-ChunkLoad' is enabled this will enable the functional base to remove witherskulls and fireballs on chunk load so the server cannot be abused nor get laggy due this. 
 	 * @return boolean
 	 */

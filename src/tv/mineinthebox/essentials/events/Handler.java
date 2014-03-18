@@ -26,6 +26,7 @@ import tv.mineinthebox.essentials.events.chat.PlayerIgnorePlayerChatEvent;
 import tv.mineinthebox.essentials.events.chat.PublishMojangStatus;
 import tv.mineinthebox.essentials.events.chat.SilenceChatEvent;
 import tv.mineinthebox.essentials.events.entity.ChunkProtection;
+import tv.mineinthebox.essentials.events.entity.CleanupUnloadedChunkEvent;
 import tv.mineinthebox.essentials.events.entity.CustomZombieAggroRange;
 import tv.mineinthebox.essentials.events.entity.DisableEndDragonGrief;
 import tv.mineinthebox.essentials.events.entity.DisableEndermanGrief;
@@ -121,6 +122,7 @@ public class Handler {
 		}
 		//entity yml
 		setListener(new EntitySpawnEventManager());
+		if(Configuration.getEntityConfig().isCleanUpOnChunkUnloadEnabled()) {setListener(new CleanupUnloadedChunkEvent());}
 		if(Configuration.getEntityConfig().isChunkProtectionEnabled()) {setListener(new ChunkProtection());}
 		if(Configuration.getEntityConfig().isWeatherDisabled()) {setListener(new DisableWeatherEvent());}
 		if(Configuration.getEntityConfig().isFireSpreadDisabled()) {setListener(new DisableFireSpreadEvent());}

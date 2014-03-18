@@ -122,6 +122,7 @@ public class Configuration {
 				con.set("disable-spawneggs", false);
 				con.set("log.spawnEggs", false);
 				con.set("use-criticals", false);
+				con.set("cleanup-on-chunkunload", false);
 				con.set("Remove-Flying-Projectiles-On-ChunkLoad", false);
 				for(EntityType entity : EntityType.values()) {
 					if(entity.isAlive()) {
@@ -419,6 +420,7 @@ public class Configuration {
 				hash.put("disableSpawnEggs", con.getBoolean("disable-spawneggs"));
 				hash.put("logSpawnEggs", con.getBoolean("log.spawnEggs"));
 				hash.put("useCriticals", con.getBoolean("use-criticals"));
+				hash.put("cleanup", con.getBoolean("cleanup-on-chunkunload"));
 				hash.put("AntiFireball", con.getBoolean("Remove-Flying-Projectiles-On-ChunkLoad"));
 				HashMap<String, Boolean> entitys = new HashMap<String, Boolean>();
 				for(String key : con.getConfigurationSection("mobs.allowToSpawn").getKeys(true)) {

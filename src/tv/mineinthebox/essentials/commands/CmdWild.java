@@ -14,8 +14,8 @@ import tv.mineinthebox.essentials.enums.PermissionKey;
 
 public class CmdWild {
 	
-	private int xRadius = 100000;
-	private int zRadius = 100000;
+	private int xRadius = 10000;
+	private int zRadius = 10000;
 	
 	public boolean execute(CommandSender sender, Command cmd, String[] args) {
 		if(cmd.getName().equalsIgnoreCase("wild")) {
@@ -23,10 +23,10 @@ public class CmdWild {
 				if(args.length == 0) {
 					if(sender instanceof Player) {
 						Player p = (Player) sender;
-						Random randx = new Random((xRadius)+p.getLocation().getBlockX());
-						Random randz = new Random((zRadius)+p.getLocation().getBlockZ());
-						int x = randx.nextInt();
-						int z = randz.nextInt();
+						Random randx = new Random();
+						Random randz = new Random();
+						int x = randx.nextInt(xRadius)+p.getLocation().getBlockX();
+						int z = randz.nextInt(zRadius)+p.getLocation().getBlockZ();
 						Location loc = new Location(p.getWorld(), x, p.getWorld().getHighestBlockYAt(x, z), z);
 						loc.getWorld().refreshChunk(loc.getChunk().getX(), loc.getChunk().getZ());
 						p.teleport(loc);
@@ -37,10 +37,10 @@ public class CmdWild {
 				} else if(args.length == 1) {
 					Player p = Bukkit.getPlayer(args[0]);
 					if(p instanceof Player) {
-						Random randx = new Random((xRadius)+p.getLocation().getBlockX());
-						Random randz = new Random((zRadius)+p.getLocation().getBlockZ());
-						int x = randx.nextInt();
-						int z = randz.nextInt();
+						Random randx = new Random(xRadius);
+						Random randz = new Random(zRadius);
+						int x = randx.nextInt()+p.getLocation().getBlockX();
+						int z = randz.nextInt()+p.getLocation().getBlockX();
 						Location loc = new Location(p.getWorld(), x, p.getWorld().getHighestBlockYAt(x, z), z);
 						loc.getWorld().refreshChunk(loc.getChunk().getX(), loc.getChunk().getZ());
 						p.teleport(loc);

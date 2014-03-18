@@ -27,8 +27,8 @@ public class WildSign implements Listener {
 		}
 	}
 	
-	private int xRadius = 100000;
-	private int zRadius = 100000;
+	private int xRadius = 10000;
+	private int zRadius = 10000;
 	
 	@EventHandler
 	public void onInteract(PlayerInteractEvent e) {
@@ -37,10 +37,10 @@ public class WildSign implements Listener {
 				Sign sign = (Sign) e.getClickedBlock().getState();
 				if(sign.getLine(0).equalsIgnoreCase(ChatColor.DARK_GRAY + "[wild]")) {
 					if(e.getPlayer().hasPermission(PermissionKey.SIGN_WILD_SIGN_USE.getPermission())) {
-						Random randx = new Random((xRadius)+e.getPlayer().getLocation().getBlockX());
-						Random randz = new Random((zRadius)+e.getPlayer().getLocation().getBlockZ());
-						int x = randx.nextInt();
-						int z = randz.nextInt();
+						Random randx = new Random();
+						Random randz = new Random();
+						int x = randx.nextInt(xRadius)+e.getPlayer().getLocation().getBlockX();
+						int z = randz.nextInt(zRadius)+e.getPlayer().getLocation().getBlockZ();
 						Location loc = new Location(e.getPlayer().getWorld(), x, e.getPlayer().getWorld().getHighestBlockYAt(x, z), z);
 						loc.getWorld().refreshChunk(loc.getChunk().getX(), loc.getChunk().getZ());
 						e.getPlayer().teleport(loc);

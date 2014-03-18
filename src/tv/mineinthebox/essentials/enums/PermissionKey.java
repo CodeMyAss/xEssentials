@@ -75,6 +75,7 @@ public enum PermissionKey {
 	SIGN_FIREWORK("xEssentials.signs.firework"),
 	SIGN_COLOR("xEssentials.signs.color"),
 	SIGN_FREE("xEssentials.signs.free"),
+	SIGN_WARP_SIGN("xEssentials.signs.warp"),
 	SIGN_GETYOURHEAD("xEssentials.signs.getyourhead");
 	
 	private final String permission;

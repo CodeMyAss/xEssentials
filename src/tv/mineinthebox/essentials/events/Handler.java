@@ -86,6 +86,7 @@ import tv.mineinthebox.essentials.events.signs.FireworkSign;
 import tv.mineinthebox.essentials.events.signs.FreeSign;
 import tv.mineinthebox.essentials.events.signs.GetYourHeadSign;
 import tv.mineinthebox.essentials.events.signs.SignBoom;
+import tv.mineinthebox.essentials.events.signs.WarpSign;
 import tv.mineinthebox.essentials.hook.Hooks;
 
 public class Handler {
@@ -196,6 +197,7 @@ public class Handler {
 		setListener(new FireworkSign());
 		setListener(new SignBoom());
 		setListener(new GetYourHeadSign());
+		setListener(new WarpSign());
 		
 		//block events
 		if(Configuration.getBlockConfig().isNotifyOnBreakEnabled()) {setListener(new NotifyAdminOnBlockBreak());}

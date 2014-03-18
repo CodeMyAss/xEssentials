@@ -1157,7 +1157,6 @@ public class xEssentialsOfflinePlayer {
 		update();
 		List<Warp> warps = new ArrayList<Warp>();
 		for(String key : con.getConfigurationSection("warp").getKeys(false)) {
-			System.out.print("the key is: " + key);
 			Warp warp = new Warp(con, getUser(), key);
 			warps.add(warp);
 		}

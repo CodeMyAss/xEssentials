@@ -1865,7 +1865,6 @@ public class xEssentialsPlayer {
 		update();
 		List<Warp> warps = new ArrayList<Warp>();
 		for(String key : con.getConfigurationSection("warp").getKeys(false)) {
-			System.out.print("this is a key: " + key);
 			Warp warp = new Warp(con, getPlayer().getName(), key);
 			warps.add(warp);
 		}

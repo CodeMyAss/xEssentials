@@ -109,7 +109,7 @@ public class Configuration {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private void createCommandConfig() {
 		try {
 			File f = new File(xEssentials.getPlugin().getDataFolder() + File.separator + "commands.yml");
@@ -215,7 +215,7 @@ public class Configuration {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	private void createKitConfig() {
 		try {
@@ -600,7 +600,7 @@ public class Configuration {
 		}
 		return kits.toArray(new Kit[kits.size()]);
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param returns a new list with updated materials against data values
@@ -651,7 +651,7 @@ public class Configuration {
 		}
 		return false;
 	}
-	
+
 	private static Boolean isNumberic(String arg) {
 		try {
 			Integer i = Integer.parseInt(arg);
@@ -751,7 +751,7 @@ public class Configuration {
 		BroadcastConfig config = new BroadcastConfig();
 		return config;
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param returns the memory version of CommandConfig
@@ -761,7 +761,7 @@ public class Configuration {
 		CommandConfig config = new CommandConfig();
 		return config;
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param get the full memory configuration for Kits
@@ -864,7 +864,7 @@ public class Configuration {
 
 		return true;
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param handles the commands, for disable, enable
@@ -877,7 +877,9 @@ public class Configuration {
 			if(Configuration.getCommandConfig().getUnregisteredCommands().contains(command.getName())) {
 				Configuration.getCommandConfig().unRegisterBukkitCommand(command);
 			} else {
-				Configuration.getCommandConfig().registerBukkitCommand(command);
+				if(!Configuration.getCommandConfig().isRegistered(command)) {
+					Configuration.getCommandConfig().registerBukkitCommand(command);
+				}
 			}
 		}
 	}

@@ -128,15 +128,16 @@ public class Configuration {
 				List<String> commands = Arrays.asList(commandlist.getAllCommands);
 				List<String> orginal = Arrays.asList(con.getConfigurationSection("command").getKeys(false).toArray(new String[0]));
 				if(commands.size() != orginal.size()) {
+					xEssentials.getPlugin().log("new commands detected!, adding them right now inside the command config!", LogType.INFO);
 					for(String cmd : commands) {
 						if(!orginal.contains(cmd)) {
-							xEssentials.getPlugin().log("registering new commands: " + cmd, LogType.INFO);
+							xEssentials.getPlugin().log("registering new command: " + cmd + " in commands.yml", LogType.INFO);
 							con.set("command."+cmd+".enable", true);
 						}
 					}
 					con.save(f);
 				} else {
-					xEssentials.getPlugin().log("no new commands found", LogType.INFO);
+					xEssentials.getPlugin().log("there where no newer commands found to be added in commands.yml", LogType.INFO);
 				}
 			}
 		} catch(Exception e) {

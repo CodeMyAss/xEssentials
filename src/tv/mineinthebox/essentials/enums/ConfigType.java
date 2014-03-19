@@ -11,5 +11,6 @@ public enum ConfigType {
 	RULES,
 	GREYLIST,
 	BLOCKS,
-	KITS
+	KITS,
+	COMMAND
 }

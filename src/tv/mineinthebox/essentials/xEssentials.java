@@ -60,6 +60,7 @@ public class xEssentials extends JavaPlugin {
 		if(Configuration.getGrayListConfig().isEnabled()) {
 			server.createServer();
 		}
+		Configuration.HandleCommandManager();
 	}
 
 	public void onDisable() {

@@ -8,16 +8,19 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.Material;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.FileConfigurationOptions;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
+import tv.mineinthebox.essentials.commands.CommandList;
 import tv.mineinthebox.essentials.configurations.BanConfig;
 import tv.mineinthebox.essentials.configurations.BlockConfig;
 import tv.mineinthebox.essentials.configurations.BroadcastConfig;
 import tv.mineinthebox.essentials.configurations.ChatConfig;
+import tv.mineinthebox.essentials.configurations.CommandConfig;
 import tv.mineinthebox.essentials.configurations.EntityConfig;
 import tv.mineinthebox.essentials.configurations.GreylistConfig;
 import tv.mineinthebox.essentials.configurations.KitConfig;
@@ -59,6 +62,7 @@ public class Configuration {
 		createGreyListConfig();
 		createBlockConfig();
 		createKitConfig();
+		createCommandConfig();
 		loadSystemPresets(ConfigType.BAN);
 		loadSystemPresets(ConfigType.BROADCAST);
 		loadSystemPresets(ConfigType.CHAT);
@@ -70,6 +74,7 @@ public class Configuration {
 		loadSystemPresets(ConfigType.GREYLIST);
 		loadSystemPresets(ConfigType.BLOCKS);
 		loadSystemPresets(ConfigType.KITS);
+		loadSystemPresets(ConfigType.COMMAND);
 		for(Material mat : Material.values()) {
 			materials.add(mat.name());
 		}
@@ -99,6 +104,40 @@ public class Configuration {
 				con.set("item.blacklist.enable", false);
 				con.set("item.blacklist.items", items);
 				con.save(f);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void createCommandConfig() {
+		try {
+			File f = new File(xEssentials.getPlugin().getDataFolder() + File.separator + "commands.yml");
+			if(!f.exists()) {
+				FileConfiguration con = YamlConfiguration.loadConfiguration(f);
+				FileConfigurationOptions opt = con.options();
+				opt.header("here you can specify whenever a command should be unregistered or not\nfor example you got a other plugin which has the /home command this would basicly conflict with xEssentials\nhereby you can change the behaviour by unregistering xEssentials commands here.");
+				CommandList list = new CommandList();
+				for(String command : list.getAllCommands) {
+					con.set("command."+command+".enable", true);
+				}
+				con.save(f);
+			} else {
+				FileConfiguration con = YamlConfiguration.loadConfiguration(f);
+				CommandList commandlist = new CommandList();
+				List<String> commands = Arrays.asList(commandlist.getAllCommands);
+				List<String> orginal = Arrays.asList(con.getConfigurationSection("command").getKeys(false).toArray(new String[0]));
+				if(commands.size() != orginal.size()) {
+					for(String cmd : commands) {
+						if(!orginal.contains(cmd)) {
+							xEssentials.getPlugin().log("registering new commands: " + cmd, LogType.INFO);
+							con.set("command."+cmd+".enable", true);
+						}
+					}
+					con.save(f);
+				} else {
+					xEssentials.getPlugin().log("no new commands found", LogType.INFO);
+				}
 			}
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -512,6 +551,17 @@ public class Configuration {
 			hash.put("cooldownTime", con.getInt("cooldown.time"));
 			hash.put("kits", kitss);
 			configure.put(ConfigType.KITS, hash);
+		} else if(cfg == ConfigType.COMMAND) {
+			File f = new File(xEssentials.getPlugin().getDataFolder() + File.separator + "commands.yml");
+			FileConfiguration con = YamlConfiguration.loadConfiguration(f);
+			HashMap<String, Object> hash = new HashMap<String, Object>();
+			HashMap<String, Boolean> commands = new HashMap<String, Boolean>();
+			String[] orginal = con.getConfigurationSection("command").getKeys(false).toArray(new String[0]);
+			for(String cmd : orginal) {
+				commands.put(cmd, con.getBoolean("command."+cmd+".enable"));
+			}
+			hash.put("commands", commands);
+			configure.put(ConfigType.COMMAND, hash);
 		}
 	}
 
@@ -695,10 +745,20 @@ public class Configuration {
 	/**
 	 * @author xize
 	 * @param gets the full memory configuration for broadcasts
-	 * @return broadcastConfig
+	 * @return BroadcastConfig
 	 */
 	public static BroadcastConfig getBroadcastConfig() {
 		BroadcastConfig config = new BroadcastConfig();
+		return config;
+	}
+	
+	/**
+	 * @author xize
+	 * @param returns the memory version of CommandConfig
+	 * @return CommandConfig
+	 */
+	public static CommandConfig getCommandConfig() {
+		CommandConfig config = new CommandConfig();
 		return config;
 	}
 	
@@ -793,6 +853,7 @@ public class Configuration {
 			}
 		}
 		createConfigs();
+		HandleCommandManager();
 		if(Configuration.getGrayListConfig().isEnabled()) {
 			xEssentials.server = new GreyListServer(Configuration.getGrayListConfig().getPort());
 			xEssentials.server.createServer();
@@ -802,6 +863,23 @@ public class Configuration {
 		customhandler.startCustomEvents();
 
 		return true;
+	}
+	
+	/**
+	 * @author xize
+	 * @param handles the commands, for disable, enable
+	 * @param this manager manages automaticly the commands defined in the commands.yml
+	 */
+	public static void HandleCommandManager() {
+		CommandList cmdlist = new CommandList();
+		for(String cmd : cmdlist.getAllCommands) {
+			PluginCommand command = xEssentials.getPlugin().getCommand(cmd);
+			if(Configuration.getCommandConfig().getUnregisteredCommands().contains(command.getName())) {
+				Configuration.getCommandConfig().unRegisterBukkitCommand(command);
+			} else {
+				Configuration.getCommandConfig().registerBukkitCommand(command);
+			}
+		}
 	}
 
 	/**

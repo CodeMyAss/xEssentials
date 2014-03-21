@@ -269,5 +269,5 @@ commands:
      permission: xEssentials.command.wild
   money:
      description: economy money command
-     aliases: []
+     aliases: [bal]
      permission: xEssentials.command.money

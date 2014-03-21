@@ -15,7 +15,7 @@ import tv.mineinthebox.essentials.xEssentials;
 import tv.mineinthebox.essentials.enums.ConfigType;
 
 public class CommandConfig {
-
+	
 	/**
 	 * @author xize
 	 * @param returns the configuration with all commands

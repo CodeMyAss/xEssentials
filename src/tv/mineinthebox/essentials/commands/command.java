@@ -203,6 +203,9 @@ public class command implements CommandExecutor, TabCompleter {
 		} else if(cmd.getName().equalsIgnoreCase("wild")) {
 			CmdWild wild = new CmdWild();
 			return wild.execute(sender, cmd, args);
+		} else if(cmd.getName().equalsIgnoreCase("money")) {
+			CmdMoney money = new CmdMoney();
+			return money.execute(sender, cmd, args);
 		}
 		return false;
 	}
@@ -254,6 +257,9 @@ public class command implements CommandExecutor, TabCompleter {
 		} else if(cmd.getName().equalsIgnoreCase("delwarp")) {
 			CmdDelWarp delwarp = new CmdDelWarp();
 			return delwarp.onTabComplete(sender, cmd, args);
+		} else if(cmd.getName().equalsIgnoreCase("money")) {
+			CmdMoney money = new CmdMoney();
+			return money.onTabComplete(sender, cmd, args);
 		}
 		return null;
 	}

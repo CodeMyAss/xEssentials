@@ -369,4 +369,74 @@ public class xEssentials extends JavaPlugin {
 		}
 		throw new NullPointerException("warp does not exist");
 	}
+	
+	/**
+	 * @author xize
+	 * @param player - the players name, can also be a offline players name
+	 * @return Double
+	 */
+	public static Double getMoney(String player) {
+		if(xEssentials.isEssentialsPlayer(player)) {
+			if(xEssentials.contains(player)) {
+				xEssentialsPlayer xp = xEssentials.get(player);
+				return xp.getTotalEssentialsMoney();
+			} else {
+				xEssentialsOfflinePlayer off = xEssentials.getOfflinePlayer(player);
+				return off.getTotalEssentialsMoney();
+			}
+		}
+		throw new NullPointerException("this player has never played before!");
+	}
+	
+	/**
+	 * @author xize
+	 * @param player - the player name, can be a offline player to
+	 * @param money - money, which get removed from the bank!
+	 */
+	public static void withdrawMoney(String player, Double money) {
+		if(xEssentials.isEssentialsPlayer(player)) {
+			if(xEssentials.contains(player)) {
+				xEssentialsPlayer xp = xEssentials.get(player);
+				Double moneyz = xp.getTotalEssentialsMoney();
+				if(money > moneyz) {
+					throw new IndexOutOfBoundsException("cannot withdraw money below zero");
+				}
+				xp.clearMoney();
+				xp.addEssentialsMoney((moneyz-money));
+			} else {
+				xEssentialsOfflinePlayer off = xEssentials.getOfflinePlayer(player);
+				Double moneyz = off.getTotalEssentialsMoney();
+				if(money > moneyz) {
+					throw new IndexOutOfBoundsException("cannot withdraw money below zero");
+				}
+				off.clearMoney();
+				off.addEssentialsMoney((moneyz-money));
+			}
+		} else {
+			throw new NullPointerException("this player has never played before!");
+		}
+	}
+	
+	/**
+	 * @author xize
+	 * @param player - the player name, can be a offline player to
+	 * @param money - money, which get added to the bank
+	 */
+	public static void depositMoney(String player, Double money) {
+		if(xEssentials.isEssentialsPlayer(player)) {
+			if(xEssentials.contains(player)) {
+				xEssentialsPlayer xp = xEssentials.get(player);
+				Double moneyz = xp.getTotalEssentialsMoney();
+				xp.clearMoney();
+				xp.addEssentialsMoney(moneyz+money);
+			} else {
+				xEssentialsOfflinePlayer off = xEssentials.getOfflinePlayer(player);
+				Double moneyz = off.getTotalEssentialsMoney();
+				off.clearMoney();
+				off.addEssentialsMoney(moneyz+money);
+			}
+		} else {
+			throw new NullPointerException("this player has never played before!");
+		}
+	}
 }

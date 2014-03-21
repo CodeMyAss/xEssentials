@@ -21,6 +21,7 @@ import tv.mineinthebox.essentials.configurations.BlockConfig;
 import tv.mineinthebox.essentials.configurations.BroadcastConfig;
 import tv.mineinthebox.essentials.configurations.ChatConfig;
 import tv.mineinthebox.essentials.configurations.CommandConfig;
+import tv.mineinthebox.essentials.configurations.EconomyConfig;
 import tv.mineinthebox.essentials.configurations.EntityConfig;
 import tv.mineinthebox.essentials.configurations.GreylistConfig;
 import tv.mineinthebox.essentials.configurations.KitConfig;
@@ -63,6 +64,7 @@ public class Configuration {
 		createBlockConfig();
 		createKitConfig();
 		createCommandConfig();
+		createEconomyConfig();
 		loadSystemPresets(ConfigType.BAN);
 		loadSystemPresets(ConfigType.BROADCAST);
 		loadSystemPresets(ConfigType.CHAT);
@@ -75,6 +77,7 @@ public class Configuration {
 		loadSystemPresets(ConfigType.BLOCKS);
 		loadSystemPresets(ConfigType.KITS);
 		loadSystemPresets(ConfigType.COMMAND);
+		loadSystemPresets(ConfigType.ECONOMY);
 		for(Material mat : Material.values()) {
 			materials.add(mat.name());
 		}
@@ -109,6 +112,21 @@ public class Configuration {
 			e.printStackTrace();
 		}
 	}
+	
+	private void createEconomyConfig() {
+		try {
+			File f = new File(xEssentials.getPlugin().getDataFolder() + File.separator + "economy.yml");
+			if(!f.exists()) {
+				FileConfiguration con = YamlConfiguration.loadConfiguration(f);
+				con.set("economy.enable", true);
+				con.set("economy.currency", "$");
+				con.set("economy.startersAmount", 10.0);
+				con.save(f);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 	private void createCommandConfig() {
 		try {
@@ -119,7 +137,9 @@ public class Configuration {
 				opt.header("here you can specify whenever a command should be unregistered or not\nfor example you got a other plugin which has the /home command this would basicly conflict with xEssentials\nhereby you can change the behaviour by unregistering xEssentials commands here.");
 				CommandList list = new CommandList();
 				for(String command : list.getAllCommands) {
-					con.set("command."+command+".enable", true);
+					if(!command.equalsIgnoreCase("money")) {
+						con.set("command."+command+".enable", true);	
+					}
 				}
 				con.save(f);
 			} else {
@@ -127,10 +147,10 @@ public class Configuration {
 				CommandList commandlist = new CommandList();
 				List<String> commands = Arrays.asList(commandlist.getAllCommands);
 				List<String> orginal = Arrays.asList(con.getConfigurationSection("command").getKeys(false).toArray(new String[0]));
-				if(commands.size() != orginal.size()) {
+				if((commands.size()-1) != orginal.size()) {
 					xEssentials.getPlugin().log("new commands detected!, adding them right now inside the command config!", LogType.INFO);
 					for(String cmd : commands) {
-						if(!orginal.contains(cmd)) {
+						if(!orginal.contains(cmd) && !cmd.equalsIgnoreCase("money")) {
 							xEssentials.getPlugin().log("registering new command: " + cmd + " in commands.yml", LogType.INFO);
 							con.set("command."+cmd+".enable", true);
 						}
@@ -563,6 +583,14 @@ public class Configuration {
 			}
 			hash.put("commands", commands);
 			configure.put(ConfigType.COMMAND, hash);
+		} else if(cfg == ConfigType.ECONOMY) {
+			File f = new File(xEssentials.getPlugin().getDataFolder() + File.separator + "economy.yml");
+			FileConfiguration con = YamlConfiguration.loadConfiguration(f);
+			HashMap<String, Object> hash = new HashMap<String, Object>();
+			hash.put("enable", con.getBoolean("economy.enable"));
+			hash.put("currency", con.getString("economy.currency"));
+			hash.put("startersAmount", con.getDouble("economy.startersAmount"));
+			configure.put(ConfigType.ECONOMY, hash);
 		}
 	}
 
@@ -732,6 +760,16 @@ public class Configuration {
 		GreylistConfig grey = new GreylistConfig();
 		return grey;
 	}
+	
+	/**
+	 * @author xize
+	 * @param returns the EconomyConfig as memory loaded
+	 * @return EconomyConfig
+	 */
+	public static EconomyConfig getEconomyConfig() {
+		EconomyConfig econ = new EconomyConfig();
+		return econ;
+	}
 
 	/**
 	 * @author xize
@@ -875,10 +913,10 @@ public class Configuration {
 		CommandList cmdlist = new CommandList();
 		for(String cmd : cmdlist.getAllCommands) {
 			PluginCommand command = xEssentials.getPlugin().getCommand(cmd);
-			if(Configuration.getCommandConfig().getUnregisteredCommands().contains(command.getName())) {
+			if(Configuration.getCommandConfig().getUnregisteredCommands().contains(command.getName()) || (command.getName().equalsIgnoreCase("money") && !Configuration.getEconomyConfig().isEconomyEnabled())) {
 				Configuration.getCommandConfig().unRegisterBukkitCommand(command);
 			} else {
-				if(!Configuration.getCommandConfig().isRegistered(command)) {
+				if(!Configuration.getCommandConfig().isRegistered(command) || (command.getName().equalsIgnoreCase("money") && !Configuration.getCommandConfig().isRegistered(command) && Configuration.getEconomyConfig().isEconomyEnabled())) {
 					Configuration.getCommandConfig().registerBukkitCommand(command);
 				}
 			}

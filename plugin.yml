@@ -267,3 +267,7 @@ commands:
      description: teleport to the wild!
      aliases: []
      permission: xEssentials.command.wild
+  money:
+     description: economy money command
+     aliases: []
+     permission: xEssentials.command.money

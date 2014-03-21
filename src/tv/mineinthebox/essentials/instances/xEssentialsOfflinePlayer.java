@@ -1227,6 +1227,147 @@ public class xEssentialsOfflinePlayer {
 	
 	/**
 	 * @author xize
+	 * @param returns the total amount of Essentials money of this player
+	 * @return Double
+	 */
+	public Double getTotalEssentialsMoney() {
+		update();   
+		return con.getDouble("money");
+	}
+	
+	/**
+	 * @author xize
+	 * @param returns true if the player has money if its 0.0 or the config entry doesn't exist it is false
+	 * @return Boolean
+	 */
+	public Boolean hasEssentialsMoney() {
+		update();
+		if(con.contains("money")) {
+			if(con.getDouble("money") > 0.0) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * @author xize
+	 * @param this withdraws the players money
+	 * @return Boolean
+	 */
+	public Boolean payEssentialsMoney(Double price) {
+		update();
+		Double money = (getTotalEssentialsMoney()-price);
+		if(money > 0.0) {
+			con.set("money", money);
+			try {
+				con.save(f);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			update();
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * @author xize
+	 * @param price - the price the player is gonna be to pay
+	 * @param toPayTo - the retriever
+	 * @return Boolean - if the player has no money it will be false.
+	 */
+	public Boolean payEssentialsMoney(Double price, xEssentialsOfflinePlayer toPayTo) {
+		update();
+		Double money = (getTotalEssentialsMoney()-price);
+		if(money > 0.0) {
+			con.set("money", money);
+			try {
+				con.save(f);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			update();
+			toPayTo.addEssentialsMoney(price);
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * @author xize
+	 * @param this will add money to the players bank
+	 */
+	public void addEssentialsMoney(Double price) {
+		update();
+		con.set("money", getTotalEssentialsMoney()+price);
+		try {
+			con.save(f);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		update();
+	}
+	
+	/**
+	 * @author xize
+	 * @param price - the price the player is gonna be to pay
+	 * @param toPayTo - the retriever
+	 * @return Boolean - if the player has no money it will be false.
+	 */
+	public Boolean payEssentialsMoney(Double price, xEssentialsPlayer toPayTo) {
+		update();
+		Double money = (getTotalEssentialsMoney()-price);
+		if(money > 0.0) {
+			con.set("money", money);
+			try {
+				con.save(f);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			update();
+			toPayTo.addEssentialsMoney(price);
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * @author xize
+	 * @param price - the price
+	 * @return Boolean
+	 */
+	public boolean hasPlayerEnoughMoneyFromPrice(Double price) {
+		update();
+		if(getTotalEssentialsMoney() > price || getTotalEssentialsMoney() == price) {
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * @author xize
+	 * @param clear the money of the player
+	 * @return void
+	 */
+	public void clearMoney() {
+		update();
+		con.set("money", null);
+		try {
+			con.save(f);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		update();
+	}
+	
+	/**
+	 * @author xize
 	 * @param gets updated at every call so we know that the configuration stored in the memory is still recent with the flat saved file!
 	 * @return void
 	 */

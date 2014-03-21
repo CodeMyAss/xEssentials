@@ -27,6 +27,7 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import tv.mineinthebox.essentials.Configuration;
 import tv.mineinthebox.essentials.xEssentials;
 import tv.mineinthebox.essentials.enums.PermissionKey;
 import tv.mineinthebox.essentials.enums.PlayerTaskEnum;
@@ -93,6 +94,9 @@ public class xEssentialsPlayer {
 			this.con.set("fly", false);
 			this.con.set("torch", false);
 			this.con.set("firefly", false);
+			if(Configuration.getEconomyConfig().isEconomyEnabled()){
+				this.con.set("money", Configuration.getEconomyConfig().getStartersMoney());
+			}
 			try {
 				this.con.save(this.f);
 			} catch (IOException e) {
@@ -1789,7 +1793,7 @@ public class xEssentialsPlayer {
 		}
 		update();
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param set the kit cooldown
@@ -1805,7 +1809,7 @@ public class xEssentialsPlayer {
 		}
 		update();
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param remove the kit cooldown
@@ -1821,7 +1825,7 @@ public class xEssentialsPlayer {
 		}
 		update();
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param return the saved cooldown of this player
@@ -1830,7 +1834,7 @@ public class xEssentialsPlayer {
 	public Long getKitCooldown() {
 		return con.getLong("kitCooldown");
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param returns true whenever the player has the cooldown else false
@@ -1842,7 +1846,7 @@ public class xEssentialsPlayer {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param returns true if the player owns warps
@@ -1855,7 +1859,7 @@ public class xEssentialsPlayer {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param returns all the warps of this player!
@@ -1870,7 +1874,7 @@ public class xEssentialsPlayer {
 		}
 		return warps.toArray(new Warp[warps.size()]);
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param warpname - the warpname
@@ -1890,7 +1894,7 @@ public class xEssentialsPlayer {
 		}
 		update();
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param warpname - the disired warp name to be removed
@@ -1905,7 +1909,7 @@ public class xEssentialsPlayer {
 		}
 		update();
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param key - possible warp name
@@ -1919,7 +1923,7 @@ public class xEssentialsPlayer {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param get a warp through a key
@@ -1931,6 +1935,147 @@ public class xEssentialsPlayer {
 			return new Warp(con, getPlayer().getName(), key);
 		}
 		throw new NullPointerException("this player has no warp called " + key);
+	}
+
+	/**
+	 * @author xize
+	 * @param returns the total amount of Essentials money of this player
+	 * @return Double
+	 */
+	public Double getTotalEssentialsMoney() {
+		update();   
+		return con.getDouble("money");
+	}
+
+	/**
+	 * @author xize
+	 * @param returns true if the player has money if its 0.0 or the config entry doesn't exist it is false
+	 * @return Boolean
+	 */
+	public Boolean hasEssentialsMoney() {
+		update();
+		if(con.contains("money")) {
+			if(con.getDouble("money") > 0.0) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * @author xize
+	 * @param this withdraws the players money
+	 * @return Boolean
+	 */
+	public Boolean payEssentialsMoney(Double price) {
+		update();
+		Double money = (getTotalEssentialsMoney()-price);
+		if(money > 0.0) {
+			con.set("money", money);
+			try {
+				con.save(f);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			update();
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * @author xize
+	 * @param price - the price the player is gonna be to pay
+	 * @param toPayTo - the retriever
+	 * @return Boolean - if the player has no money it will be false.
+	 */
+	public Boolean payEssentialsMoney(Double price, xEssentialsOfflinePlayer toPayTo) {
+		update();
+		Double money = (getTotalEssentialsMoney()-price);
+		if(money > 0.0) {
+			con.set("money", money);
+			try {
+				con.save(f);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			update();
+			toPayTo.addEssentialsMoney(price);
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * @author xize
+	 * @param price - the price the player is gonna be to pay
+	 * @param toPayTo - the retriever
+	 * @return Boolean - if the player has no money it will be false.
+	 */
+	public Boolean payEssentialsMoney(Double price, xEssentialsPlayer toPayTo) {
+		update();
+		Double money = (getTotalEssentialsMoney()-price);
+		if(money > 0.0) {
+			con.set("money", money);
+			try {
+				con.save(f);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			update();
+			toPayTo.addEssentialsMoney(price);
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * @author xize
+	 * @param this will add money to the players bank
+	 */
+	public void addEssentialsMoney(Double price) {
+		update();
+		con.set("money", getTotalEssentialsMoney()+price);
+		try {
+			con.save(f);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		update();
+	}
+
+	/**
+	 * @author xize
+	 * @param price - the price
+	 * @return Boolean
+	 */
+	public boolean hasPlayerEnoughMoneyFromPrice(Double price) {
+		update();
+		if(getTotalEssentialsMoney() > price || getTotalEssentialsMoney() == price) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * @author xize
+	 * @param clear the money of the player
+	 * @return void
+	 */
+	public void clearMoney() {
+		update();
+		con.set("money", null);
+		try {
+			con.save(f);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		update();
 	}
 
 	/**

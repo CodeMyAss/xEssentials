@@ -6,6 +6,7 @@ public enum PermissionKey {
 	IS_ADMIN("xEssentials.isAdmin"),
 	CMD_WILD("xEssentials.command.wild"),
 	MULTIPLE_HOMES("xEssentials.MultipleHomes"),
+	CMD_MONEY("xEssentials.command.money"),
 	CMD_AFK("xEssentials.command.afk"),
 	CMD_BAN("xEssentials.command.ban"),
 	CMD_GREYLIST("xEssentials.command.greylist"),

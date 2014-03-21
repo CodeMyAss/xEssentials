@@ -12,5 +12,6 @@ public enum ConfigType {
 	GREYLIST,
 	BLOCKS,
 	KITS,
-	COMMAND
+	COMMAND,
+	ECONOMY
 }

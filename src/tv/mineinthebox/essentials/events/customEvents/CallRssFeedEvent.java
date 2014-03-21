@@ -97,7 +97,7 @@ public class CallRssFeedEvent  {
 				} catch (MalformedURLException e1) {
 					xEssentials.getPlugin().log("the url is wrong for the RSS!", LogType.SEVERE);
 				} catch (IOException e1) {
-					xEssentials.getPlugin().log("Connection timeout for the RSS event! " + e1.getCause(), LogType.SEVERE);
+					xEssentials.getPlugin().log("Connection timeout for the RSS event!", LogType.SEVERE);
 				}
 
 			}
@@ -106,12 +106,14 @@ public class CallRssFeedEvent  {
 
 	public static void saveLastFeed() {
 		try {
-			File f = new File(xEssentials.getPlugin().getDataFolder() + File.separator + "lastRssFeed.yml");
-			YamlConfiguration con = YamlConfiguration.loadConfiguration(f);
-			con.set("author", feed.getAuthor().replaceAll("[^a-zA-Z0-9]", ""));
-			con.set("title", feed.getTitle());
-			con.set("link", feed.getLink());
-			con.save(f);
+			if(feed instanceof RssFeed) {
+				File f = new File(xEssentials.getPlugin().getDataFolder() + File.separator + "lastRssFeed.yml");
+				YamlConfiguration con = YamlConfiguration.loadConfiguration(f);
+				con.set("author", feed.getAuthor().replaceAll("[^a-zA-Z0-9]", ""));
+				con.set("title", feed.getTitle());
+				con.set("link", feed.getLink());
+				con.save(f);
+			}
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

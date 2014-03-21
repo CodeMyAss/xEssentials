@@ -92,7 +92,8 @@ public class CallRssFeedEvent  {
 						}
 					}
 
-
+				} catch(NullPointerException e1) {
+					xEssentials.getPlugin().log("couldn't create a stored RssFeed object, probably because you don't have a propper connection at first run.", LogType.SEVERE);
 				} catch (MalformedURLException e1) {
 					xEssentials.getPlugin().log("the url is wrong for the RSS!", LogType.SEVERE);
 				} catch (IOException e1) {

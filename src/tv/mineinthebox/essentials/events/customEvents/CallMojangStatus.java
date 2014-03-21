@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.util.HashMap;
 
 import org.bukkit.Bukkit;
@@ -15,6 +16,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import tv.mineinthebox.essentials.xEssentials;
+import tv.mineinthebox.essentials.enums.LogType;
 import tv.mineinthebox.essentials.enums.MojangStatusResponse;
 import tv.mineinthebox.essentials.instances.MojangStatus;
 
@@ -68,12 +70,14 @@ public class CallMojangStatus {
 						Bukkit.getPluginManager().callEvent(new MojangStatusEvent(stat, MojangStatusResponse.UNKNOWN));
 						status = stat;
 					}
+				} catch(UnknownHostException e) {
+					xEssentials.getPlugin().log("couldn't connect to status.mojang.com, is the server down or your connection?", LogType.SEVERE);
 				} catch (FileNotFoundException e) {
-					e.printStackTrace();
+					xEssentials.getPlugin().log("couldn't find the current page, please talk to xize the developer of xEssentials for support!", LogType.SEVERE);
 				} catch (IOException e) {
-					e.printStackTrace();
+					xEssentials.getPlugin().log("couldn't connect to status.mojang.com, the website seems down", LogType.SEVERE);
 				} catch (ParseException e) {
-					e.printStackTrace();
+					xEssentials.getPlugin().log("detected malformed json stats from status.mojang.com", LogType.SEVERE);
 				}
 			}
 			

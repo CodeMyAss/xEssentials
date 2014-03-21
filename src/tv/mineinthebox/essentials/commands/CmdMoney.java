@@ -3,6 +3,7 @@ package tv.mineinthebox.essentials.commands;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -12,6 +13,7 @@ import tv.mineinthebox.essentials.Configuration;
 import tv.mineinthebox.essentials.Warnings;
 import tv.mineinthebox.essentials.xEssentials;
 import tv.mineinthebox.essentials.enums.PermissionKey;
+import tv.mineinthebox.essentials.events.customEvents.PlayerTransactionEvent;
 import tv.mineinthebox.essentials.instances.xEssentialsOfflinePlayer;
 import tv.mineinthebox.essentials.instances.xEssentialsPlayer;
 
@@ -125,6 +127,7 @@ public class CmdMoney {
 											xp.payEssentialsMoney(money, xpp);
 											sender.sendMessage(ChatColor.GREEN + "you have successfully paid " + xpp.getUser() + " " + money + Configuration.getEconomyConfig().getCurency());
 											xpp.getPlayer().sendMessage(ChatColor.GREEN + sender.getName() + " has paid " + money + Configuration.getEconomyConfig().getCurency() + " to you!");
+											Bukkit.getPluginManager().callEvent(new PlayerTransactionEvent(xp.getPlayer(), money, xpp.getUser()));
 										} else {
 											sender.sendMessage(ChatColor.RED + "you don't have enough money to pay this player!");
 										}
@@ -138,6 +141,7 @@ public class CmdMoney {
 										if(xp.hasPlayerEnoughMoneyFromPrice(money)) {
 											xp.payEssentialsMoney(money, off);
 											sender.sendMessage(ChatColor.GREEN + "you have successfully paid " + off.getUser() + " " + money + Configuration.getEconomyConfig().getCurency());
+											Bukkit.getPluginManager().callEvent(new PlayerTransactionEvent(xp.getPlayer(), money, off.getUser()));
 										} else {
 											sender.sendMessage(ChatColor.RED + "you don't have enough money to pay this player!");
 										}

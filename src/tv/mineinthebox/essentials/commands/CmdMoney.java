@@ -81,6 +81,7 @@ public class CmdMoney {
 							sender.sendMessage(ChatColor.RED + "Admin: " + ChatColor.GRAY + "/money clear <player> " + ChatColor.WHITE + ": clears the bank acount of a specific player");
 							sender.sendMessage(ChatColor.RED + "Admin: " + ChatColor.GRAY + "/money give <player> <amount> " + ChatColor.WHITE + ": give a player a amount of money");
 							sender.sendMessage(ChatColor.RED + "Admin: " + ChatColor.GRAY + "/money set <player> <amount> " + ChatColor.WHITE + ": set the current amount of money, this act as a reset");
+							sender.sendMessage(ChatColor.RED + "Admin: " + ChatColor.GRAY + "/money remove <player> <amount> " + ChatColor.WHITE + ": withdraw the players money");
 						}
 					} else if(args[0].equalsIgnoreCase("top")) {
 						SortedMap<Double, String> map = new TreeMap<Double, String>().descendingMap();
@@ -225,6 +226,42 @@ public class CmdMoney {
 										off.clearMoney();
 										off.addEssentialsMoney(money);
 										sender.sendMessage(ChatColor.GREEN + "you successfully reset the balance of player " + off.getUser() + " to " + money + Configuration.getEconomyConfig().getCurency());
+									} catch(NumberFormatException e) {
+										sender.sendMessage(ChatColor.RED + "invalid money usage on the third argument!");
+									}
+								}
+							} else {
+								Warnings.getWarnings(sender).playerHasNeverPlayedBefore();
+							}
+						} else {
+							Warnings.getWarnings(sender).noPermission();
+						}
+					} else if(args[0].equalsIgnoreCase("remove")) {
+						if(sender.hasPermission(PermissionKey.IS_ADMIN.getPermission())) {
+							if(xEssentials.isEssentialsPlayer(args[1])) {
+								if(xEssentials.contains(args[1])) {
+									xEssentialsPlayer xp = xEssentials.get(args[1]);
+									try {
+										Double money = Double.parseDouble(args[2]);
+										if(xp.hasPlayerEnoughMoneyFromPrice(money)) {
+											xp.payEssentialsMoney(money);
+											sender.sendMessage(ChatColor.GREEN + "you successfully withdrawed " + money + " from " + xp.getUser() + " his bank!");
+										} else {
+											sender.sendMessage(ChatColor.RED + "you cannot withdraw more money which the player doesn't have!");
+										}
+									} catch(NumberFormatException e) {
+										sender.sendMessage(ChatColor.RED + "invalid money usage on the third argument!");
+									}
+								} else {
+									xEssentialsOfflinePlayer off = xEssentials.getOfflinePlayer(args[1]);
+									try {
+										Double money = Double.parseDouble(args[2]);
+										if(off.hasPlayerEnoughMoneyFromPrice(money)) {
+											off.payEssentialsMoney(money);
+											sender.sendMessage(ChatColor.GREEN + "you successfully withdrawed " + money + " from " + off.getUser() + " his bank!");
+										} else {
+											sender.sendMessage(ChatColor.RED + "you cannot withdraw more money which the player doesn't have!");
+										}
 									} catch(NumberFormatException e) {
 										sender.sendMessage(ChatColor.RED + "invalid money usage on the third argument!");
 									}

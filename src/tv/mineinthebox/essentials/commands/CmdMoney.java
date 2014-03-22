@@ -1,7 +1,11 @@
 package tv.mineinthebox.essentials.commands;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -79,8 +83,24 @@ public class CmdMoney {
 							sender.sendMessage(ChatColor.RED + "Admin: " + ChatColor.GRAY + "/money set <player> <amount> " + ChatColor.WHITE + ": set the current amount of money, this act as a reset");
 						}
 					} else if(args[0].equalsIgnoreCase("top")) {
-						//List<xEssentialsOfflinePlayer> list = new ArrayList<xEssentialsOfflinePlayer>();
-						//TO-DO
+						SortedMap<Double, String> map = new TreeMap<Double, String>().descendingMap();
+						for(xEssentialsOfflinePlayer off : xEssentials.getOfflinePlayers()) {
+							if(off.hasEssentialsMoney()) {
+								map.put(off.getTotalEssentialsMoney(), off.getUser());
+							}
+						}
+						Iterator<Entry<Double, String>> it = map.entrySet().iterator();
+						int i = 1;
+						sender.sendMessage(ChatColor.GOLD + ".oO___[Money top]___Oo.");
+						while(i < 11) {
+							if(it.hasNext()) {
+								Entry<Double, String> entry = (Entry<Double, String>) it.next();
+								sender.sendMessage(ChatColor.GREEN +""+ i + ": " + ChatColor.GRAY + entry.getValue() + ": " + ChatColor.GREEN + entry.getKey() + Configuration.getEconomyConfig().getCurency());	
+								i++;
+							} else {
+								break;
+							}
+						}
 					} else if(args[0].equalsIgnoreCase("clear")) {
 						if(sender instanceof Player) {
 							if(sender.hasPermission(PermissionKey.IS_ADMIN.getPermission())) {

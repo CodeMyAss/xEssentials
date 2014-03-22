@@ -39,15 +39,17 @@ public class CmdMoney {
 				if(args.length == 2) {
 					if(args[0].equalsIgnoreCase("clear") && sender.hasPermission(PermissionKey.IS_ADMIN.getPermission())) {
 						return getPlayerByName(args[1]);
-					}
-				} else if(args.length == 3) {
-					if(args[0].equalsIgnoreCase("pay")) {
+					} else if(args[0].equalsIgnoreCase("pay")) {
 						return getPlayerByName(args[1]);
 					} else if(args[0].equalsIgnoreCase("give")) {
 						if(sender.hasPermission(PermissionKey.IS_ADMIN.getPermission())) {
 							return getPlayerByName(args[1]);
 						}
 					} else if(args[0].equalsIgnoreCase("set")) {
+						if(sender.hasPermission(PermissionKey.IS_ADMIN.getPermission())) {
+							return getPlayerByName(args[1]);
+						}
+					} else if(args[0].equalsIgnoreCase("remove")) {
 						if(sender.hasPermission(PermissionKey.IS_ADMIN.getPermission())) {
 							return getPlayerByName(args[1]);
 						}

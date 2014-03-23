@@ -29,6 +29,7 @@ import tv.mineinthebox.essentials.configurations.MotdConfig;
 import tv.mineinthebox.essentials.configurations.PlayerConfig;
 import tv.mineinthebox.essentials.configurations.PvpConfig;
 import tv.mineinthebox.essentials.configurations.RulesConfig;
+import tv.mineinthebox.essentials.configurations.ShopConfig;
 import tv.mineinthebox.essentials.enums.ConfigType;
 import tv.mineinthebox.essentials.enums.LogType;
 import tv.mineinthebox.essentials.events.CustomEventHandler;
@@ -65,6 +66,7 @@ public class Configuration {
 		createKitConfig();
 		createCommandConfig();
 		createEconomyConfig();
+		createShopConfig();
 		loadSystemPresets(ConfigType.BAN);
 		loadSystemPresets(ConfigType.BROADCAST);
 		loadSystemPresets(ConfigType.CHAT);
@@ -78,6 +80,7 @@ public class Configuration {
 		loadSystemPresets(ConfigType.KITS);
 		loadSystemPresets(ConfigType.COMMAND);
 		loadSystemPresets(ConfigType.ECONOMY);
+		loadSystemPresets(ConfigType.SHOP);
 		for(Material mat : Material.values()) {
 			materials.add(mat.name());
 		}
@@ -85,6 +88,25 @@ public class Configuration {
 
 	private String serialize_name(String mob) {
 		return mob.toString().toLowerCase();
+	}
+	
+	private void createShopConfig() {
+		try {
+			File f = new File(xEssentials.getPlugin().getDataFolder() + File.separator + "shops.yml");
+			if(!f.exists()) {
+				FileConfiguration con = YamlConfiguration.loadConfiguration(f);
+				con.set("shop.enable", true);
+				con.set("shop.shop-admin-prefix", "Admin Shop");
+				con.set("shop.tax.enable", false);
+				con.set("shop.tax.price", 2.0);
+				con.set("shop.cooldown.enable", false);
+				con.set("shop.cooldown.time", 10);
+				con.set("shop.disable-messages", false);
+				con.save(f);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void createBlockConfig() {
@@ -591,6 +613,18 @@ public class Configuration {
 			hash.put("currency", con.getString("economy.currency"));
 			hash.put("startersAmount", con.getDouble("economy.startersAmount"));
 			configure.put(ConfigType.ECONOMY, hash);
+		} else if(cfg == ConfigType.SHOP) {
+			File f = new File(xEssentials.getPlugin().getDataFolder() + File.separator + "shops.yml");
+			FileConfiguration con = YamlConfiguration.loadConfiguration(f);
+			HashMap<String, Object> hash = new HashMap<String, Object>();
+			hash.put("enable", con.getBoolean("shop.enable"));
+			hash.put("AdminShopPrefix", con.getString("shop.shop-admin-prefix"));
+			hash.put("isTaxEnabled", con.getBoolean("shop.tax.enable"));
+			hash.put("getTax", con.getDouble("shop.tax.price"));
+			hash.put("isCooldown", con.getBoolean("shop.cooldown.enable"));
+			hash.put("getCooldownTime", con.getInt("shop.cooldown.time"));
+			hash.put("disableMessages", con.getBoolean("shop.disable-messages"));
+			configure.put(ConfigType.SHOP, hash);
 		}
 	}
 
@@ -819,6 +853,16 @@ public class Configuration {
 	public static ChatConfig getChatConfig() {
 		ChatConfig config = new ChatConfig();
 		return config;
+	}
+	
+	/**
+	 * @author xize
+	 * @param returns the full memory configuration for shops
+	 * @return ShopConfig
+	 */
+	public static ShopConfig getShopConfig() {
+		ShopConfig shop = new ShopConfig();
+		return shop;
 	}
 
 	/**

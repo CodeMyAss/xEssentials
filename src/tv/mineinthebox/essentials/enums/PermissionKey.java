@@ -73,6 +73,8 @@ public enum PermissionKey {
 	CMD_POWERTOOL("xEssentials.command.powertool"),
 	CMD_NUKE("xEssentials.command.nuke"),
 	CMD_FAKE_NUKE("xEssentials.command.fakenuke"),
+	SIGN_SHOP("xEssentials.signs.shop"),
+	SIGN_SHOP_USE("xEssentials.signs.shop.use"),
 	SIGN_BOOM("xEssentials.signs.boom"),
 	SIGN_FIREWORK("xEssentials.signs.firework"),
 	SIGN_COLOR("xEssentials.signs.color"),

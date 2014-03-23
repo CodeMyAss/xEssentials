@@ -13,5 +13,6 @@ public enum ConfigType {
 	BLOCKS,
 	KITS,
 	COMMAND,
-	ECONOMY
+	ECONOMY,
+	SHOP
 }

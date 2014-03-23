@@ -81,6 +81,10 @@ import tv.mineinthebox.essentials.events.pvp.ClientSideGraveYard_ProtocolLib;
 import tv.mineinthebox.essentials.events.pvp.KillBountys;
 import tv.mineinthebox.essentials.events.pvp.NpcReplacePlayer;
 import tv.mineinthebox.essentials.events.pvp.PvpEvent;
+import tv.mineinthebox.essentials.events.shops.SignAdminShopCreateEvent;
+import tv.mineinthebox.essentials.events.shops.SignAdminShopOpenEvent;
+import tv.mineinthebox.essentials.events.shops.SignNormalShopCreateEvent;
+import tv.mineinthebox.essentials.events.shops.SignNormalShopOpenEvent;
 import tv.mineinthebox.essentials.events.signs.ColorSign;
 import tv.mineinthebox.essentials.events.signs.FireworkSign;
 import tv.mineinthebox.essentials.events.signs.FreeSign;
@@ -200,6 +204,12 @@ public class Handler {
 		setListener(new GetYourHeadSign());
 		setListener(new WarpSign());
 		setListener(new WildSign());
+		if(Configuration.getShopConfig().isShopsEnabled()) {
+			setListener(new SignAdminShopCreateEvent());
+			setListener(new SignAdminShopOpenEvent());
+			setListener(new SignNormalShopCreateEvent());
+			setListener(new SignNormalShopOpenEvent());
+		}
 		
 		//block events
 		if(Configuration.getBlockConfig().isNotifyOnBreakEnabled()) {setListener(new NotifyAdminOnBlockBreak());}

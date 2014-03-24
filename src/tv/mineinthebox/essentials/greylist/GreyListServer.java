@@ -8,14 +8,14 @@ import tv.mineinthebox.essentials.enums.LogType;
 
 public class GreyListServer implements Runnable {
 	
-	public GreyListServer(int port) {
-		this.port = port;
-	}
-
 	private int port;
 
 	private volatile Server server;
 	private Thread web;
+	
+	public GreyListServer(int port) {
+		this.port = port;
+	}
 
 	public void createServer() {
 		this.server = new Server();

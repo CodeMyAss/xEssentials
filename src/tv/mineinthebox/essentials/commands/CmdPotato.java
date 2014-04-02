@@ -39,7 +39,7 @@ public class CmdPotato {
 						Warnings.getWarnings(sender).consoleMessage();
 					}
 				} else if(args.length == 1) {
-					Player p = Bukkit.getPlayer(args[0]);
+					Player p = xEssentials.getOfflinePlayer(args[0]).getPlayer();
 					if(p instanceof Player) {
 						xEssentialsPlayer xp = xEssentials.get(p.getName());
 						xp.vanish();

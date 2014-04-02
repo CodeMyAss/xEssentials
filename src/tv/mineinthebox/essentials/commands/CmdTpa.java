@@ -28,7 +28,7 @@ public class CmdTpa {
 							sender.sendMessage(ChatColor.DARK_GRAY + "Default: " + ChatColor.GRAY + "/tpa help " + ChatColor.WHITE + ": shows help");
 							sender.sendMessage(ChatColor.DARK_GRAY + "Default: " + ChatColor.GRAY + "/tpa <player> " + ChatColor.WHITE + ": sent a tpa request to a player");
 						} else {
-							final Player victem = Bukkit.getPlayer(args[0]);
+							final Player victem = xEssentials.getOfflinePlayer(args[0]).getPlayer();
 							final String victemName = victem.getName();
 							final String senderName = sender.getName();
 							if(victem instanceof Player) {

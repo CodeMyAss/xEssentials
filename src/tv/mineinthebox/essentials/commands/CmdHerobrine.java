@@ -1,6 +1,5 @@
 package tv.mineinthebox.essentials.commands;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -14,6 +13,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import tv.mineinthebox.essentials.Warnings;
+import tv.mineinthebox.essentials.xEssentials;
 import tv.mineinthebox.essentials.enums.PermissionKey;
 
 public class CmdHerobrine {
@@ -43,7 +43,7 @@ public class CmdHerobrine {
 						Warnings.getWarnings(sender).consoleMessage();
 					}
 				} else if(args.length == 1) {
-					Player p = Bukkit.getPlayer(args[0]);
+					Player p = xEssentials.getOfflinePlayer(args[0]).getPlayer();
 					if(p instanceof Player) {
 						Skeleton zombe = (Skeleton) p.getWorld().spawnEntity(p.getLocation().add(6, 0, 6), EntityType.SKELETON);
 						ItemStack item = new ItemStack(Material.SKULL_ITEM);

@@ -1,6 +1,5 @@
 package tv.mineinthebox.essentials.commands;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
@@ -12,6 +11,8 @@ import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Horse;
+import org.bukkit.entity.Horse.Color;
+import org.bukkit.entity.Horse.Variant;
 import org.bukkit.entity.MushroomCow;
 import org.bukkit.entity.Ocelot;
 import org.bukkit.entity.Pig;
@@ -19,16 +20,15 @@ import org.bukkit.entity.PigZombie;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Sheep;
 import org.bukkit.entity.Skeleton;
+import org.bukkit.entity.Skeleton.SkeletonType;
 import org.bukkit.entity.Villager;
+import org.bukkit.entity.Villager.Profession;
 import org.bukkit.entity.Wolf;
 import org.bukkit.entity.Zombie;
-import org.bukkit.entity.Horse.Color;
-import org.bukkit.entity.Horse.Variant;
-import org.bukkit.entity.Skeleton.SkeletonType;
-import org.bukkit.entity.Villager.Profession;
 import org.bukkit.inventory.ItemStack;
 
 import tv.mineinthebox.essentials.Warnings;
+import tv.mineinthebox.essentials.xEssentials;
 import tv.mineinthebox.essentials.enums.PermissionKey;
 
 public class CmdSpawnmob {
@@ -160,7 +160,7 @@ public class CmdSpawnmob {
 							} else if(entity == EntityType.WITHER) {
 								sender.sendMessage(ChatColor.RED + "you are not allowed to spawn withers");
 							} else {
-								Player victem = Bukkit.getPlayerExact(args[1]);
+								Player victem = xEssentials.getOfflinePlayer(args[1]).getPlayer();
 								if(victem instanceof Player) {
 									if(entity.isAlive()) {
 										victem.getLocation().getWorld().spawnEntity(victem.getLocation(), entity);	
@@ -415,7 +415,7 @@ public class CmdSpawnmob {
 				} else if(args.length == 4) {
 					Player p = (Player) sender;
 					if(p instanceof Player) {
-						Player victem = Bukkit.getPlayerExact(args[3]);
+						Player victem = xEssentials.getOfflinePlayer(args[3]).getPlayer();
 						if(victem instanceof Player) {
 							if(args[1].equalsIgnoreCase("type")) {
 								try {

@@ -1,6 +1,5 @@
 package tv.mineinthebox.essentials.commands;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -8,6 +7,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import tv.mineinthebox.essentials.Warnings;
+import tv.mineinthebox.essentials.xEssentials;
 import tv.mineinthebox.essentials.enums.PermissionKey;
 import tv.mineinthebox.essentials.events.players.TeleportBackEvent;
 
@@ -31,7 +31,7 @@ public class CmdBack {
 						Warnings.getWarnings(sender).consoleMessage();
 					}
 				} else if(args.length == 1) {
-					Player p = Bukkit.getPlayer(args[0]);
+					Player p = xEssentials.getOfflinePlayer(args[0]).getPlayer();
 					if(p instanceof Player) {
 						if(TeleportBackEvent.locations.containsKey(p.getName())) {
 							Location loc = TeleportBackEvent.locations.get(p.getName());

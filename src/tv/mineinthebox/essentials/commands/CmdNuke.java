@@ -1,6 +1,5 @@
 package tv.mineinthebox.essentials.commands;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -32,7 +31,7 @@ public class CmdNuke {
 						Warnings.getWarnings(sender).consoleMessage();
 					}
 				} else if(args.length == 1) {
-					Player p = Bukkit.getPlayer(args[0]);
+					Player p = xEssentials.getOfflinePlayer(args[0]).getPlayer();
 					if(p instanceof Player) {
 						xEssentialsPlayer xp = xEssentials.get(p.getName());
 						for(Entity entity : xp.getPlayer().getNearbyEntities(40, 40, 40)) {

@@ -1,12 +1,12 @@
 package tv.mineinthebox.essentials.commands;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import tv.mineinthebox.essentials.Warnings;
+import tv.mineinthebox.essentials.xEssentials;
 import tv.mineinthebox.essentials.enums.PermissionKey;
 
 public class CmdSmite {
@@ -23,7 +23,7 @@ public class CmdSmite {
 						Warnings.getWarnings(sender).consoleMessage();
 					}
 				} else if(args.length == 1) {
-					Player p = Bukkit.getPlayer(args[0]);
+					Player p =xEssentials.getOfflinePlayer(args[0]).getPlayer();
 					if(p instanceof Player) {
 						p.getWorld().strikeLightning(p.getLocation());
 						p.sendMessage(ChatColor.GRAY + "you got smited!");

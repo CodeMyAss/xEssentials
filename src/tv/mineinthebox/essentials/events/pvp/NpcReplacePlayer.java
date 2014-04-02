@@ -110,6 +110,7 @@ public class NpcReplacePlayer implements Listener {
 		}
 	}
 	
+	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onNpcDeath(EntityDeathEvent e) {
 		if(npcs.containsKey(e.getEntity().getUniqueId())) {

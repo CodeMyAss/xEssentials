@@ -3,7 +3,6 @@ package tv.mineinthebox.essentials.commands;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -60,7 +59,7 @@ public class CmdInvsee {
 					if(sender instanceof Player) {
 						if(sender.hasPermission(PermissionKey.CMD_INVSEE.getPermission())) {
 							Player p = (Player) sender;
-							Player a = Bukkit.getPlayer(args[0]);
+							Player a = xEssentials.getOfflinePlayer(args[0]).getPlayer();
 							if(a instanceof Player) {
 								if(xEssentials.contains(args[0])) {
 									xEssentialsPlayer xp = xEssentials.get(args[0]);

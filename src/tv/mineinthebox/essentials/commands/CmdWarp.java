@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -74,7 +73,7 @@ public class CmdWarp {
 						}
 					}
 				} else if(args.length == 2) {
-					Player p = Bukkit.getPlayer(args[0]);
+					Player p = xEssentials.getOfflinePlayer(args[0]).getPlayer();
 					if(p instanceof Player) {
 						if(xEssentials.doesWarpExist(args[1])) {
 							Warp warp = xEssentials.getWarpByName(args[1]);

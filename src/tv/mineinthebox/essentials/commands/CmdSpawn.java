@@ -55,7 +55,7 @@ public class CmdSpawn {
 				}
 			} else if(args.length == 1) {
 				if(sender.hasPermission(PermissionKey.CMD_SPAWN_OTHERS.getPermission())) {
-					Player victem = Bukkit.getPlayer(args[0]);
+					Player victem = xEssentials.getOfflinePlayer(args[0]).getPlayer();
 					if(victem instanceof Player) {
 						try {
 							File f = new File(xEssentials.getPlugin().getDataFolder() + File.separator + "spawn.yml");

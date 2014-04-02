@@ -1,12 +1,12 @@
 package tv.mineinthebox.essentials.commands;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import tv.mineinthebox.essentials.Warnings;
+import tv.mineinthebox.essentials.xEssentials;
 import tv.mineinthebox.essentials.enums.PermissionKey;
 
 public class CmdTphere {
@@ -26,7 +26,7 @@ public class CmdTphere {
 					} else {
 						if(sender instanceof Player) {
 							Player p = (Player) sender;
-							Player victem = Bukkit.getPlayer(args[0]);
+							Player victem = xEssentials.getOfflinePlayer(args[0]).getPlayer();
 							if(victem instanceof Player) {
 								sender.sendMessage(ChatColor.GREEN + "teleported " + victem.getName() + " to you!");
 								victem.sendMessage(ChatColor.GREEN + sender.getName() + " has teleported you to his location!");

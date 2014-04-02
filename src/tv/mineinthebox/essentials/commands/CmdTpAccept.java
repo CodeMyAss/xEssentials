@@ -1,12 +1,12 @@
 package tv.mineinthebox.essentials.commands;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import tv.mineinthebox.essentials.Warnings;
+import tv.mineinthebox.essentials.xEssentials;
 import tv.mineinthebox.essentials.enums.PermissionKey;
 import tv.mineinthebox.essentials.utils.TpaManager;
 
@@ -17,7 +17,7 @@ public class CmdTpAccept {
 			if(sender.hasPermission(PermissionKey.CMD_TP_ACCEPT.getPermission())) {
 				if(TpaManager.containsKey(sender.getName())) {
 					Player p = (Player) sender;
-					Player victem = Bukkit.getPlayer(TpaManager.get(sender.getName()));
+					Player victem = xEssentials.getOfflinePlayer(TpaManager.get(sender.getName())).getPlayer();
 					if(victem instanceof Player) {
 						victem.teleport(p);
 						victem.sendMessage(ChatColor.GREEN + sender.getName() + " has successfully accepted your tpa request!");

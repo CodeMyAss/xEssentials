@@ -66,7 +66,7 @@ public class CmdHomeInvite {
 							if(!HomeInviteManager.containsKey(args[0])) {
 								xEssentialsOfflinePlayer xp = xEssentials.getOfflinePlayer(sender.getName());
 								if(xp.hasHome()) {
-									Player victem = Bukkit.getPlayer(args[0]);
+									Player victem = xEssentials.getOfflinePlayer(args[0]).getPlayer();
 									if(victem instanceof Player) {
 										xEssentialsPlayer xpp = xEssentials.get(victem.getName());
 										if(xpp.isVanished()) {
@@ -97,7 +97,7 @@ public class CmdHomeInvite {
 						if(!HomeInviteManager.containsKey(args[0])) {
 							xEssentialsOfflinePlayer xp = xEssentials.getOfflinePlayer(sender.getName());
 							if(xp.hasHome()) {
-								Player victem = Bukkit.getPlayer(args[0]);
+								Player victem = xEssentials.getOfflinePlayer(args[0]).getPlayer();
 								if(victem instanceof Player) {
 									xEssentialsPlayer xpp = xEssentials.get(victem.getName());
 									if(xpp.isVanished()) {
@@ -140,8 +140,8 @@ public class CmdHomeInvite {
 			@Override
 			public void run() {
 				if(HomeInviteManager.containsKey(requester)) {
-					Player rp = Bukkit.getPlayer(victem);
-					Player vp = Bukkit.getPlayer(requester);
+					Player rp = xEssentials.getOfflinePlayer(victem).getPlayer();
+					Player vp = xEssentials.getOfflinePlayer(requester).getPlayer();
 					if(rp instanceof Player) {
 						rp.sendMessage(ChatColor.GRAY + requester + ChatColor.RED + " has not accepted your home request, over time.");
 					}

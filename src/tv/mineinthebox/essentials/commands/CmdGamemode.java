@@ -1,6 +1,5 @@
 package tv.mineinthebox.essentials.commands;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.command.Command;
@@ -8,6 +7,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import tv.mineinthebox.essentials.Warnings;
+import tv.mineinthebox.essentials.xEssentials;
 import tv.mineinthebox.essentials.enums.PermissionKey;
 import tv.mineinthebox.essentials.hook.Hooks;
 import tv.mineinthebox.essentials.hook.WorldGuardHook;
@@ -99,7 +99,7 @@ public class CmdGamemode {
 				}
 			} else if(args.length == 2) {
 				if(sender.hasPermission(PermissionKey.CMD_GAMEMODE.getPermission())) {
-					Player p = Bukkit.getPlayer(args[1]);
+					Player p = xEssentials.getOfflinePlayer(args[1]).getPlayer();
 					if(p instanceof Player) {
 						if(args[0].equalsIgnoreCase("s")) {
 							if(p.getGameMode() != GameMode.SURVIVAL) {

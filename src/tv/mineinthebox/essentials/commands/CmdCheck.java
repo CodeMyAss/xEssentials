@@ -1,6 +1,5 @@
 package tv.mineinthebox.essentials.commands;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -72,7 +71,7 @@ public class CmdCheck {
 			} else if(args.length == 2) {
 				if(args[0].equalsIgnoreCase("list")) {
 					if(sender.hasPermission(PermissionKey.IS_ADMIN.getPermission())) {
-						Player victem = Bukkit.getPlayer(args[1]);
+						Player victem = xEssentials.getOfflinePlayer(args[1]).getPlayer();
 						if(victem instanceof Player) {
 							if(xEssentials.contains(args[1])) {
 								xEssentialsPlayer xp = xEssentials.get(args[1]);
@@ -107,7 +106,7 @@ public class CmdCheck {
 					}
 				} else {
 					if(sender.hasPermission(PermissionKey.IS_ADMIN.getPermission())) { 
-						Player p = Bukkit.getPlayer(args[0]);
+						Player p = xEssentials.getOfflinePlayer(args[0]).getPlayer();
 						if(p instanceof Player) {
 							if(xEssentials.contains(args[0])) { 
 								xEssentialsPlayer xp = xEssentials.get(args[0]);

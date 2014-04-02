@@ -58,7 +58,7 @@ public class CmdTeleport {
 					} else {
 						if(sender instanceof Player) {
 							Player p = (Player) sender;
-							Player to = Bukkit.getPlayer(args[0]);
+							Player to = xEssentials.getOfflinePlayer(args[0]).getPlayer();
 							if(to instanceof Player) {
 								p.teleport(to);
 								sender.sendMessage(ChatColor.GREEN + "teleporting to online location of player " + to.getName() + " ;-)");
@@ -83,7 +83,7 @@ public class CmdTeleport {
 				if(args[0].equalsIgnoreCase("crate")) {
 					if(sender.hasPermission(PermissionKey.CMD_TELEPORT.getPermission())) {
 						if(sender instanceof Player) {
-							Player to = Bukkit.getPlayer(args[1]);
+							Player to = xEssentials.getOfflinePlayer(args[1]).getPlayer();
 							Player p = (Player) sender;
 							if(to instanceof Player) {
 								if(Hooks.isManCoEnabled()) {
@@ -130,8 +130,8 @@ public class CmdTeleport {
 					}
 				} else {
 					if(sender.hasPermission(PermissionKey.CMD_TELEPORT.getPermission())) {
-						Player p1 = Bukkit.getPlayer(args[0]);
-						Player p2 = Bukkit.getPlayer(args[1]);
+						Player p1 =xEssentials.getOfflinePlayer(args[0]).getPlayer();
+						Player p2 = xEssentials.getOfflinePlayer(args[1]).getPlayer();
 						if(p1 instanceof Player) {
 							if(p2 instanceof Player) {
 								p1.teleport(p2);
@@ -171,7 +171,7 @@ public class CmdTeleport {
 			} else if(args.length == 4) {
 				if(sender.hasPermission(PermissionKey.CMD_TELEPORT.getPermission())) {
 					World w = Bukkit.getWorld(args[0]);
-					Player victem = Bukkit.getPlayer(args[0]);
+					Player victem = xEssentials.getOfflinePlayer(args[0]).getPlayer();
 					if(w instanceof World) {
 						if(sender instanceof Player) {
 							Player p = (Player) sender;
@@ -209,7 +209,7 @@ public class CmdTeleport {
 					Warnings.getWarnings(sender).noPermission();
 				}
 			} else if(args.length == 5) {
-				Player victem = Bukkit.getPlayer(args[0]);
+				Player victem = xEssentials.getOfflinePlayer(args[0]).getPlayer();
 				if(victem instanceof Player){
 					try {
 						World w = Bukkit.getWorld(args[1]);

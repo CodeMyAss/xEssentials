@@ -1,12 +1,12 @@
 package tv.mineinthebox.essentials.commands;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import tv.mineinthebox.essentials.Warnings;
+import tv.mineinthebox.essentials.xEssentials;
 import tv.mineinthebox.essentials.enums.PermissionKey;
 import tv.mineinthebox.essentials.utils.TpaManager;
 
@@ -16,7 +16,7 @@ public class CmdTpDeny {
 		if(cmd.getName().equalsIgnoreCase("tpdeny")) {
 			if(sender.hasPermission(PermissionKey.CMD_TP_DENY.getPermission())) {
 				if(TpaManager.containsKey(sender.getName())) {
-					Player requester = Bukkit.getPlayer(TpaManager.get(sender.getName()));
+					Player requester = xEssentials.getOfflinePlayer(TpaManager.get(sender.getName())).getPlayer();
 					if(requester instanceof Player) {
 						requester.sendMessage(ChatColor.RED + sender.getName() + " has denied your tpa request!");
 					}

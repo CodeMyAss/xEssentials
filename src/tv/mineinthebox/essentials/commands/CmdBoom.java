@@ -20,7 +20,7 @@ public class CmdBoom {
 		if(cmd.getName().equalsIgnoreCase("boom")) {
 			if(sender.hasPermission(PermissionKey.CMD_BOOM.getPermission())) {
 				if(args.length == 1) {
-					Player boom = Bukkit.getPlayer(args[0]);
+					Player boom = xEssentials.getOfflinePlayer(args[0]).getPlayer();
 					if(boom instanceof Player) {
 						if(boom.getGameMode() == GameMode.CREATIVE) {
 							boom.setGameMode(GameMode.SURVIVAL);

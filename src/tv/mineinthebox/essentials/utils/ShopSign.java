@@ -1,13 +1,18 @@
 package tv.mineinthebox.essentials.utils;
 
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Chest;
+import org.bukkit.block.Sign;
+
+import tv.mineinthebox.essentials.xEssentials;
+import tv.mineinthebox.essentials.instances.xEssentialsOfflinePlayer;
 
 public class ShopSign {
 
-	public static Chest getChestFromSign(Block sign) {
+	public Chest getChestFromSign(Block sign) {
 		//TO-DO adding lwc, and lockette support, so a player cannot put a shop sign on a chest he don't owns.
 		BlockFace[] faces = {BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST, BlockFace.UP, BlockFace.DOWN};
 		for(BlockFace face : faces) {
@@ -23,7 +28,7 @@ public class ShopSign {
 	 * @param returns the buy price of the sign
 	 * @return Double
 	 */
-	public static Double getBuyPrice(String s) {
+	public Double getBuyPrice(String s) {
 		if(s.contains(" : ")) {
 			String[] split = s.split(" : ");
 			String buy = split[0];
@@ -38,7 +43,7 @@ public class ShopSign {
 	 * @param returns the sell price of the sign
 	 * @return Double
 	 */
-	public static Double getSellPrice(String s) {
+	public Double getSellPrice(String s) {
 		if(s.contains(" : ")) {
 			String[] split = s.split(" : ");
 			String sell = split[1];
@@ -54,7 +59,7 @@ public class ShopSign {
 	 * @return String
 	 */
 	@SuppressWarnings("deprecation")
-	public static String getItemFromSign(String s) {
+	public String getItemFromSign(String s) {
 		if(s.contains(":")) {
 			String[] split = s.split(":");
 			String data = split[0];
@@ -82,7 +87,7 @@ public class ShopSign {
 	 * @param returns true whenever the sign is close enough to a chest
 	 * @return Boolean
 	 */
-	public static boolean isAttachedOnChest(Block sign) {
+	public boolean isAttachedOnChest(Block sign) {
 		//TO-DO adding lwc, and lockette support, so a player cannot put a shop sign on a chest he don't owns.
 		BlockFace[] faces = {BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST, BlockFace.UP, BlockFace.DOWN};
 		for(BlockFace face : faces) {
@@ -99,7 +104,7 @@ public class ShopSign {
 	 * @return Boolean
 	 */
 	@SuppressWarnings("deprecation")
-	public static boolean isValidMaterial(String s) {
+	public boolean isValidMaterial(String s) {
 		if(s.contains(":")) {
 			String[] split = s.split(":");
 			String data = split[0];
@@ -127,7 +132,7 @@ public class ShopSign {
 	 * @param validate the buy and sell on the shop sign, if invalid it returns false
 	 * @return Boolean
 	 */
-	public static boolean validateBuyAndSell(String s) {
+	public boolean validateBuyAndSell(String s) {
 		if(s.contains(" : ")) {
 			String[] split = s.split(" : ");
 			String buy = split[0];
@@ -154,7 +159,7 @@ public class ShopSign {
 	 * @param convert the string into a number
 	 * @return Integer
 	 */
-	public static int getNumberFromString(String s) {
+	public int getNumberFromString(String s) {
 		try {
 			Integer i = Integer.parseInt(s);
 			if(i != null) {
@@ -171,7 +176,7 @@ public class ShopSign {
 	 * @param returns true whenever the line number seems to be a number
 	 * @return Boolean
 	 */
-	public static boolean isNumber(String s) {
+	public boolean isNumber(String s) {
 		try {
 			Integer i = Integer.parseInt(s);
 			if(i != null) {
@@ -181,6 +186,83 @@ public class ShopSign {
 			return false;
 		}
 		return false;
+	}
+	
+	/**
+	 * @author xize
+	 * @param loc - Location of the sign
+	 * @return Boolean
+	 */
+	public boolean isStoredShopSign(Location loc) {
+		for(xEssentialsOfflinePlayer off : xEssentials.getOfflinePlayers()) {
+			if(off.containsShopSign(loc)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * @author xize
+	 * @param loc - Location
+	 * @return String
+	 */
+	public String getCompatUserName(Location loc) {
+		for(xEssentialsOfflinePlayer off : xEssentials.getOfflinePlayers()) {
+			if(off.containsShopSign(loc)) {
+				return off.getUser();
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * @author xize
+	 * @param loc - Location
+	 * @param signline - the username based on the sign
+	 * @return Boolean
+	 */
+	public boolean isUserChanged(Location loc, String signline) {
+		for(xEssentialsOfflinePlayer off : xEssentials.getOfflinePlayers()) {
+			if(off.containsShopSign(loc)) {
+				if(!off.getUser().equalsIgnoreCase(signline)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * @author xize
+	 * @param block - the block around a sign
+	 * @param returns true when a sign is found else false
+	 * @return Boolean
+	 */
+	public boolean hasSignAttached(Block block) {
+		BlockFace[] faces = {BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST, BlockFace.UP, BlockFace.DOWN};
+		for(BlockFace face : faces) {
+			if(block.getRelative(face).getState() instanceof Sign) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * @author xize
+	 * @param block - the block around a sign
+	 * @param returns the sign
+	 * @return Sign
+	 */
+	public Sign getSignFromAttachedBlock(Block block) {
+		BlockFace[] faces = {BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST, BlockFace.UP, BlockFace.DOWN};
+		for(BlockFace face : faces) {
+			if(block.getRelative(face).getState() instanceof Sign) {
+				return (Sign)block.getRelative(face).getState();
+			}
+		}
+		return null;
 	}
 
 }

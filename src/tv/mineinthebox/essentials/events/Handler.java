@@ -85,6 +85,7 @@ import tv.mineinthebox.essentials.events.shops.SignAdminShopCreateEvent;
 import tv.mineinthebox.essentials.events.shops.SignAdminShopOpenEvent;
 import tv.mineinthebox.essentials.events.shops.SignNormalShopCreateEvent;
 import tv.mineinthebox.essentials.events.shops.SignNormalShopOpenEvent;
+import tv.mineinthebox.essentials.events.shops.SignShopBreakEvent;
 import tv.mineinthebox.essentials.events.signs.ColorSign;
 import tv.mineinthebox.essentials.events.signs.FireworkSign;
 import tv.mineinthebox.essentials.events.signs.FreeSign;
@@ -209,6 +210,7 @@ public class Handler {
 			setListener(new SignAdminShopOpenEvent());
 			setListener(new SignNormalShopCreateEvent());
 			setListener(new SignNormalShopOpenEvent());
+			setListener(new SignShopBreakEvent());
 		}
 		
 		//block events

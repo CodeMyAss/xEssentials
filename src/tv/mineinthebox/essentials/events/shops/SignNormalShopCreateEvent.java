@@ -5,23 +5,29 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.SignChangeEvent;
 
+import tv.mineinthebox.essentials.xEssentials;
 import tv.mineinthebox.essentials.enums.PermissionKey;
+import tv.mineinthebox.essentials.instances.xEssentialsPlayer;
 import tv.mineinthebox.essentials.utils.ShopSign;
 
 public class SignNormalShopCreateEvent implements Listener {
+
+	private final ShopSign shop = new ShopSign();
 	
 	@EventHandler
 	public void onSignCreate(SignChangeEvent e) {
 		if(e.getLine(0).equalsIgnoreCase("[shop]")) {
 			if(e.getPlayer().hasPermission(PermissionKey.SIGN_SHOP.getPermission())) {
-				int amount = ShopSign.getNumberFromString(e.getLine(1));
+				int amount = shop.getNumberFromString(e.getLine(1));
 				if(!(amount > 64 || amount == 0)) {
-					if(ShopSign.validateBuyAndSell(e.getLine(2))) {
-						if(ShopSign.isValidMaterial(e.getLine(3))) {
-							if(ShopSign.isAttachedOnChest(e.getBlock())) {
+					if(shop.validateBuyAndSell(e.getLine(2))) {
+						if(shop.isValidMaterial(e.getLine(3))) {
+							if(shop.isAttachedOnChest(e.getBlock())) {
 								e.setLine(0, e.getPlayer().getName());
-								e.setLine(3, ShopSign.getItemFromSign(e.getLine(3).toUpperCase()));
+								e.setLine(3, shop.getItemFromSign(e.getLine(3).toUpperCase()));
 								e.getPlayer().sendMessage(ChatColor.GREEN + "you successfully created a shop sign!");
+								xEssentialsPlayer xp = xEssentials.get(e.getPlayer().getName());
+								xp.addShopSign(e.getBlock().getLocation());
 							} else {
 								e.getBlock().breakNaturally();
 								e.getPlayer().sendMessage(ChatColor.RED + "there whas no chest found at the location of the sign!");

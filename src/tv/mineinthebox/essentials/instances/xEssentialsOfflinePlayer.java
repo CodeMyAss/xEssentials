@@ -3,10 +3,13 @@ package tv.mineinthebox.essentials.instances;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.BanList.Type;
 import org.bukkit.Bukkit;
@@ -22,6 +25,7 @@ import org.bukkit.inventory.ItemStack;
 import tv.mineinthebox.essentials.xEssentials;
 import tv.mineinthebox.essentials.enums.PlayerTaskEnum;
 import tv.mineinthebox.essentials.utils.AlternateAccount;
+import tv.mineinthebox.essentials.utils.Crypt;
 
 public class xEssentialsOfflinePlayer {
 
@@ -233,7 +237,7 @@ public class xEssentialsOfflinePlayer {
 	 * @return
 	 */
 	public Player getPlayer() {
-		Player p = Bukkit.getPlayer(getUser());
+		Player p = Bukkit.getPlayer(UUID.fromString(getUniqueId()));
 		if(p instanceof Player) {
 			return p;
 		}
@@ -1364,6 +1368,182 @@ public class xEssentialsOfflinePlayer {
 			e.printStackTrace();
 		}
 		update();
+	}
+	
+	/**
+	 * @author xize
+	 * @param password - the password which gets encrypted
+	 */
+	public void setAuctionPassword(String password) {
+		if(xEssentials.getAuctionDatabase().doesPlayerExist(getUser())) {
+			try {
+				xEssentials.getAuctionDatabase().doQuery("UPDATE auction_users SET password=" + Crypt.CryptToSaltedSha512(password) + " WHERE username=" + getUser() + "");
+			} catch (NoSuchAlgorithmException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (NoSuchProviderException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else {
+			try {
+				xEssentials.getAuctionDatabase().doQuery("INSERT INTO auction_users (date, username, products, UUID, password, SESSION_ID) VALUES("+ System.currentTimeMillis() + ", " + getUser() + ", 0, " + getUniqueId() + ", " + Crypt.CryptToSaltedSha512(password) + ", " + UUID.randomUUID().toString().replace("-", ""));
+			} catch (NoSuchAlgorithmException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (NoSuchProviderException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	/**
+	 * @author xize
+	 * @param returns the auction password
+	 * @return String
+	 */
+	public String getAuctionPassword() {
+		if(xEssentials.getAuctionDatabase().doesPlayerExist(getUser())) {
+			return (String) xEssentials.getAuctionDatabase().getObjectFromQuery("SELECT * FROM auction_users WHERE username=" + getUser() + "", "password");
+		}
+		return null;
+	}
+	
+	/**
+	 * @author xize
+	 * @param returns true whenever the player has a auction password set
+	 * @return Boolean
+	 */
+	public boolean hasAuctionPassword() {
+		if(xEssentials.getAuctionDatabase().doesPlayerExist(getUser())) {
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * @author xize
+	 * @param returns the unique imutable session id
+	 * @return String
+	 */
+	public String getAuctionSession() {
+		if(xEssentials.getAuctionDatabase().doesPlayerExist(getUser())) {
+			return (String) xEssentials.getAuctionDatabase().getObjectFromQuery("SELECT * FROM auction_users WHERE username=" + getUser() + "", "SESSION_ID");
+		}
+		return null;
+	}
+	
+	/**
+	 * @author xize
+	 * @param returns true whenever the player has bought auction items while he whas currently offline!
+	 * @return Boolean
+	 */
+	public boolean hasBoughtAuctionItems() {
+		update();
+		return con.contains("auction.boughtitems");
+	}
+	
+	/**
+	 * @author xize
+	 * @param sets the bought auction items the player bought while being offline
+	 */
+	@SuppressWarnings("unchecked")
+	public void setBoughtAuctionItems(ItemStack[] itemss) {
+		List<ItemStack> items = Arrays.asList(((List<ItemStack>) con.get("auction.boughtitems")).toArray(new ItemStack[0]));
+		for(ItemStack i : itemss) {
+			items.add(i);
+		}
+		con.set("auction.boughtitems", items.toArray());
+		try {
+			con.save(f);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		update();
+	}
+	
+	/**
+	 * @author xize
+	 * @param removes the auction items
+	 */
+	public void removeAuctionItems() {
+		con.set("auction.boughtitems", null);
+		try {
+			con.save(f);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		update();
+	}
+	
+	/**
+	 * @author xize
+	 * @param get all the shop signs from the player
+	 * @return List<String>()
+	 */
+	public List<String> getSignShops() {
+		return con.getStringList("signshops");
+	}
+	
+	/**
+	 * @author xize
+	 * @param adds a shop sign to this player
+	 * @param loc - the Location
+	 */
+	public void addShopSign(Location loc) {
+		List<String> signs = new ArrayList<String>(getSignShops());
+		String serialize = loc.getWorld().getName()+":"+loc.getX()+":"+loc.getY()+":"+loc.getZ();
+		signs.add(serialize);
+		con.set("signshops", null);
+		con.set("signshops", signs.toArray());
+		try {
+			con.save(f);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		update();
+	}
+	
+	/**
+	 * @author xize
+	 * @param loc - the Location
+	 * @param checks if the sign is a contained sign in the configuration of this player
+	 * @return Boolean
+	 */
+	public boolean containsShopSign(Location loc) {
+		update();
+		String serialize = loc.getWorld().getName()+":"+loc.getX()+":"+loc.getY()+":"+loc.getZ();
+		List<String> list = new ArrayList<String>(getSignShops());
+		return list.contains(serialize);
+	}
+	
+	/**
+	 * @author xize
+	 * @param removes the sign
+	 * @param loc - the Location
+	 */
+	public void removeShopSign(Location loc) {
+		update();
+		String serialize = loc.getWorld().getName()+":"+loc.getX()+":"+loc.getY()+":"+loc.getZ();
+		List<String> locations = new ArrayList<String>(getSignShops());
+		if(locations.contains(serialize)) {
+			locations.remove(serialize);
+			con.set("signshops", null);
+			con.set("signshops", locations.toArray());
+			try {
+				con.save(f);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			update(); 
+		} else {
+			throw new NullPointerException("sign does not exist on this player!");
+		}
 	}
 	
 	/**

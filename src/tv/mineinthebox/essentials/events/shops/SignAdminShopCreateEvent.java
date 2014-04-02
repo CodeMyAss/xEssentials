@@ -11,15 +11,17 @@ import tv.mineinthebox.essentials.utils.ShopSign;
 
 public class SignAdminShopCreateEvent implements Listener {
 	
+	private final ShopSign shop = new ShopSign();
+	
 	@EventHandler
 	public void onSignCreate(SignChangeEvent e) {
 		if(e.getLine(0).equalsIgnoreCase(Configuration.getShopConfig().getAdminPrefix())) {
 			if(e.getPlayer().hasPermission(PermissionKey.IS_ADMIN.getPermission())) {
-				int amount = ShopSign.getNumberFromString(e.getLine(1));
+				int amount = shop.getNumberFromString(e.getLine(1));
 				if(!(amount > 64 || amount == 0)) {
-					if(ShopSign.validateBuyAndSell(e.getLine(2))) {
-						if(ShopSign.isValidMaterial(e.getLine(3))) {
-							e.setLine(3, ShopSign.getItemFromSign(e.getLine(3).toUpperCase()));
+					if(shop.validateBuyAndSell(e.getLine(2))) {
+						if(shop.isValidMaterial(e.getLine(3))) {
+							e.setLine(3, shop.getItemFromSign(e.getLine(3).toUpperCase()));
 							e.getPlayer().sendMessage(ChatColor.GREEN + "you have successfully created a Admin shop!");
 						} else {
 							e.getBlock().breakNaturally();

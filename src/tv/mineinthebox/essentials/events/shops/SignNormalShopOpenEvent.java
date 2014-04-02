@@ -21,6 +21,8 @@ import tv.mineinthebox.essentials.utils.ShopSign;
 
 public class SignNormalShopOpenEvent implements Listener {
 
+	private final ShopSign shop = new ShopSign();
+	
 	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onInteract(PlayerInteractEvent e) {
@@ -28,11 +30,16 @@ public class SignNormalShopOpenEvent implements Listener {
 			//buy items
 			if(e.getClickedBlock().getState() instanceof Sign) {
 				Sign sign = (Sign) e.getClickedBlock().getState();
-				if(xEssentials.isEssentialsPlayer(sign.getLine(0))) {
+				if(xEssentials.isEssentialsPlayer(sign.getLine(0)) || shop.isStoredShopSign(sign.getLocation())) {
 					if(e.getPlayer().hasPermission(PermissionKey.SIGN_SHOP_USE.getPermission())) {
-						if(ShopSign.isAttachedOnChest(e.getClickedBlock())) {
+						if(shop.isAttachedOnChest(e.getClickedBlock())) {
+							if(shop.isUserChanged(sign.getLocation(), sign.getLine(0))) {
+								sign.setLine(0, shop.getCompatUserName(sign.getLocation()));
+								sign.update();
+								e.getPlayer().sendMessage(ChatColor.GREEN + "detected user name change on the shop holder, its now updated!");
+							}
 							if(sign.getLine(2).contains("b")) {
-								Double cost = ShopSign.getBuyPrice(sign.getLine(2));
+								Double cost = shop.getBuyPrice(sign.getLine(2));
 								if(Configuration.getEconomyConfig().isEconomyEnabled()) {
 									xEssentialsPlayer xp = xEssentials.get(e.getPlayer().getName());
 									if((xp.getTotalEssentialsMoney()-cost) < 0.0) {
@@ -47,7 +54,7 @@ public class SignNormalShopOpenEvent implements Listener {
 										return;
 									}
 								}
-								Chest chest = (Chest) ShopSign.getChestFromSign(sign.getBlock());
+								Chest chest = (Chest) shop.getChestFromSign(sign.getBlock());
 								int amount = Integer.parseInt(sign.getLine(1));
 								String[] split = sign.getLine(3).split(":");
 								Material mat = Material.getMaterial(split[0]);
@@ -116,16 +123,21 @@ public class SignNormalShopOpenEvent implements Listener {
 		} else if(e.getAction() == Action.LEFT_CLICK_BLOCK) {
 			if(e.getClickedBlock().getState() instanceof Sign) {
 				Sign sign = (Sign) e.getClickedBlock().getState();
-				if(xEssentials.isEssentialsPlayer(sign.getLine(0))) {
+				if(xEssentials.isEssentialsPlayer(sign.getLine(0)) || shop.isStoredShopSign(sign.getLocation())) {
 					if(e.getPlayer().hasPermission(PermissionKey.SIGN_SHOP_USE.getPermission())) {
-						if(ShopSign.isAttachedOnChest(sign.getBlock())) {
+						if(shop.isAttachedOnChest(sign.getBlock())) {
 							if(!e.getPlayer().isSneaking()) {
+								if(shop.isUserChanged(sign.getLocation(), sign.getLine(0))) {
+									sign.setLine(0, shop.getCompatUserName(sign.getLocation()));
+									sign.update();
+									e.getPlayer().sendMessage(ChatColor.GREEN + "detected user name change on the shop holder, its now updated!");
+								}
 								if(sign.getLine(2).contains("s")) {
-									Chest chest = ShopSign.getChestFromSign(sign.getBlock());
+									Chest chest = shop.getChestFromSign(sign.getBlock());
 									String[] items = sign.getLine(3).split(":");
 									Material data = Material.getMaterial(items[0]);
 									Short subdata = Short.parseShort(items[1]);
-									Double money = ShopSign.getSellPrice(sign.getLine(2));
+									Double money = shop.getSellPrice(sign.getLine(2));
 									int amount = Integer.parseInt(sign.getLine(1));
 
 									if(e.getItem() != null) {
@@ -178,7 +190,8 @@ public class SignNormalShopOpenEvent implements Listener {
 							e.getPlayer().sendMessage(ChatColor.RED + "this sign has not a chest attached!");
 						}
 					} else {
-						if(!e.getPlayer().getName().equalsIgnoreCase(sign.getLine(0)) || !e.getPlayer().hasPermission(PermissionKey.IS_ADMIN.getPermission())) {
+						xEssentialsPlayer xp = xEssentials.get(e.getPlayer().getName());
+						if(!xp.containsShopSign(e.getClickedBlock().getLocation()) || !e.getPlayer().hasPermission(PermissionKey.IS_ADMIN.getPermission())) {
 							e.getPlayer().sendMessage(ChatColor.RED + "you are not allowed todo that!");
 						}
 					}

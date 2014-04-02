@@ -29,6 +29,7 @@ import tv.mineinthebox.essentials.utils.ShopSign;
 public class SignAdminShopOpenEvent implements Listener {
 
 	private HashMap<String, Sign> signData = new HashMap<String, Sign>();
+	private final ShopSign shop = new ShopSign();
 
 	@EventHandler
 	public void onInteract(PlayerInteractEvent e) {
@@ -39,7 +40,7 @@ public class SignAdminShopOpenEvent implements Listener {
 				if(sign.getLine(0).equalsIgnoreCase(Configuration.getShopConfig().getAdminPrefix())) {
 					if(e.getPlayer().hasPermission(PermissionKey.SIGN_SHOP_USE.getPermission())) {
 						if(sign.getLine(2).contains("b")) {
-							Double cost = ShopSign.getBuyPrice(sign.getLine(2));
+							Double cost = shop.getBuyPrice(sign.getLine(2));
 							if(Configuration.getEconomyConfig().isEconomyEnabled()) {
 								xEssentialsPlayer xp = xEssentials.get(e.getPlayer().getName());
 								if((xp.getTotalEssentialsMoney()-cost) < 0.0) {
@@ -84,7 +85,7 @@ public class SignAdminShopOpenEvent implements Listener {
 								String[] items = sign.getLine(3).split(":");
 								Material data = Material.getMaterial(items[0]);
 								Short subdata = Short.parseShort(items[1]);
-								Double money = ShopSign.getSellPrice(sign.getLine(2));
+								Double money = shop.getSellPrice(sign.getLine(2));
 								int amount = Integer.parseInt(sign.getLine(1));
 
 								if(e.getItem() != null) {
@@ -143,7 +144,7 @@ public class SignAdminShopOpenEvent implements Listener {
 				Player p = (Player) e.getWhoClicked();
 				Sign sign = signData.get(p.getName());
 
-				Double cost = ShopSign.getBuyPrice(sign.getLine(2));
+				Double cost = shop.getBuyPrice(sign.getLine(2));
 				int amount = Integer.parseInt(sign.getLine(1));
 				String[] itemdata = sign.getLine(3).split(":");
 				Material mat = Material.getMaterial(itemdata[0]);

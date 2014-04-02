@@ -25,7 +25,7 @@ public class GreyListServer implements Runnable {
 		server.setHandler(new GreyListServlet());
 		Thread webserverThread = new Thread(this);
 		webserverThread.start();
-		xEssentials.getPlugin().log("greylist server listening on port " + port, LogType.INFO);
+		xEssentials.getPlugin().log("Greylist server listening on port " + port, LogType.INFO);
 		this.web = webserverThread;
 	}
 

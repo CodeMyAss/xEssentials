@@ -14,5 +14,6 @@ public enum ConfigType {
 	KITS,
 	COMMAND,
 	ECONOMY,
-	SHOP
+	SHOP,
+	AUCTION
 }

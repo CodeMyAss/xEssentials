@@ -16,6 +16,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
 import tv.mineinthebox.essentials.commands.CommandList;
+import tv.mineinthebox.essentials.configurations.AuctionConfig;
 import tv.mineinthebox.essentials.configurations.BanConfig;
 import tv.mineinthebox.essentials.configurations.BlockConfig;
 import tv.mineinthebox.essentials.configurations.BroadcastConfig;
@@ -67,6 +68,7 @@ public class Configuration {
 		createCommandConfig();
 		createEconomyConfig();
 		createShopConfig();
+		createAuctionConfig();
 		loadSystemPresets(ConfigType.BAN);
 		loadSystemPresets(ConfigType.BROADCAST);
 		loadSystemPresets(ConfigType.CHAT);
@@ -81,6 +83,7 @@ public class Configuration {
 		loadSystemPresets(ConfigType.COMMAND);
 		loadSystemPresets(ConfigType.ECONOMY);
 		loadSystemPresets(ConfigType.SHOP);
+		loadSystemPresets(ConfigType.AUCTION);
 		for(Material mat : Material.values()) {
 			materials.add(mat.name());
 		}
@@ -90,6 +93,22 @@ public class Configuration {
 		return mob.toString().toLowerCase();
 	}
 	
+	private void createAuctionConfig() {
+		try {
+			File f = new File(xEssentials.getPlugin().getDataFolder() + File.separator + "auction.yml");
+			if(!f.exists()) {
+				FileConfiguration con = YamlConfiguration.loadConfiguration(f);
+				FileConfigurationOptions opt = con.options();
+				opt.header("default configuration for auctions, when enabled this will start a webshop.\nthe passwords will be stored in the player files\nhowever this will be salt protected\nand will not be shown inside the console!\nnote the admin password get encrypted to ;-)");
+				con.set("auction.enable", true);
+				con.set("auction.port", 8009);
+				con.save(f);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	private void createShopConfig() {
 		try {
 			File f = new File(xEssentials.getPlugin().getDataFolder() + File.separator + "shops.yml");
@@ -97,10 +116,6 @@ public class Configuration {
 				FileConfiguration con = YamlConfiguration.loadConfiguration(f);
 				con.set("shop.enable", true);
 				con.set("shop.shop-admin-prefix", "Admin Shop");
-				con.set("shop.tax.enable", false);
-				con.set("shop.tax.price", 2.0);
-				con.set("shop.cooldown.enable", false);
-				con.set("shop.cooldown.time", 10);
 				con.set("shop.disable-messages", false);
 				con.save(f);
 			}
@@ -619,12 +634,15 @@ public class Configuration {
 			HashMap<String, Object> hash = new HashMap<String, Object>();
 			hash.put("enable", con.getBoolean("shop.enable"));
 			hash.put("AdminShopPrefix", con.getString("shop.shop-admin-prefix"));
-			hash.put("isTaxEnabled", con.getBoolean("shop.tax.enable"));
-			hash.put("getTax", con.getDouble("shop.tax.price"));
-			hash.put("isCooldown", con.getBoolean("shop.cooldown.enable"));
-			hash.put("getCooldownTime", con.getInt("shop.cooldown.time"));
 			hash.put("disableMessages", con.getBoolean("shop.disable-messages"));
 			configure.put(ConfigType.SHOP, hash);
+		} else if(cfg == ConfigType.AUCTION) {
+			File f = new File(xEssentials.getPlugin().getDataFolder() + File.separator + "auction.yml");
+			FileConfiguration con = YamlConfiguration.loadConfiguration(f);
+			HashMap<String, Object> hash = new HashMap<String, Object>();
+			hash.put("enable", con.getBoolean("auction.enable"));
+			hash.put("port", con.getInt("auction.port"));
+			configure.put(ConfigType.AUCTION, hash);
 		}
 	}
 
@@ -803,6 +821,16 @@ public class Configuration {
 	public static EconomyConfig getEconomyConfig() {
 		EconomyConfig econ = new EconomyConfig();
 		return econ;
+	}
+	
+	/**
+	 * @author xize
+	 * @param returns the auction configuration
+	 * @return AuctionConfig
+	 */
+	public static AuctionConfig getAuctionConfig() {
+		AuctionConfig auction = new AuctionConfig();
+		return auction;
 	}
 
 	/**

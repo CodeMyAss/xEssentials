@@ -58,5 +58,16 @@ public class VaultHook {
 		Economy econ = economyProvider.getProvider();
 		return ((econ.getBalance(p) - amount) > 0.0);
 	}
+	
+	/**
+	 * @author xize
+	 * @param player - the player who pays
+	 * @param to - the player who receives the payment
+	 * @param amount - the amount of money
+	 */
+	public static void pay(String player, String to, Double amount) {
+		withdraw(player, amount);
+		desposit(player, amount);
+	}
 
 }

@@ -15,6 +15,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import tv.mineinthebox.essentials.auction.AuctionServer;
 import tv.mineinthebox.essentials.commands.CommandList;
 import tv.mineinthebox.essentials.commands.command;
 import tv.mineinthebox.essentials.enums.LogType;
@@ -27,6 +28,7 @@ import tv.mineinthebox.essentials.greylist.GreyListServer;
 import tv.mineinthebox.essentials.instances.Warp;
 import tv.mineinthebox.essentials.instances.xEssentialsOfflinePlayer;
 import tv.mineinthebox.essentials.instances.xEssentialsPlayer;
+import tv.mineinthebox.essentials.utils.AuctionSqlite;
 import tv.mineinthebox.essentials.utils.TPS;
 
 
@@ -39,6 +41,8 @@ public class xEssentials extends JavaPlugin {
 	private final CommandList cmdlist = new CommandList();
 	private final RealisticGlass glass = new RealisticGlass();
 	public static GreyListServer server = null;
+	public static AuctionServer auServers = null;
+	private static AuctionSqlite auctiondb = null;
 
 	public void onEnable() {
 		pl = this;
@@ -61,6 +65,11 @@ public class xEssentials extends JavaPlugin {
 			server.createServer();
 		}
 		Configuration.HandleCommandManager();
+		AuctionServer auServer = new AuctionServer(Configuration.getAuctionConfig().getPort());
+		if(Configuration.getAuctionConfig().isAuctionEnabled()) {
+			auServer.createServer();
+			auctiondb = new AuctionSqlite();
+		}
 	}
 
 	public void onDisable() {
@@ -77,6 +86,11 @@ public class xEssentials extends JavaPlugin {
 		}
 		if(Configuration.getBroadcastConfig().isBroadcastEnabled()) {
 			CallEssentialsBroadcastEvent.stop();
+		}
+		if(auServers instanceof AuctionServer) {
+			if(auServers.isRunning()) {
+				auServers.disable();
+			}
 		}
 	}
 
@@ -309,7 +323,7 @@ public class xEssentials extends JavaPlugin {
 	public static void reloadPlayerBase() {
 		players.clear();
 		for(Player p : Bukkit.getOnlinePlayers()) {
-			xEssentialsPlayer xp = new xEssentialsPlayer(p);
+			xEssentialsPlayer xp = new xEssentialsPlayer(p, xEssentials.getOfflinePlayer(p.getName()).getUniqueId());
 			players.put(p.getName().toLowerCase(), xp);
 		}
 	}
@@ -438,5 +452,14 @@ public class xEssentials extends JavaPlugin {
 		} else {
 			throw new NullPointerException("this player has never played before!");
 		}
+	}
+	
+	/**
+	 * @author xize
+	 * @param returns the auction database
+	 * @return AuctionSqlite
+	 */
+	public static AuctionSqlite getAuctionDatabase() {
+		return auctiondb;
 	}
 }

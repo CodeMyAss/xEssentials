@@ -53,10 +53,10 @@ public class xEssentialsPlayer {
 	 * @return xEssentialsPlayer
 	 * 
 	 */
-	public xEssentialsPlayer(Player player) {
+	public xEssentialsPlayer(Player player, String UUID) {
 		this.player = player;
 		if(Bukkit.getOnlineMode()) {
-			this.f = new File(xEssentials.getPlugin().getDataFolder() + File.separator + "players"+File.separator+new MojangUUID(player).getUUID()+".yml");	
+			this.f = new File(xEssentials.getPlugin().getDataFolder() + File.separator + "players"+File.separator+UUID+".yml");	
 		} else {
 			this.f = new File(xEssentials.getPlugin().getDataFolder() + File.separator + "players"+File.separator+player.getName().toLowerCase()+".yml");
 		}
@@ -74,6 +74,11 @@ public class xEssentialsPlayer {
 				}
 				//call the custom event whenever we noticed the name has been changed!
 				Bukkit.getPluginManager().callEvent(new PlayerNameChangeEvent(oldName, player.getName(), player, this));
+				//update database for auctions whenever the name is changed appearing to be here!
+				setNameHistory(oldName);
+				if(Configuration.getAuctionConfig().isAuctionEnabled()) {
+					xEssentials.getAuctionDatabase().updatePlayer(oldName, player.getName());
+				}
 			} else {
 				this.con.set("ip", player.getAddress().getAddress().getHostAddress());
 				try {
@@ -98,6 +103,7 @@ public class xEssentialsPlayer {
 			this.con.set("fly", false);
 			this.con.set("torch", false);
 			this.con.set("firefly", false);
+			this.con.set("uuid", UUID);
 			if(Configuration.getEconomyConfig().isEconomyEnabled()){
 				this.con.set("money", Configuration.getEconomyConfig().getStartersMoney());
 			}
@@ -230,6 +236,7 @@ public class xEssentialsPlayer {
 	 * @param nukes the player with a massive explosion rain but as fake
 	 * @return void
 	 */
+	@SuppressWarnings("deprecation")
 	public void fakenuke() {
 		for(int x = -16; x <= 16; x +=8) {
 			for(int z = -16; z<=16; z +=8) {
@@ -763,7 +770,7 @@ public class xEssentialsPlayer {
 	 * 
 	 * @author xize
 	 * @param get the Unique ID of this player
-	 * @return Long
+	 * @return String
 	 */
 	public String getUniqueId() {
 		return f.getName().replace(".yml", "");
@@ -2184,6 +2191,14 @@ public class xEssentialsPlayer {
 	
 	/**
 	 * @author xize
+	 * @param removes everything auction related from this invidual player, including in the databases
+	 */
+	public void clearAuctionCompletely() {
+		xEssentials.getAuctionDatabase().clearAuction(player.getName());
+	}
+	
+	/**
+	 * @author xize
 	 * @param get all the shop signs from the player
 	 * @return List<String>()
 	 */
@@ -2247,6 +2262,36 @@ public class xEssentialsPlayer {
 		} else {
 			throw new NullPointerException("sign does not exist on this player!");
 		}
+	}
+	
+	/**
+	 * @author xize
+	 * @param set the old name in the history
+	 * @param oldName - old name
+	 */
+	private void setNameHistory(String oldName) {
+		List<String> list = con.getStringList("name-history");
+		list.add(oldName);
+		if(list.size() > 8) {
+			list.remove(8);
+		}
+		con.set("name-history", list);
+		try {
+			con.save(f);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		update();
+	}
+	
+	/**
+	 * @author xize
+	 * @param returns atleast 8 results of this players name history
+	 * @return List<String>()
+	 */
+	public List<String> getNameHistory() {
+		return con.getStringList("name-history");
 	}
 
 	/**

@@ -1085,7 +1085,7 @@ public class xEssentialsOfflinePlayer {
 		}
 		update();
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param set the kit cooldown
@@ -1101,7 +1101,7 @@ public class xEssentialsOfflinePlayer {
 		}
 		update();
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param remove the kit cooldown
@@ -1117,7 +1117,7 @@ public class xEssentialsOfflinePlayer {
 		}
 		update();
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param return the saved cooldown of this player
@@ -1126,7 +1126,7 @@ public class xEssentialsOfflinePlayer {
 	public Long getKitCooldown() {
 		return con.getLong("kitCooldown");
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param returns true whenever the player has the cooldown else false
@@ -1151,7 +1151,7 @@ public class xEssentialsOfflinePlayer {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param returns all the warps of this player!
@@ -1166,7 +1166,7 @@ public class xEssentialsOfflinePlayer {
 		}
 		return warps.toArray(new Warp[warps.size()]);
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param warpname - the warpname
@@ -1186,7 +1186,7 @@ public class xEssentialsOfflinePlayer {
 		}
 		update();
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param warpname - the disired warp name to be removed
@@ -1201,7 +1201,7 @@ public class xEssentialsOfflinePlayer {
 		}
 		update();
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param key - possible warp name
@@ -1215,7 +1215,7 @@ public class xEssentialsOfflinePlayer {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param get a warp through a key
@@ -1228,7 +1228,7 @@ public class xEssentialsOfflinePlayer {
 		}
 		throw new NullPointerException("this player has no warp called " + key);
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param returns the total amount of Essentials money of this player
@@ -1238,7 +1238,7 @@ public class xEssentialsOfflinePlayer {
 		update();   
 		return con.getDouble("money");
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param returns true if the player has money if its 0.0 or the config entry doesn't exist it is false
@@ -1253,7 +1253,7 @@ public class xEssentialsOfflinePlayer {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param this withdraws the players money
@@ -1275,7 +1275,7 @@ public class xEssentialsOfflinePlayer {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param price - the price the player is gonna be to pay
@@ -1299,7 +1299,7 @@ public class xEssentialsOfflinePlayer {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param this will add money to the players bank
@@ -1315,7 +1315,7 @@ public class xEssentialsOfflinePlayer {
 		}
 		update();
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param price - the price the player is gonna be to pay
@@ -1339,7 +1339,7 @@ public class xEssentialsOfflinePlayer {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param price - the price
@@ -1352,7 +1352,7 @@ public class xEssentialsOfflinePlayer {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param clear the money of the player
@@ -1369,7 +1369,7 @@ public class xEssentialsOfflinePlayer {
 		}
 		update();
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param password - the password which gets encrypted
@@ -1397,7 +1397,7 @@ public class xEssentialsOfflinePlayer {
 			}
 		}
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param returns the auction password
@@ -1409,7 +1409,7 @@ public class xEssentialsOfflinePlayer {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param returns true whenever the player has a auction password set
@@ -1421,7 +1421,7 @@ public class xEssentialsOfflinePlayer {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param returns the unique imutable session id
@@ -1433,7 +1433,7 @@ public class xEssentialsOfflinePlayer {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param returns true whenever the player has bought auction items while he whas currently offline!
@@ -1443,17 +1443,15 @@ public class xEssentialsOfflinePlayer {
 		update();
 		return con.contains("auction.boughtitems");
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param sets the bought auction items the player bought while being offline
 	 */
 	@SuppressWarnings("unchecked")
-	public void setBoughtAuctionItems(ItemStack[] itemss) {
+	public void setBoughtAuctionItem(ItemStack itemss) {
 		List<ItemStack> items = Arrays.asList(((List<ItemStack>) con.get("auction.boughtitems")).toArray(new ItemStack[0]));
-		for(ItemStack i : itemss) {
-			items.add(i);
-		}
+		items.add(itemss);
 		con.set("auction.boughtitems", items.toArray());
 		try {
 			con.save(f);
@@ -1463,7 +1461,7 @@ public class xEssentialsOfflinePlayer {
 		}
 		update();
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param removes the auction items
@@ -1478,7 +1476,15 @@ public class xEssentialsOfflinePlayer {
 		}
 		update();
 	}
-	
+
+	/**
+	 * @author xize
+	 * @param removes everything auction related from this invidual player, including in the databases
+	 */
+	public void clearAuctionCompletely() {
+		xEssentials.getAuctionDatabase().clearAuction(getUser());
+	}
+
 	/**
 	 * @author xize
 	 * @param get all the shop signs from the player
@@ -1487,7 +1493,7 @@ public class xEssentialsOfflinePlayer {
 	public List<String> getSignShops() {
 		return con.getStringList("signshops");
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param adds a shop sign to this player
@@ -1507,7 +1513,7 @@ public class xEssentialsOfflinePlayer {
 		}
 		update();
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param loc - the Location
@@ -1520,7 +1526,7 @@ public class xEssentialsOfflinePlayer {
 		List<String> list = new ArrayList<String>(getSignShops());
 		return list.contains(serialize);
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param removes the sign
@@ -1546,6 +1552,15 @@ public class xEssentialsOfflinePlayer {
 		}
 	}
 	
+	/**
+	 * @author xize
+	 * @param returns atleast 8 results of this players name history
+	 * @return List<String>()
+	 */
+	public List<String> getNameHistory() {
+		return con.getStringList("name-history");
+	}
+
 	/**
 	 * @author xize
 	 * @param gets updated at every call so we know that the configuration stored in the memory is still recent with the flat saved file!

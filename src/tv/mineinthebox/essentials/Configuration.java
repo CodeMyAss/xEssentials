@@ -15,6 +15,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
+import tv.mineinthebox.essentials.auction.AuctionServer;
 import tv.mineinthebox.essentials.commands.CommandList;
 import tv.mineinthebox.essentials.configurations.AuctionConfig;
 import tv.mineinthebox.essentials.configurations.BanConfig;
@@ -28,6 +29,7 @@ import tv.mineinthebox.essentials.configurations.GreylistConfig;
 import tv.mineinthebox.essentials.configurations.KitConfig;
 import tv.mineinthebox.essentials.configurations.MotdConfig;
 import tv.mineinthebox.essentials.configurations.PlayerConfig;
+import tv.mineinthebox.essentials.configurations.ProtectionConfig;
 import tv.mineinthebox.essentials.configurations.PvpConfig;
 import tv.mineinthebox.essentials.configurations.RulesConfig;
 import tv.mineinthebox.essentials.configurations.ShopConfig;
@@ -38,12 +40,13 @@ import tv.mineinthebox.essentials.events.Handler;
 import tv.mineinthebox.essentials.events.customEvents.CallEssentialsBroadcastEvent;
 import tv.mineinthebox.essentials.greylist.GreyListServer;
 import tv.mineinthebox.essentials.instances.Kit;
+import tv.mineinthebox.essentials.utils.ProtectionDB;
 
 public class Configuration {
 
 	//this will be the configs loaded in the memory
 	//this will used by events and in events without instancing every time a new object this will be painfully awful in PlayerMoveEvent.
-	private static final EnumMap<ConfigType, HashMap<String, Object>> configure = new EnumMap<ConfigType, HashMap<String, Object>>(ConfigType.class);
+	private final static EnumMap<ConfigType, HashMap<String, Object>> configure = new EnumMap<ConfigType, HashMap<String, Object>>(ConfigType.class);
 	private static List<String> materials = new ArrayList<String>();
 
 	/**
@@ -68,7 +71,8 @@ public class Configuration {
 		createCommandConfig();
 		createEconomyConfig();
 		createShopConfig();
-		createAuctionConfig();
+		createProtectionConfig();
+		//createAuctionConfig();
 		loadSystemPresets(ConfigType.BAN);
 		loadSystemPresets(ConfigType.BROADCAST);
 		loadSystemPresets(ConfigType.CHAT);
@@ -83,7 +87,8 @@ public class Configuration {
 		loadSystemPresets(ConfigType.COMMAND);
 		loadSystemPresets(ConfigType.ECONOMY);
 		loadSystemPresets(ConfigType.SHOP);
-		loadSystemPresets(ConfigType.AUCTION);
+		//loadSystemPresets(ConfigType.AUCTION);
+		loadSystemPresets(ConfigType.PROTECTION);
 		for(Material mat : Material.values()) {
 			materials.add(mat.name());
 		}
@@ -93,6 +98,26 @@ public class Configuration {
 		return mob.toString().toLowerCase();
 	}
 	
+	private void createProtectionConfig() {
+		try {
+			File f = new File(xEssentials.getPlugin().getDataFolder() + File.separator + "protection.yml");
+			if(!f.exists()) {
+				FileConfiguration con = YamlConfiguration.loadConfiguration(f);
+				con.set("protection.enable", true);
+				con.set("protection.protect.signs", true);
+				con.set("protection.protect.chests", true);
+				con.set("protection.protect.furnace", true);
+				con.set("protection.protect.jukebox", true);
+				//con.set("protection.protect.itemframes", true);
+				con.set("protection.message.disallow", "&cthis %BLOCK% has been protected by a spell");
+				con.save(f);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@SuppressWarnings("unused")
 	private void createAuctionConfig() {
 		try {
 			File f = new File(xEssentials.getPlugin().getDataFolder() + File.separator + "auction.yml");
@@ -102,6 +127,8 @@ public class Configuration {
 				opt.header("default configuration for auctions, when enabled this will start a webshop.\nthe passwords will be stored in the player files\nhowever this will be salt protected\nand will not be shown inside the console!\nnote the admin password get encrypted to ;-)");
 				con.set("auction.enable", true);
 				con.set("auction.port", 8009);
+				con.set("auction.increase-bid-by", 5.0);
+				con.set("auction.url", "http://auction.yoursite.com");
 				con.save(f);
 			}
 		} catch(Exception e) {
@@ -174,7 +201,7 @@ public class Configuration {
 				opt.header("here you can specify whenever a command should be unregistered or not\nfor example you got a other plugin which has the /home command this would basicly conflict with xEssentials\nhereby you can change the behaviour by unregistering xEssentials commands here.");
 				CommandList list = new CommandList();
 				for(String command : list.getAllCommands) {
-					if(!command.equalsIgnoreCase("money")) {
+					if(!(command.equalsIgnoreCase("money") || command.equalsIgnoreCase("cprivate") || command.equalsIgnoreCase("cmodify") || command.equalsIgnoreCase("cremove"))) {
 						con.set("command."+command+".enable", true);	
 					}
 				}
@@ -184,10 +211,12 @@ public class Configuration {
 				CommandList commandlist = new CommandList();
 				List<String> commands = Arrays.asList(commandlist.getAllCommands);
 				List<String> orginal = Arrays.asList(con.getConfigurationSection("command").getKeys(false).toArray(new String[0]));
-				if((commands.size()-1) != orginal.size()) {
+				System.out.print("size: " + commands.size());
+				System.out.print("size: " + orginal.size());
+				if((commands.size()-4) != orginal.size()) {
 					xEssentials.getPlugin().log("new commands detected!, adding them right now inside the command config!", LogType.INFO);
 					for(String cmd : commands) {
-						if(!orginal.contains(cmd) && !cmd.equalsIgnoreCase("money")) {
+						if(!orginal.contains(cmd) && (!cmd.equalsIgnoreCase("money") || !cmd.equalsIgnoreCase("cprivate") || !cmd.equalsIgnoreCase("cremove") || !cmd.equalsIgnoreCase("cmodify"))) {
 							xEssentials.getPlugin().log("registering new command: " + cmd + " in commands.yml", LogType.INFO);
 							con.set("command."+cmd+".enable", true);
 						}
@@ -642,7 +671,20 @@ public class Configuration {
 			HashMap<String, Object> hash = new HashMap<String, Object>();
 			hash.put("enable", con.getBoolean("auction.enable"));
 			hash.put("port", con.getInt("auction.port"));
+			hash.put("bid", con.getDouble("auction.increase-bid-by"));
+			hash.put("url", con.getString("auction.url"));
 			configure.put(ConfigType.AUCTION, hash);
+		} else if(cfg == ConfigType.PROTECTION) {
+			File f = new File(xEssentials.getPlugin().getDataFolder() + File.separator + "protection.yml");
+			FileConfiguration con= YamlConfiguration.loadConfiguration(f);
+			HashMap<String, Object> hash = new HashMap<String, Object>();
+			hash.put("enable", con.getBoolean("protection.enable"));
+			hash.put("signEnable", con.getBoolean("protection.protect.signs"));
+			hash.put("chestEnable", con.getBoolean("protection.protect.chests"));
+			hash.put("furnaceEnable", con.getBoolean("protection.protect.furnace"));
+			hash.put("jukeboxEnable", con.getBoolean("protection.protect.jukebox"));
+			hash.put("messageDisallow", con.getString("protection.message.disallow"));
+			configure.put(ConfigType.PROTECTION, hash);
 		}
 	}
 
@@ -792,11 +834,21 @@ public class Configuration {
 	public static void setConfigValue(ConfigType type, String hashName, Object value) {
 		configure.get(type).put(hashName, value);
 	}
+	
+	/**
+	 * @author xize
+	 * @param get the full memory configuration for protections
+	 * @return ProtectionConfig
+	 */
+	public static ProtectionConfig getProtectionConfig() {
+		ProtectionConfig config = new ProtectionConfig();
+		return config;
+	}
 
 	/**
 	 * @author xize
 	 * @param gets the full memory configuration for bans
-	 * @return banConfig
+	 * @return BanConfig
 	 */
 	public static BanConfig getBanConfig() {
 		BanConfig config = new BanConfig();
@@ -876,7 +928,7 @@ public class Configuration {
 	/**
 	 * @author xize
 	 * @param gets the full memory configuration for chat
-	 * @return chatConfig
+	 * @return ChatConfig
 	 */
 	public static ChatConfig getChatConfig() {
 		ChatConfig config = new ChatConfig();
@@ -949,14 +1001,19 @@ public class Configuration {
 		Handler handler = new Handler();
 		CustomEventHandler customhandler = new CustomEventHandler();
 		handler.stop();
-		//clear responsible from the deepest tree in the HashMap in case things could get persistent in the jvm things need to be better safe than not.
 		CallEssentialsBroadcastEvent.stop();
+		//clear responsible from the deepest tree in the HashMap in case things could get persistent in the jvm things need to be better safe than not.
 		for(ConfigType aEnum : ConfigType.values()) {
 			configure.get(aEnum).clear();
 		}
 		configure.clear();
 		for(ConfigType aEnum : ConfigType.values()) {
 			loadSystemPresets(aEnum);
+		}
+		if(xEssentials.auServers != null) {
+			if(xEssentials.auServers.isRunning()) {
+				xEssentials.auServers.disable();
+			}
 		}
 		if(xEssentials.server != null) {
 			if(xEssentials.server.isRunning()) {
@@ -965,6 +1022,10 @@ public class Configuration {
 		}
 		createConfigs();
 		HandleCommandManager();
+		if(Configuration.getAuctionConfig().isAuctionEnabled()) {
+			xEssentials.auServers = new AuctionServer(Configuration.getAuctionConfig().getPort());
+			xEssentials.auServers.createServer();
+		}
 		if(Configuration.getGrayListConfig().isEnabled()) {
 			xEssentials.server = new GreyListServer(Configuration.getGrayListConfig().getPort());
 			xEssentials.server.createServer();
@@ -972,6 +1033,9 @@ public class Configuration {
 		xEssentials.reloadPlayerBase(); 
 		handler.start();
 		customhandler.startCustomEvents();
+		if(Configuration.getProtectionConfig().isProtectionEnabled()) {
+			xEssentials.protectiondb = new ProtectionDB();	
+		}
 
 		return true;
 	}
@@ -985,10 +1049,10 @@ public class Configuration {
 		CommandList cmdlist = new CommandList();
 		for(String cmd : cmdlist.getAllCommands) {
 			PluginCommand command = xEssentials.getPlugin().getCommand(cmd);
-			if(Configuration.getCommandConfig().getUnregisteredCommands().contains(command.getName()) || (command.getName().equalsIgnoreCase("money") && !Configuration.getEconomyConfig().isEconomyEnabled())) {
+			if(Configuration.getCommandConfig().getUnregisteredCommands().contains(command.getName()) || (command.getName().equalsIgnoreCase("money") && !Configuration.getEconomyConfig().isEconomyEnabled()) || (command.getName().equalsIgnoreCase("cprivate") && !Configuration.getProtectionConfig().isProtectionEnabled()) || (command.getName().equalsIgnoreCase("cmodify") && !Configuration.getProtectionConfig().isProtectionEnabled()) || (command.getName().equalsIgnoreCase("cremove") && !Configuration.getProtectionConfig().isProtectionEnabled())) {
 				Configuration.getCommandConfig().unRegisterBukkitCommand(command);
 			} else {
-				if(!Configuration.getCommandConfig().isRegistered(command) || (command.getName().equalsIgnoreCase("money") && !Configuration.getCommandConfig().isRegistered(command) && Configuration.getEconomyConfig().isEconomyEnabled())) {
+				if(!Configuration.getCommandConfig().isRegistered(command) || (command.getName().equalsIgnoreCase("money") && !Configuration.getCommandConfig().isRegistered(command) && Configuration.getEconomyConfig().isEconomyEnabled()) || (command.getName().equalsIgnoreCase("cprivate") && !Configuration.getCommandConfig().isRegistered(command) && Configuration.getProtectionConfig().isProtectionEnabled()) || (command.getName().equalsIgnoreCase("cmodify") && !Configuration.getCommandConfig().isRegistered(command) && Configuration.getProtectionConfig().isProtectionEnabled()) || (command.getName().equalsIgnoreCase("cremove") && !Configuration.getCommandConfig().isRegistered(command) && Configuration.getProtectionConfig().isProtectionEnabled())) {
 					Configuration.getCommandConfig().registerBukkitCommand(command);
 				}
 			}

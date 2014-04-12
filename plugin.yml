@@ -271,3 +271,15 @@ commands:
      description: economy money command
      aliases: [bal]
      permission: xEssentials.command.money
+  cprivate:
+     description: allows you to select a block to make it private
+     aliases: []
+     permission: xEssentials.command.cprivate
+  cremove:
+     description: allows you to remove a block protection to make it public
+     aliases: []
+     permission: xEssentials.command.cremove
+  cmodify:
+     description: modify a protected block
+     aliases: []
+     permission: xEssentials.command.cmodify

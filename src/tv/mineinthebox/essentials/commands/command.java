@@ -206,6 +206,15 @@ public class command implements CommandExecutor, TabCompleter {
 		} else if(cmd.getName().equalsIgnoreCase("money")) {
 			CmdMoney money = new CmdMoney();
 			return money.execute(sender, cmd, args);
+		} else if(cmd.getName().equalsIgnoreCase("cprivate")) {
+			CmdCprivate priv = new CmdCprivate();
+			return priv.execute(sender, cmd, args);
+		} else if(cmd.getName().equalsIgnoreCase("cremove")) {
+			CmdCremove remove = new CmdCremove();
+			return remove.execute(sender, cmd, args);
+		} else if(cmd.getName().equalsIgnoreCase("cmodify")) {
+			CmdCmodify modify = new CmdCmodify();
+			return modify.execute(sender, cmd, args);
 		}
 		return false;
 	}

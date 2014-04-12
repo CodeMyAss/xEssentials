@@ -67,7 +67,10 @@ public class CommandList {
 			"delwarp",
 			"warps",
 			"wild",
-			"money"
+			"money",
+			"cprivate",
+			"cremove",
+			"cmodify"
 	};
 
 }

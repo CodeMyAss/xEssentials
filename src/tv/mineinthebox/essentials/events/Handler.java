@@ -6,6 +6,7 @@ import org.bukkit.event.Listener;
 
 import tv.mineinthebox.essentials.Configuration;
 import tv.mineinthebox.essentials.xEssentials;
+import tv.mineinthebox.essentials.events.auction.CommandAuctionEvent;
 import tv.mineinthebox.essentials.events.ban.FloodSpamEvent;
 import tv.mineinthebox.essentials.events.ban.HumanSpamCommandEvent;
 import tv.mineinthebox.essentials.events.ban.HumanSpamEvent;
@@ -76,6 +77,14 @@ import tv.mineinthebox.essentials.events.players.TeleportEvent;
 import tv.mineinthebox.essentials.events.players.TorchEvent;
 import tv.mineinthebox.essentials.events.players.TrollModeEvent;
 import tv.mineinthebox.essentials.events.players.VanishEvent;
+import tv.mineinthebox.essentials.events.protection.BlockProtectEvent;
+import tv.mineinthebox.essentials.events.protection.ChestProtectedEvent;
+import tv.mineinthebox.essentials.events.protection.FurnaceProtectedEvent;
+import tv.mineinthebox.essentials.events.protection.JukeboxProtectedEvent;
+import tv.mineinthebox.essentials.events.protection.ModifyProtectionEvent;
+import tv.mineinthebox.essentials.events.protection.RegisterProtectionEvent;
+import tv.mineinthebox.essentials.events.protection.SignProtectedEvent;
+import tv.mineinthebox.essentials.events.protection.UnregisterProtectionEvent;
 import tv.mineinthebox.essentials.events.pvp.ClientSideGraveYard;
 import tv.mineinthebox.essentials.events.pvp.ClientSideGraveYard_ProtocolLib;
 import tv.mineinthebox.essentials.events.pvp.KillBountys;
@@ -221,6 +230,23 @@ public class Handler {
 		if(Configuration.getBlockConfig().isBlockBlacklistEnabled()) {setListener(new BlockBlackListEvent());}
 		if(Configuration.getBlockConfig().isItemBlacklistEnabled()) {setListener(new ItemBlackListEvent());}
 		
+		//auction listeners
+		if(Configuration.getAuctionConfig().isAuctionEnabled()) {
+			setListener(new CommandAuctionEvent());
+		}
+		
+		//protection events
+		if(Configuration.getProtectionConfig().isProtectionEnabled()) {
+			setListener(new UnregisterProtectionEvent());
+			setListener(new RegisterProtectionEvent());
+			setListener(new BlockProtectEvent());
+			setListener(new ModifyProtectionEvent());
+			if(Configuration.getProtectionConfig().isSignProtectionEnabled()) {setListener(new SignProtectedEvent());}
+			if(Configuration.getProtectionConfig().isChestProtectionEnabled()) {setListener(new ChestProtectedEvent());}
+			if(Configuration.getProtectionConfig().isFurnaceProtectionEnabled()) {setListener(new FurnaceProtectedEvent());}
+			if(Configuration.getProtectionConfig().isJukeboxProtectionEnabled()) {setListener(new JukeboxProtectedEvent());}
+		}
+			
 		setListener(new RemoveMemory());
 	}
 

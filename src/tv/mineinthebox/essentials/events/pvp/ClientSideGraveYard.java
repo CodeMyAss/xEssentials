@@ -2,9 +2,6 @@ package tv.mineinthebox.essentials.events.pvp;
 
 import java.io.File;
 
-import net.minecraft.server.v1_7_R1.EntityPlayer;
-import net.minecraft.server.v1_7_R1.PacketPlayOutUpdateSign;
-
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -12,7 +9,6 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.craftbukkit.v1_7_R1.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -46,8 +42,9 @@ public class ClientSideGraveYard implements Listener {
 					};
 					//https://forums.bukkit.org/threads/change-the-direction-of-a-sign.31582/ relevant
 
-					EntityPlayer player = ((CraftPlayer) p).getHandle();
-					player.playerConnection.sendPacket(new PacketPlayOutUpdateSign(signBlock.getX(), signBlock.getY(), signBlock.getZ(), lines));
+					p.sendSignChange(signBlock.getLocation(), lines);
+					//EntityPlayer player = ((CraftPlayer) p).getHandle();
+					//player.playerConnection.sendPacket(new PacketPlayOutUpdateSign(signBlock.getX(), signBlock.getY(), signBlock.getZ(), lines));
 					p.sendBlockChange(block.getLocation(), Material.MOSSY_COBBLESTONE, block.getData());
 					Block blockSkeleton = block.getRelative(BlockFace.UP);
 					p.sendBlockChange(blockSkeleton.getLocation(), Material.SKULL, (byte) 0);
@@ -63,7 +60,7 @@ public class ClientSideGraveYard implements Listener {
 			}
 		} catch(NoClassDefFoundError r) {
 			xEssentials.getPlugin().log("ClientSideGraveYards is only supported for Craftbukkit 1.7.2 R1, disabling configuration option...", LogType.SEVERE);
-			xEssentials.getPlugin().log("if you want more compataibillity please install ProtocolLib or update to the correct craftbukkit.", LogType.SEVERE);
+			xEssentials.getPlugin().log("if you want more compatability please install ProtocolLib or update to the correct craftbukkit.", LogType.SEVERE);
 			try {
 				File f = new File(xEssentials.getPlugin().getDataFolder() + File.separator + "pvp.yml");
 				FileConfiguration con = YamlConfiguration.loadConfiguration(f);

@@ -15,24 +15,51 @@ import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import org.json.simple.parser.JSONParser;
 
-public class MojangUUID implements Callable<UUID> {
+public class MojangUUID {
 
-	private String playername;
+	private Player p;
 
+	public MojangUUID(Player p) {
+		this.p = p;
+	}
+	
+	private boolean isVersionSupported() {
+		try {
+			Class.forName("net.minecraft.util.com.mojang.authlib.GameProfile");
+			return true;
+		} catch (ClassNotFoundException e) {}
+		return false;
+	}
+	
+	/**
+	 * @author xize
+	 * @param returns the unique id, this class will be compatible for any version of minecraft.
+	 * @param we will look to a special class file named GameProfile.java, if it doesn't exist we know that bukkit is in a old state, which means we have to fetch data our selves. 
+	 * @return String
+	 * @throws Exception
+	 */
+	public String getUniqueId() throws Exception {
+		if(isVersionSupported()) {
+			return p.getUniqueId().toString().replace("-", "");
+		} else {
+			Callable<UUID> getUUID = new CompatUUID(p);
+			return getUUID.call().toString().replace("-", "");
+		}
+	}
+}
+
+class CompatUUID implements Callable<UUID> {
+	
+	private Player p;
 	private final int MAX_SEARCH = 100;
 	private final String REPO = "https://api.mojang.com/profiles/page/";
 	private final String AGENT = "minecraft";
 	private final JSONParser jsonParser = new JSONParser();
-
-
-	public MojangUUID(Player p) {
-		this.playername = p.getName();
+	
+	public CompatUUID(Player p) {
+		this.p = p;
 	}
 	
-	public String getUniqueId() throws Exception {
-			return call().toString();
-	}
-
 	@Override
 	public UUID call() throws Exception {
 		for(int i = 1; i < MAX_SEARCH; i++) {
@@ -59,7 +86,7 @@ public class MojangUUID implements Callable<UUID> {
 	private String buildBody() {
 		List<JSONObject> list = new ArrayList<JSONObject>();
 		JSONObject obj = new JSONObject();
-		obj.put("name", playername);
+		obj.put("name", p.getName());
 		obj.put("agent", AGENT);
 		list.add(obj);
 		return JSONValue.toJSONString(list);
@@ -82,4 +109,5 @@ public class MojangUUID implements Callable<UUID> {
 		connection.setDoOutput(true);
 		return connection;
 	}
+	
 }

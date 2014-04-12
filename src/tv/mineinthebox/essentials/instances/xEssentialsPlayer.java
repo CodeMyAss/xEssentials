@@ -2096,7 +2096,7 @@ public class xEssentialsPlayer {
 	public void setAuctionPassword(String password) {
 		if(xEssentials.getAuctionDatabase().doesPlayerExist(getUser())) {
 			try {
-				xEssentials.getAuctionDatabase().doQuery("UPDATE auction_users SET password=" + Crypt.CryptToSaltedSha512(password) + " WHERE username=" + getUser() + "");
+				xEssentials.getAuctionDatabase().doQuery("UPDATE auction_users SET password='" + Crypt.CryptToSaltedSha512(password) + "' WHERE username='" + getUser() + "'");
 			} catch (NoSuchAlgorithmException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -2106,7 +2106,8 @@ public class xEssentialsPlayer {
 			}
 		} else {
 			try {
-				xEssentials.getAuctionDatabase().doQuery("INSERT INTO auction_users (date, username, products, UUID, password, SESSION_ID) VALUES("+ System.currentTimeMillis() + ", " + getUser() + ", 0, " + getUniqueId() + ", " + Crypt.CryptToSaltedSha512(password) + ", " + UUID.randomUUID().toString().replace("-", ""));
+				String values = xEssentials.getAuctionDatabase().setValueString(new String[] {new Date(System.currentTimeMillis()).toString(), getUser(), "0", getUniqueId(), Crypt.CryptToSaltedSha512(password), UUID.randomUUID().toString()});
+				xEssentials.getAuctionDatabase().doQuery("INSERT INTO auction_users (date, username, products, UUID, password, SESSION_ID) VALUES(" + values + ")");
 			} catch (NoSuchAlgorithmException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -2195,6 +2196,15 @@ public class xEssentialsPlayer {
 	 */
 	public void clearAuctionCompletely() {
 		xEssentials.getAuctionDatabase().clearAuction(player.getName());
+	}
+	
+	/**
+	 * @author xize
+	 * @param item - the MarketItem(<?> extends ItemStack) in hand
+	 * @param cost - the price
+	 */
+	public void sellAuctionItem(MarketItem item) {
+		xEssentials.getAuctionDatabase().placeItemOnSale(item);
 	}
 	
 	/**

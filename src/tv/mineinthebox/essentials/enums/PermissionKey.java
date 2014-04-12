@@ -5,6 +5,9 @@ public enum PermissionKey {
 	
 	IS_ADMIN("xEssentials.isAdmin"),
 	CMD_WILD("xEssentials.command.wild"),
+	CMD_CPRIVATE("xEssentials.command.cprivate"),
+	CMD_CREMOVE("xEssentials.command.cremove"),
+	CMD_CMODIFY("xEssentials.command.cmodify"),
 	MULTIPLE_HOMES("xEssentials.MultipleHomes"),
 	CMD_MONEY("xEssentials.command.money"),
 	CMD_AFK("xEssentials.command.afk"),
@@ -73,6 +76,7 @@ public enum PermissionKey {
 	CMD_POWERTOOL("xEssentials.command.powertool"),
 	CMD_NUKE("xEssentials.command.nuke"),
 	CMD_FAKE_NUKE("xEssentials.command.fakenuke"),
+	CMD_AUCTION("xEssentials.command.auction"),
 	SIGN_SHOP("xEssentials.signs.shop"),
 	SIGN_SHOP_USE("xEssentials.signs.shop.use"),
 	SIGN_BOOM("xEssentials.signs.boom"),

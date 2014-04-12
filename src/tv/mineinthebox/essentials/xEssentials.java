@@ -29,6 +29,7 @@ import tv.mineinthebox.essentials.instances.Warp;
 import tv.mineinthebox.essentials.instances.xEssentialsOfflinePlayer;
 import tv.mineinthebox.essentials.instances.xEssentialsPlayer;
 import tv.mineinthebox.essentials.utils.AuctionSqlite;
+import tv.mineinthebox.essentials.utils.ProtectionDB;
 import tv.mineinthebox.essentials.utils.TPS;
 
 
@@ -43,6 +44,7 @@ public class xEssentials extends JavaPlugin {
 	public static GreyListServer server = null;
 	public static AuctionServer auServers = null;
 	private static AuctionSqlite auctiondb = null;
+	public static ProtectionDB protectiondb = null;
 
 	public void onEnable() {
 		pl = this;
@@ -54,20 +56,23 @@ public class xEssentials extends JavaPlugin {
 			reloadPlayerBase();
 		}
 		for(String cmd : cmdlist.getAllCommands) {
-			getCommand(cmd).setExecutor(new command());	
+				getCommand(cmd).setExecutor(new command());	
 		}
 		if(Configuration.getPlayerConfig().isRealisticGlassEnabled()) {
 			glass.loadGlassBlocks();	
 		}
 		TPS.startTps();
+		Configuration.HandleCommandManager();
+		if(Configuration.getProtectionConfig().isProtectionEnabled()) {
+			protectiondb = new ProtectionDB();	
+		}
 		server = new GreyListServer(Configuration.getGrayListConfig().getPort());
 		if(Configuration.getGrayListConfig().isEnabled()) {
 			server.createServer();
 		}
-		Configuration.HandleCommandManager();
-		AuctionServer auServer = new AuctionServer(Configuration.getAuctionConfig().getPort());
+		auServers = new AuctionServer(Configuration.getAuctionConfig().getPort());
 		if(Configuration.getAuctionConfig().isAuctionEnabled()) {
-			auServer.createServer();
+			auServers.createServer();
 			auctiondb = new AuctionSqlite();
 		}
 	}
@@ -79,13 +84,13 @@ public class xEssentials extends JavaPlugin {
 		}
 		log("has been disabled!", LogType.INFO);
 		if(Configuration.getChatConfig().isRssBroadcastEnabled()) {CallRssFeedEvent.saveLastFeed();}
+		if(Configuration.getBroadcastConfig().isBroadcastEnabled()) {
+			CallEssentialsBroadcastEvent.stop();
+		}
 		if(server instanceof GreyListServer) {
 			if(server.isRunning()) {
 				server.disable();
 			}
-		}
-		if(Configuration.getBroadcastConfig().isBroadcastEnabled()) {
-			CallEssentialsBroadcastEvent.stop();
 		}
 		if(auServers instanceof AuctionServer) {
 			if(auServers.isRunning()) {
@@ -461,5 +466,14 @@ public class xEssentials extends JavaPlugin {
 	 */
 	public static AuctionSqlite getAuctionDatabase() {
 		return auctiondb;
+	}
+	
+	/**
+	 * @author xize
+	 * @param returns the database
+	 * @return ProtectionDB
+	 */
+	public static ProtectionDB getProtectionDatabase() {
+		return protectiondb;
 	}
 }

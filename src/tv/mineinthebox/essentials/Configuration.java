@@ -72,7 +72,7 @@ public class Configuration {
 		createEconomyConfig();
 		createShopConfig();
 		createProtectionConfig();
-		//createAuctionConfig();
+		createAuctionConfig();
 		loadSystemPresets(ConfigType.BAN);
 		loadSystemPresets(ConfigType.BROADCAST);
 		loadSystemPresets(ConfigType.CHAT);
@@ -87,7 +87,7 @@ public class Configuration {
 		loadSystemPresets(ConfigType.COMMAND);
 		loadSystemPresets(ConfigType.ECONOMY);
 		loadSystemPresets(ConfigType.SHOP);
-		//loadSystemPresets(ConfigType.AUCTION);
+		loadSystemPresets(ConfigType.AUCTION);
 		loadSystemPresets(ConfigType.PROTECTION);
 		for(Material mat : Material.values()) {
 			materials.add(mat.name());
@@ -117,7 +117,6 @@ public class Configuration {
 		}
 	}
 	
-	@SuppressWarnings("unused")
 	private void createAuctionConfig() {
 		try {
 			File f = new File(xEssentials.getPlugin().getDataFolder() + File.separator + "auction.yml");
@@ -211,8 +210,6 @@ public class Configuration {
 				CommandList commandlist = new CommandList();
 				List<String> commands = Arrays.asList(commandlist.getAllCommands);
 				List<String> orginal = Arrays.asList(con.getConfigurationSection("command").getKeys(false).toArray(new String[0]));
-				System.out.print("size: " + commands.size());
-				System.out.print("size: " + orginal.size());
 				if((commands.size()-4) != orginal.size()) {
 					xEssentials.getPlugin().log("new commands detected!, adding them right now inside the command config!", LogType.INFO);
 					for(String cmd : commands) {

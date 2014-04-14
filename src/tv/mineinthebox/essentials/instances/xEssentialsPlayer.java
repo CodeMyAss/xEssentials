@@ -69,9 +69,10 @@ public class xEssentialsPlayer {
 				}
 				//call the custom event whenever we noticed the name has been changed!
 				Bukkit.getPluginManager().callEvent(new PlayerNameChangeEvent(oldName, player.getName(), player, this));
-				//update database for auctions whenever the name is changed appearing to be here!
 				setNameHistory(oldName);
-			
+				if(Configuration.getProtectionConfig().isProtectionEnabled()) {
+					xEssentials.getProtectionDatabase().updatePlayer(oldName, player.getName());
+				}
 			} else {
 				this.con.set("ip", player.getAddress().getAddress().getHostAddress());
 				try {

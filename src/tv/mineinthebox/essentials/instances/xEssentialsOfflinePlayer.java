@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
+
 import org.bukkit.BanList.Type;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -231,9 +233,8 @@ public class xEssentialsOfflinePlayer {
 	 * @param gets the player if online
 	 * @return
 	 */
-	@SuppressWarnings("deprecation")
 	public Player getPlayer() {
-		Player p = Bukkit.getPlayer(getUser());
+		Player p = Bukkit.getPlayer(UUID.fromString(getUniqueId()));
 		if(p instanceof Player) {
 			return p;
 		}
@@ -483,7 +484,7 @@ public class xEssentialsOfflinePlayer {
 	 */
 	public String getUniqueId() {
 		update();
-		return f.getName().replace(".yml", "");
+		return con.getString("uuid");
 	}
 
 	/**

@@ -23,7 +23,7 @@ public class LoadMemory implements Listener {
 				e.getPlayer().kickPlayer("failed to join, cannot retrieve UUID of this player");
 			}	
 		} else {
-			xEssentialsPlayer xp = new xEssentialsPlayer(e.getPlayer(), e.getPlayer().getUniqueId().toString());
+			xEssentialsPlayer xp = new xEssentialsPlayer(e.getPlayer(), e.getPlayer().getName().toLowerCase());
 			xEssentials.set(e.getPlayer().getName(), xp);
 		}
 	}

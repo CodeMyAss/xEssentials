@@ -97,7 +97,7 @@ public class xEssentialsPlayer {
 			this.con.set("fly", false);
 			this.con.set("torch", false);
 			this.con.set("firefly", false);
-			this.con.set("uuid", UUID);
+			this.con.set("uuid", player.getUniqueId().toString());
 			if(Configuration.getEconomyConfig().isEconomyEnabled()){
 				this.con.set("money", Configuration.getEconomyConfig().getStartersMoney());
 			}
@@ -767,7 +767,7 @@ public class xEssentialsPlayer {
 	 * @return String
 	 */
 	public String getUniqueId() {
-		return f.getName().replace(".yml", "");
+		return player.getUniqueId().toString();
 	}
 
 	/**

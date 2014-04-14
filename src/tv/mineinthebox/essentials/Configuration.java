@@ -15,9 +15,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
-import tv.mineinthebox.essentials.auction.AuctionServer;
 import tv.mineinthebox.essentials.commands.CommandList;
-import tv.mineinthebox.essentials.configurations.AuctionConfig;
 import tv.mineinthebox.essentials.configurations.BanConfig;
 import tv.mineinthebox.essentials.configurations.BlockConfig;
 import tv.mineinthebox.essentials.configurations.BroadcastConfig;
@@ -72,7 +70,6 @@ public class Configuration {
 		createEconomyConfig();
 		createShopConfig();
 		createProtectionConfig();
-		createAuctionConfig();
 		loadSystemPresets(ConfigType.BAN);
 		loadSystemPresets(ConfigType.BROADCAST);
 		loadSystemPresets(ConfigType.CHAT);
@@ -87,7 +84,6 @@ public class Configuration {
 		loadSystemPresets(ConfigType.COMMAND);
 		loadSystemPresets(ConfigType.ECONOMY);
 		loadSystemPresets(ConfigType.SHOP);
-		loadSystemPresets(ConfigType.AUCTION);
 		loadSystemPresets(ConfigType.PROTECTION);
 		for(Material mat : Material.values()) {
 			materials.add(mat.name());
@@ -110,24 +106,6 @@ public class Configuration {
 				con.set("protection.protect.jukebox", true);
 				//con.set("protection.protect.itemframes", true);
 				con.set("protection.message.disallow", "&cthis %BLOCK% has been protected by a spell");
-				con.save(f);
-			}
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	private void createAuctionConfig() {
-		try {
-			File f = new File(xEssentials.getPlugin().getDataFolder() + File.separator + "auction.yml");
-			if(!f.exists()) {
-				FileConfiguration con = YamlConfiguration.loadConfiguration(f);
-				FileConfigurationOptions opt = con.options();
-				opt.header("default configuration for auctions, when enabled this will start a webshop.\nthe passwords will be stored in the player files\nhowever this will be salt protected\nand will not be shown inside the console!\nnote the admin password get encrypted to ;-)");
-				con.set("auction.enable", true);
-				con.set("auction.port", 8009);
-				con.set("auction.increase-bid-by", 5.0);
-				con.set("auction.url", "http://auction.yoursite.com");
 				con.save(f);
 			}
 		} catch(Exception e) {
@@ -662,15 +640,6 @@ public class Configuration {
 			hash.put("AdminShopPrefix", con.getString("shop.shop-admin-prefix"));
 			hash.put("disableMessages", con.getBoolean("shop.disable-messages"));
 			configure.put(ConfigType.SHOP, hash);
-		} else if(cfg == ConfigType.AUCTION) {
-			File f = new File(xEssentials.getPlugin().getDataFolder() + File.separator + "auction.yml");
-			FileConfiguration con = YamlConfiguration.loadConfiguration(f);
-			HashMap<String, Object> hash = new HashMap<String, Object>();
-			hash.put("enable", con.getBoolean("auction.enable"));
-			hash.put("port", con.getInt("auction.port"));
-			hash.put("bid", con.getDouble("auction.increase-bid-by"));
-			hash.put("url", con.getString("auction.url"));
-			configure.put(ConfigType.AUCTION, hash);
 		} else if(cfg == ConfigType.PROTECTION) {
 			File f = new File(xEssentials.getPlugin().getDataFolder() + File.separator + "protection.yml");
 			FileConfiguration con= YamlConfiguration.loadConfiguration(f);
@@ -871,16 +840,6 @@ public class Configuration {
 		EconomyConfig econ = new EconomyConfig();
 		return econ;
 	}
-	
-	/**
-	 * @author xize
-	 * @param returns the auction configuration
-	 * @return AuctionConfig
-	 */
-	public static AuctionConfig getAuctionConfig() {
-		AuctionConfig auction = new AuctionConfig();
-		return auction;
-	}
 
 	/**
 	 * @author xize
@@ -1007,11 +966,6 @@ public class Configuration {
 		for(ConfigType aEnum : ConfigType.values()) {
 			loadSystemPresets(aEnum);
 		}
-		if(xEssentials.auServers != null) {
-			if(xEssentials.auServers.isRunning()) {
-				xEssentials.auServers.disable();
-			}
-		}
 		if(xEssentials.server != null) {
 			if(xEssentials.server.isRunning()) {
 				xEssentials.server.disable();
@@ -1019,10 +973,6 @@ public class Configuration {
 		}
 		createConfigs();
 		HandleCommandManager();
-		if(Configuration.getAuctionConfig().isAuctionEnabled()) {
-			xEssentials.auServers = new AuctionServer(Configuration.getAuctionConfig().getPort());
-			xEssentials.auServers.createServer();
-		}
 		if(Configuration.getGrayListConfig().isEnabled()) {
 			xEssentials.server = new GreyListServer(Configuration.getGrayListConfig().getPort());
 			xEssentials.server.createServer();

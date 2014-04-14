@@ -6,7 +6,6 @@ import org.bukkit.event.Listener;
 
 import tv.mineinthebox.essentials.Configuration;
 import tv.mineinthebox.essentials.xEssentials;
-import tv.mineinthebox.essentials.events.auction.CommandAuctionEvent;
 import tv.mineinthebox.essentials.events.ban.FloodSpamEvent;
 import tv.mineinthebox.essentials.events.ban.HumanSpamCommandEvent;
 import tv.mineinthebox.essentials.events.ban.HumanSpamEvent;
@@ -230,11 +229,6 @@ public class Handler {
 		if(Configuration.getBlockConfig().isNotifyOnConsumeEnabled()) {setListener(new NotifyItemUseEvent());}
 		if(Configuration.getBlockConfig().isBlockBlacklistEnabled()) {setListener(new BlockBlackListEvent());}
 		if(Configuration.getBlockConfig().isItemBlacklistEnabled()) {setListener(new ItemBlackListEvent());}
-		
-		//auction listeners
-		if(Configuration.getAuctionConfig().isAuctionEnabled()) {
-			setListener(new CommandAuctionEvent());
-		}
 		
 		//protection events
 		if(Configuration.getProtectionConfig().isProtectionEnabled()) {

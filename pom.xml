@@ -184,7 +184,7 @@
 		<connection>scm:git:ssh://git@github.com/xize/xEssentials</connection>
 		<developerConnection>scm:git:ssh://git@github.com/xize/xEssentials.git</developerConnection>
 	</scm>
-	<version>3.1</version>
+	<version>3.2</version>
 	<organization>
 		<name>xEssentials</name>
 		<url>https://github.com/xEssentials</url>

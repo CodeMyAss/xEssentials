@@ -3,14 +3,10 @@ package tv.mineinthebox.essentials.instances;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
-
 import org.bukkit.BanList.Type;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -25,7 +21,6 @@ import org.bukkit.inventory.ItemStack;
 import tv.mineinthebox.essentials.xEssentials;
 import tv.mineinthebox.essentials.enums.PlayerTaskEnum;
 import tv.mineinthebox.essentials.utils.AlternateAccount;
-import tv.mineinthebox.essentials.utils.Crypt;
 
 public class xEssentialsOfflinePlayer {
 
@@ -1362,134 +1357,6 @@ public class xEssentialsOfflinePlayer {
 	public void clearMoney() {
 		update();
 		con.set("money", null);
-		try {
-			con.save(f);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		update();
-	}
-	/**
-	 * @author xize
-	 * @param password - the password which gets encrypted
-	 */
-	public void setAuctionPassword(String password) {
-		if(xEssentials.getAuctionDatabase().doesPlayerExist(getUser())) {
-			try {
-				xEssentials.getAuctionDatabase().doQuery("UPDATE auction_users SET password='" + Crypt.CryptToSaltedSha512(password) + "' WHERE username='" + getUser() + "'");
-			} catch (NoSuchAlgorithmException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (NoSuchProviderException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		} else {
-			try {
-				String values = xEssentials.getAuctionDatabase().setValueString(new String[] {new Date(System.currentTimeMillis()).toString(), getUser(), "0", getUniqueId(), Crypt.CryptToSaltedSha512(password), UUID.randomUUID().toString()});
-				xEssentials.getAuctionDatabase().doQuery("INSERT INTO auction_users (date, username, products, UUID, password, SESSION_ID) VALUES(" + values + ")");
-			} catch (NoSuchAlgorithmException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (NoSuchProviderException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-	}
-	
-	/**
-	 * @author xize
-	 * @param returns the auction password
-	 * @return String
-	 */
-	public String getAuctionPassword() {
-		if(xEssentials.getAuctionDatabase().doesPlayerExist(getUser())) {
-			return (String) xEssentials.getAuctionDatabase().getObjectFromQuery("SELECT * FROM auction_users WHERE username=" + getUser() + "", "password");
-		}
-		return null;
-	}
-	
-	/**
-	 * @author xize
-	 * @param returns true whenever the player has a auction password set
-	 * @return Boolean
-	 */
-	public boolean hasAuctionPassword() {
-		if(xEssentials.getAuctionDatabase().doesPlayerExist(getUser())) {
-			return true;
-		}
-		return false;
-	}
-	
-	/**
-	 * @author xize
-	 * @param returns the unique imutable session id
-	 * @return String
-	 */
-	public String getAuctionSession() {
-		if(xEssentials.getAuctionDatabase().doesPlayerExist(getUser())) {
-			return (String) xEssentials.getAuctionDatabase().getObjectFromQuery("SELECT * FROM auction_users WHERE username=" + getUser() + "", "SESSION_ID");
-		}
-		return null;
-	}
-	
-	/**
-	 * @author xize
-	 * @param returns true whenever the player has bought auction items while he whas currently offline! (offline inventory)
-	 * @return Boolean
-	 */
-	public boolean hasBoughtAuctionItems() {
-		update();
-		return con.contains("auction.boughtitems");
-	}
-	
-	/**
-	 * @author xize
-	 * @param removes the auction items (offline inventory)
-	 */
-	public void removeAuctionItems() {
-		con.set("auction.boughtitems", null);
-		try {
-			con.save(f);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		update();
-	}
-	
-	/**
-	 * @author xize
-	 * @param removes everything auction related from this invidual player, including in the databases
-	 */
-	public void clearAuctionCompletely() {
-		xEssentials.getAuctionDatabase().clearAuction(getUser());
-	}
-	
-	/**
-	 * @author xize
-	 * @param item - the ItemStack in hand
-	 * @param cost - the price
-	 */
-	public void sellAuctionItem(ItemStack item, Double cost) {
-		MarketItem market = new MarketItem(item);
-		market.setOwner(getUser());
-		market.setCosts(cost);
-		market.setCreationDate(new Date(System.currentTimeMillis()));
-		xEssentials.getAuctionDatabase().placeItemOnSale(market);
-	}
-	
-	/**
-	 * @author xize
-	 * @param sets the bought auction items the player bought while being offline
-	 */
-	@SuppressWarnings("unchecked")
-	public void setBoughtAuctionItem(ItemStack itemss) {
-		List<ItemStack> items = Arrays.asList(((List<ItemStack>) con.get("auction.boughtitems")).toArray(new ItemStack[0]));
-		items.add(itemss);
-		con.set("auction.boughtitems", items.toArray());
 		try {
 			con.save(f);
 		} catch (IOException e) {

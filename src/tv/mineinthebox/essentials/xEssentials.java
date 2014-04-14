@@ -15,7 +15,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import tv.mineinthebox.essentials.auction.AuctionServer;
 import tv.mineinthebox.essentials.commands.CommandList;
 import tv.mineinthebox.essentials.commands.command;
 import tv.mineinthebox.essentials.enums.LogType;
@@ -28,7 +27,6 @@ import tv.mineinthebox.essentials.greylist.GreyListServer;
 import tv.mineinthebox.essentials.instances.Warp;
 import tv.mineinthebox.essentials.instances.xEssentialsOfflinePlayer;
 import tv.mineinthebox.essentials.instances.xEssentialsPlayer;
-import tv.mineinthebox.essentials.utils.AuctionSqlite;
 import tv.mineinthebox.essentials.utils.ProtectionDB;
 import tv.mineinthebox.essentials.utils.TPS;
 
@@ -42,8 +40,6 @@ public class xEssentials extends JavaPlugin {
 	private final CommandList cmdlist = new CommandList();
 	private final RealisticGlass glass = new RealisticGlass();
 	public static GreyListServer server = null;
-	public static AuctionServer auServers = null;
-	private static AuctionSqlite auctiondb = null;
 	public static ProtectionDB protectiondb = null;
 
 	public void onEnable() {
@@ -70,11 +66,6 @@ public class xEssentials extends JavaPlugin {
 		if(Configuration.getGrayListConfig().isEnabled()) {
 			server.createServer();
 		}
-		auServers = new AuctionServer(Configuration.getAuctionConfig().getPort());
-		if(Configuration.getAuctionConfig().isAuctionEnabled()) {
-			auServers.createServer();
-			auctiondb = new AuctionSqlite();
-		}
 	}
 
 	public void onDisable() {
@@ -90,11 +81,6 @@ public class xEssentials extends JavaPlugin {
 		if(server instanceof GreyListServer) {
 			if(server.isRunning()) {
 				server.disable();
-			}
-		}
-		if(auServers instanceof AuctionServer) {
-			if(auServers.isRunning()) {
-				auServers.disable();
 			}
 		}
 	}
@@ -457,15 +443,6 @@ public class xEssentials extends JavaPlugin {
 		} else {
 			throw new NullPointerException("this player has never played before!");
 		}
-	}
-	
-	/**
-	 * @author xize
-	 * @param returns the auction database
-	 * @return AuctionSqlite
-	 */
-	public static AuctionSqlite getAuctionDatabase() {
-		return auctiondb;
 	}
 	
 	/**

@@ -33,8 +33,8 @@ public class AuctionServer implements Runnable {
 	      HandlerList handlers = new HandlerList();
 	      handlers.setHandlers(new Handler[]{resource_handler, new AuctionContentHandler()});
 	      this.server.setHandler(handlers);
-	      Thread webserverThread = new Thread(this);
-	      webserverThread.start();
+	      this.web = new Thread(this);
+	      this.web.start();
 	}
 
 	/**

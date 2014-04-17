@@ -484,7 +484,12 @@ public class xEssentialsOfflinePlayer {
 	 */
 	public String getUniqueId() {
 		update();
-		return con.getString("uuid");
+		if(con.contains("uuid")) {
+			return con.getString("uuid");
+		}  else {
+			String uid = f.getName().replace(".yml", "");
+			return (uid.substring(0, 8) + "-" + uid.substring(8, 12) + "-" + uid.substring(12, 16) + "-" + uid.substring(16, 20) + "-" +uid.substring(20, 32));
+		}
 	}
 
 	/**

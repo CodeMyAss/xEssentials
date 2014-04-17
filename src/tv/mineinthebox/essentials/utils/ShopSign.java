@@ -32,9 +32,9 @@ public class ShopSign {
 		if(s.contains(" : ")) {
 			String[] split = s.split(" : ");
 			String buy = split[0];
-			return Double.parseDouble(buy.replace("b ", ""));
+			return Double.parseDouble(buy.replace("b ", "").replace("B ", ""));
 		} else {
-			return Double.parseDouble(s.replace("b ", ""));
+			return Double.parseDouble(s.replace("b ", "").replace("B ", ""));
 		}
 	}
 	
@@ -47,9 +47,9 @@ public class ShopSign {
 		if(s.contains(" : ")) {
 			String[] split = s.split(" : ");
 			String sell = split[1];
-			return Double.parseDouble(sell.replace("s ", ""));
+			return Double.parseDouble(sell.replace("s ", "").replace("S ", ""));
 		} else {
-			return Double.parseDouble(s.replace("s ", ""));
+			return Double.parseDouble(s.replace("s ", "").replace("S ", ""));
 		}
 	}
 	

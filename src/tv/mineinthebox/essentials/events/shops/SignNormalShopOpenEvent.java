@@ -38,7 +38,7 @@ public class SignNormalShopOpenEvent implements Listener {
 								sign.update();
 								e.getPlayer().sendMessage(ChatColor.GREEN + "detected user name change on the shop holder, its now updated!");
 							}
-							if(sign.getLine(2).contains("b")) {
+							if(sign.getLine(2).contains("b") || sign.getLine(2).contains("B")) {
 								Double cost = shop.getBuyPrice(sign.getLine(2));
 								if(Configuration.getEconomyConfig().isEconomyEnabled()) {
 									xEssentialsPlayer xp = xEssentials.get(e.getPlayer().getName());
@@ -132,7 +132,7 @@ public class SignNormalShopOpenEvent implements Listener {
 									sign.update();
 									e.getPlayer().sendMessage(ChatColor.GREEN + "detected user name change on the shop holder, its now updated!");
 								}
-								if(sign.getLine(2).contains("s")) {
+								if(sign.getLine(2).contains("s") || sign.getLine(2).contains("S")) {
 									Chest chest = shop.getChestFromSign(sign.getBlock());
 									String[] items = sign.getLine(3).split(":");
 									Material data = Material.getMaterial(items[0]);

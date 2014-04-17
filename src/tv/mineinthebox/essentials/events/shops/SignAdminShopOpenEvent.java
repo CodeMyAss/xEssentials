@@ -39,7 +39,7 @@ public class SignAdminShopOpenEvent implements Listener {
 				Sign sign = (Sign) e.getClickedBlock().getState();
 				if(sign.getLine(0).equalsIgnoreCase(Configuration.getShopConfig().getAdminPrefix())) {
 					if(e.getPlayer().hasPermission(PermissionKey.SIGN_SHOP_USE.getPermission())) {
-						if(sign.getLine(2).contains("b")) {
+						if(sign.getLine(2).contains("b") || sign.getLine(2).contains("B")) {
 							Double cost = shop.getBuyPrice(sign.getLine(2));
 							if(Configuration.getEconomyConfig().isEconomyEnabled()) {
 								xEssentialsPlayer xp = xEssentials.get(e.getPlayer().getName());
@@ -80,7 +80,7 @@ public class SignAdminShopOpenEvent implements Listener {
 				if(sign.getLine(0).equalsIgnoreCase(Configuration.getShopConfig().getAdminPrefix())) {
 					if(e.getPlayer().hasPermission(PermissionKey.SIGN_SHOP_USE.getPermission())) {
 						if(!e.getPlayer().isSneaking()) {
-							if(sign.getLine(2).contains("s")) {
+							if(sign.getLine(2).contains("s") || sign.getLine(2).contains("S")) {
 
 								String[] items = sign.getLine(3).split(":");
 								Material data = Material.getMaterial(items[0]);

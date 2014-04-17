@@ -81,8 +81,11 @@ public class CommandConfig {
 			Object map = getPrivateField(commandMap, "knownCommands");
 			@SuppressWarnings("unchecked")
 			HashMap<String, Command> knownCommands = (HashMap<String, Command>) map;
-			knownCommands.remove(cmd.getName());
+			knownCommands.remove("xessentials"+":"+cmd.getName());
 			for (String alias : cmd.getAliases()){
+				if(knownCommands.containsKey("xessentials:"+alias) && knownCommands.get("xessentials:"+alias).toString().contains(xEssentials.getPlugin().getName())){
+					knownCommands.remove("xessentials:"+alias);
+				}
 				if(knownCommands.containsKey(alias) && knownCommands.get(alias).toString().contains(xEssentials.getPlugin().getName())){
 					knownCommands.remove(alias);
 				}
@@ -99,7 +102,7 @@ public class CommandConfig {
 			Object map = getPrivateField(commandMap, "knownCommands");
 			@SuppressWarnings("unchecked")
 			HashMap<String, Command> knownCommands = (HashMap<String, Command>) map;
-			if(knownCommands.containsKey(cmd.getName())) {
+			if(knownCommands.containsKey("xessentials"+":"+cmd.getName())) {
 				return true;
 			}
 		} catch (Exception e) {
@@ -115,9 +118,14 @@ public class CommandConfig {
 			Object map = getPrivateField(commandMap, "knownCommands");
 			@SuppressWarnings("unchecked")
 			HashMap<String, Command> knownCommands = (HashMap<String, Command>) map;
-			knownCommands.put(cmd.getName(), cmd);
-			for(String alias : cmd.getAliases()) {
-				knownCommands.put(alias, cmd);
+			knownCommands.put("xessentials"+":"+cmd.getName(), cmd);
+			for (String alias : cmd.getAliases()){
+				if(!knownCommands.containsKey("xessentials:"+alias) && !knownCommands.get("xessentials:"+alias).toString().contains(xEssentials.getPlugin().getName())){
+					knownCommands.put("xessentials:"+alias, cmd);
+				}
+				if(!knownCommands.containsKey(alias) && !knownCommands.get(alias).toString().contains(xEssentials.getPlugin().getName())){
+					knownCommands.put(alias, cmd);
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

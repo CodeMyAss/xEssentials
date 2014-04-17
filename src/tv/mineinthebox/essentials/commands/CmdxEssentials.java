@@ -17,6 +17,7 @@ import org.bukkit.command.CommandSender;
 import tv.mineinthebox.essentials.Configuration;
 import tv.mineinthebox.essentials.Warnings;
 import tv.mineinthebox.essentials.xEssentials;
+import tv.mineinthebox.essentials.enums.LogType;
 import tv.mineinthebox.essentials.enums.PermissionKey;
 import tv.mineinthebox.essentials.utils.TPS;
 
@@ -76,12 +77,15 @@ public class CmdxEssentials implements Runnable {
 								if(dir.isDirectory()) {
 									File db = new File("plugins" + File.separator + "LWC" + File.separator + "lwc.db");
 									if(db.exists()) {
+										xEssentials.getPlugin().log("starting importing lwc database contents in our own database...", LogType.INFO);
+										xEssentials.getPlugin().log("setting up a new workers thread, against server crashing.", LogType.INFO);
 										sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&2[&3xEssentials&2]&f " + ChatColor.GRAY + "starting importing lwc database contents in our own database..."));
 										sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&2[&3xEssentials&2]&f " + ChatColor.GRAY + "setting up a new workers thread, against server crashing."));
 										timestart = System.currentTimeMillis();
 										this.sender = sender;
 										lwcthread = new Thread(this);
 										lwcthread.start();
+										xEssentials.getPlugin().log("thread has been activated, now waiting for response, this could take up to 30 minutes depending on the size of the database.", LogType.INFO);
 										sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&2[&3xEssentials&2]&f " + ChatColor.GRAY + "thread has been activated, now waiting for response, this could take up to 30 minutes depending on the size of the database."));
 									} else {
 										sender.sendMessage(ChatColor.RED + "could not find any LWC sqlite database");
@@ -128,7 +132,10 @@ public class CmdxEssentials implements Runnable {
 				sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&2[&3xEssentials&2]&f " + ChatColor.GRAY + "lwc database has successfully been intergrated, into our xEssentials system."));
 				sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&2[&3xEssentials&2]&f " + ChatColor.GRAY + "thread took currently " + (timeend-timestart) + "ms."));
 			}
+			xEssentials.getPlugin().log("lwc database has successfully been intergrated, into our xEssentials system.", LogType.INFO);
+			xEssentials.getPlugin().log("thread took currently " + (timeend-timestart) + "ms.", LogType.INFO);
 			try {
+				//graceful shutdown of the thread.
 				Thread.sleep(100000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block

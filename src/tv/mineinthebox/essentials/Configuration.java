@@ -104,7 +104,7 @@ public class Configuration {
 				con.set("protection.protect.chests", true);
 				con.set("protection.protect.furnace", true);
 				con.set("protection.protect.jukebox", true);
-				//con.set("protection.protect.itemframes", true);
+				con.set("protection.protect.dispenser", true);
 				con.set("protection.message.disallow", "&cthis %BLOCK% has been protected by a spell");
 				con.save(f);
 			}
@@ -649,6 +649,7 @@ public class Configuration {
 			hash.put("chestEnable", con.getBoolean("protection.protect.chests"));
 			hash.put("furnaceEnable", con.getBoolean("protection.protect.furnace"));
 			hash.put("jukeboxEnable", con.getBoolean("protection.protect.jukebox"));
+			hash.put("dispenserEnable", con.getBoolean("protection.protect.dispenser"));
 			hash.put("messageDisallow", con.getString("protection.message.disallow"));
 			configure.put(ConfigType.PROTECTION, hash);
 		}

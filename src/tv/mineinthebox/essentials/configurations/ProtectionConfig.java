@@ -49,6 +49,14 @@ public class ProtectionConfig {
 	
 	/**
 	 * @author xize
+	 * @param returns true whenever the default dispenser protection is enabled
+	 * @return Boolean
+	 */
+	public boolean isDispenserEnabled() {
+		return (Boolean) Configuration.getConfigValue(ConfigType.PROTECTION, "dispenserEnable");
+	}
+	/**
+	 * @author xize
 	 * @param returns the disallow message
 	 * @return String
 	 */

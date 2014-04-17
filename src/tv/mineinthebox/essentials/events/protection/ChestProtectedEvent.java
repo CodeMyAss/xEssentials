@@ -19,12 +19,25 @@ import tv.mineinthebox.essentials.enums.PermissionKey;
 
 public class ChestProtectedEvent implements Listener {
 
-	@EventHandler
-	public void onDestroy(BlockBreakEvent e) {
+	@EventHandler(ignoreCancelled = true)
+	public void onPlace(BlockPlaceEvent e) {
+		if(e.getBlock().getType() == Material.CHEST || e.getBlock().getType() == Material.TRAPPED_CHEST) {
+			if(xEssentials.getProtectionDatabase().register(e.getPlayer().getName(), e.getBlock())) {
+				e.getPlayer().sendMessage(ChatColor.GREEN + "registered private chest");
+			} else {
+				e.getPlayer().sendMessage(Configuration.getProtectionConfig().getDisallowMessage().replace("%BLOCK%", e.getBlock().getType().name()));
+				e.setCancelled(true);
+			}
+		}
+	}
+	
+	@EventHandler(ignoreCancelled = true)
+	public void onBreak(BlockBreakEvent e) {
 		if(e.getBlock().getType() == Material.CHEST || e.getBlock().getType() == Material.TRAPPED_CHEST) {
 			if(xEssentials.getProtectionDatabase().isRegistered(e.getBlock())) {
-				if(xEssentials.getProtectionDatabase().removeProtectedBlock(e)) {
-					e.getPlayer().sendMessage(ChatColor.RED + "you successfully unregistered that chest");
+				if(xEssentials.getProtectionDatabase().isOwner(e.getPlayer().getName(), e.getBlock()) || e.getPlayer().hasPermission(PermissionKey.IS_ADMIN.getPermission())) {
+					xEssentials.getProtectionDatabase().unregister(e.getPlayer().getName(), e.getBlock());
+					e.getPlayer().sendMessage(ChatColor.GREEN + "unregistered that chest.");
 				} else {
 					e.getPlayer().sendMessage(Configuration.getProtectionConfig().getDisallowMessage().replace("%BLOCK%", e.getBlock().getType().name()));
 					e.setCancelled(true);
@@ -33,24 +46,12 @@ public class ChestProtectedEvent implements Listener {
 		}
 	}
 
-	@EventHandler
-	public void onPlace(BlockPlaceEvent e) {
-		if(e.getBlock().getType() == Material.CHEST || e.getBlock().getType() == Material.TRAPPED_CHEST) {
-			if(xEssentials.getProtectionDatabase().addProtectedBlock(e)) {
-				e.getPlayer().sendMessage(ChatColor.GREEN + "registered private chest");
-			} else {
-				e.getPlayer().sendMessage(Configuration.getProtectionConfig().getDisallowMessage().replace("%BLOCK%", e.getBlock().getType().name()));
-				e.setCancelled(true);
-			}
-		}
-	}
-
-	@EventHandler
+	@EventHandler(ignoreCancelled = true)
 	public void onInteract(PlayerInteractEvent e) {
 		if(e.getAction() == Action.RIGHT_CLICK_BLOCK) {
 			if(e.getClickedBlock().getType() == Material.CHEST || e.getClickedBlock().getType() == Material.TRAPPED_CHEST) {
 				if(xEssentials.getProtectionDatabase().isRegistered(e.getClickedBlock())) {
-					if(xEssentials.getProtectionDatabase().isOwner(e.getPlayer(), e.getClickedBlock()) || e.getPlayer().hasPermission(PermissionKey.IS_ADMIN.getPermission())) {
+					if(xEssentials.getProtectionDatabase().isOwner(e.getPlayer().getName(), e.getClickedBlock()) || e.getPlayer().hasPermission(PermissionKey.IS_ADMIN.getPermission())) {
 						e.getPlayer().sendMessage(ChatColor.GREEN + "opening privated chest");
 					} else {
 						e.getPlayer().sendMessage(Configuration.getProtectionConfig().getDisallowMessage().replace("%BLOCK%", e.getClickedBlock().getType().name()));
@@ -83,4 +84,5 @@ public class ChestProtectedEvent implements Listener {
 			}
 		}
 	}
+	
 }

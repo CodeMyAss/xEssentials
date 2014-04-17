@@ -18,31 +18,11 @@ import tv.mineinthebox.essentials.xEssentials;
 import tv.mineinthebox.essentials.enums.PermissionKey;
 
 public class FurnaceProtectedEvent implements Listener {
-	
 
-	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	public void onDestroy(BlockBreakEvent e) {
-		if(xEssentials.getProtectionDatabase().isRegistered(e.getBlock())) {
-			if(e.getBlock().getType() == Material.FURNACE) {
-				if(xEssentials.getProtectionDatabase().removeProtectedBlock(e)) {
-					e.getPlayer().sendMessage(ChatColor.RED + "you successfully unregistered that furnace");
-				} else {
-					e.getPlayer().sendMessage(Configuration.getProtectionConfig().getDisallowMessage().replace("%BLOCK%", e.getBlock().getType().name()));
-					e.setCancelled(true);
-				}
-			} else {
-				if(!xEssentials.getProtectionDatabase().isOwner(e.getPlayer(), e.getBlock())) {
-					e.getPlayer().sendMessage(Configuration.getProtectionConfig().getDisallowMessage().replace("%BLOCK%", e.getBlock().getType().name()));
-					e.setCancelled(true);
-				}
-			}
-		}
-	}
-
-	@EventHandler
+	@EventHandler(ignoreCancelled = true)
 	public void onPlace(BlockPlaceEvent e) {
 		if(e.getBlock().getType() == Material.FURNACE) {
-			if(xEssentials.getProtectionDatabase().addProtectedBlock(e)) {
+			if(xEssentials.getProtectionDatabase().register(e.getPlayer().getName(), e.getBlock())) {
 				e.getPlayer().sendMessage(ChatColor.GREEN + "registered private furnace");
 			} else {
 				e.getPlayer().sendMessage(Configuration.getProtectionConfig().getDisallowMessage().replace("%BLOCK%", e.getBlock().getType().name()));
@@ -50,13 +30,28 @@ public class FurnaceProtectedEvent implements Listener {
 			}
 		}
 	}
+	
+	@EventHandler(ignoreCancelled = true)
+	public void onBreak(BlockBreakEvent e) {
+		if(e.getBlock().getType() == Material.FURNACE) {
+			if(xEssentials.getProtectionDatabase().isRegistered(e.getBlock())) {
+				if(xEssentials.getProtectionDatabase().isOwner(e.getPlayer().getName(), e.getBlock()) || e.getPlayer().hasPermission(PermissionKey.IS_ADMIN.getPermission())) {
+					xEssentials.getProtectionDatabase().unregister(e.getPlayer().getName(), e.getBlock());
+					e.getPlayer().sendMessage(ChatColor.GREEN + "unregistered that furnace.");
+				} else {
+					e.getPlayer().sendMessage(Configuration.getProtectionConfig().getDisallowMessage().replace("%BLOCK%", e.getBlock().getType().name()));
+					e.setCancelled(true);
+				}
+			}
+		}
+	}
 
-	@EventHandler
+	@EventHandler(ignoreCancelled = true)
 	public void onInteract(PlayerInteractEvent e) {
 		if(e.getAction() == Action.RIGHT_CLICK_BLOCK) {
 			if(e.getClickedBlock().getType() == Material.FURNACE) {
 				if(xEssentials.getProtectionDatabase().isRegistered(e.getClickedBlock())) {
-					if(xEssentials.getProtectionDatabase().isOwner(e.getPlayer(), e.getClickedBlock()) || e.getPlayer().hasPermission(PermissionKey.IS_ADMIN.getPermission())) {
+					if(xEssentials.getProtectionDatabase().isOwner(e.getPlayer().getName(), e.getClickedBlock()) || e.getPlayer().hasPermission(PermissionKey.IS_ADMIN.getPermission())) {
 						e.getPlayer().sendMessage(ChatColor.GREEN + "opening private furnace");
 					} else {
 						e.getPlayer().sendMessage(Configuration.getProtectionConfig().getDisallowMessage().replace("%BLOCK%", e.getClickedBlock().getType().name()));
@@ -66,7 +61,7 @@ public class FurnaceProtectedEvent implements Listener {
 			}
 		}
 	}
-	
+
 	@EventHandler
 	public void onPiston(BlockPistonExtendEvent e) {
 		for(Block block : e.getBlocks()) {

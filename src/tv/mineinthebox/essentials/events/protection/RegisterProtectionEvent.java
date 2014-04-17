@@ -27,37 +27,29 @@ public class RegisterProtectionEvent implements Listener {
 				Material.WALL_SIGN,
 				Material.FURNACE,
 				Material.JUKEBOX,
-				Material.TRAP_DOOR
+				Material.TRAP_DOOR,
+				Material.DISPENSER
 		};
 		return Arrays.asList(materials);
 	}
 
 	public static HashSet<String> players = new HashSet<String>();
 
-	@EventHandler
+	@EventHandler(ignoreCancelled = true)
 	public void onInteract(PlayerInteractEvent e) {
 		if(e.getAction() == Action.RIGHT_CLICK_BLOCK) {
 			if(players.contains(e.getPlayer().getName())) {
 				if(!xEssentials.getProtectionDatabase().isRegistered(e.getClickedBlock())) {
 					if(materials().contains(e.getClickedBlock().getType())) {
-						if(xEssentials.getProtectionDatabase().addProtectedBlock(e.getPlayer(), e.getClickedBlock())) {
-							e.getPlayer().sendMessage(ChatColor.GREEN + "successfully registered private " + e.getClickedBlock().getType().name());
-							players.remove(e.getPlayer().getName());
-							e.setCancelled(true);
-						} else {
-							e.getPlayer().sendMessage(ChatColor.RED + "something went wrong");
-							players.remove(e.getPlayer().getName());
-							e.setCancelled(true);
-						}
+						xEssentials.getProtectionDatabase().register(e.getPlayer().getName(), e.getClickedBlock());
+						e.getPlayer().sendMessage(ChatColor.GREEN + "successfully registered permissions for this " + e.getClickedBlock().getType().name() + " block");
+						players.remove(e.getPlayer().getName());
+						e.setCancelled(true);
 					} else {
-						e.getPlayer().sendMessage(ChatColor.RED + "this is not a valid block to be registered");
+						e.getPlayer().sendMessage(ChatColor.RED + "could not register permissions on a block which isn't a permissionable block.");
 						players.remove(e.getPlayer().getName());
 						e.setCancelled(true);
 					}
-				} else {
-					e.getPlayer().sendMessage(ChatColor.RED + "this block is already registered!");
-					players.remove(e.getPlayer().getName());
-					e.setCancelled(true);
 				}
 			}
 		}

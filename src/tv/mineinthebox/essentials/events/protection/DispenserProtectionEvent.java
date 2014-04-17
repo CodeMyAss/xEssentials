@@ -17,23 +17,23 @@ import tv.mineinthebox.essentials.Configuration;
 import tv.mineinthebox.essentials.xEssentials;
 import tv.mineinthebox.essentials.enums.PermissionKey;
 
-public class SignProtectedEvent implements Listener {
+public class DispenserProtectionEvent implements Listener {
 
 	@EventHandler(ignoreCancelled = true)
 	public void onPlace(BlockPlaceEvent e) {
-		if(e.getBlock().getType() == Material.SIGN_POST || e.getBlock().getType() == Material.WALL_SIGN) {
+		if(e.getBlock().getType() == Material.DISPENSER) {
 			xEssentials.getProtectionDatabase().register(e.getPlayer().getName(), e.getBlock());
-			e.getPlayer().sendMessage(ChatColor.GREEN + "successfully registered privated sign");
+			e.getPlayer().sendMessage(ChatColor.GREEN + "registered private dispenser");
 		}
 	}
 	
 	@EventHandler(ignoreCancelled = true)
 	public void onBreak(BlockBreakEvent e) {
-		if(e.getBlock().getType() == Material.SIGN_POST || e.getBlock().getType() == Material.WALL_SIGN) {
+		if(e.getBlock().getType() == Material.DISPENSER) {
 			if(xEssentials.getProtectionDatabase().isRegistered(e.getBlock())) {
 				if(xEssentials.getProtectionDatabase().isOwner(e.getPlayer().getName(), e.getBlock()) || e.getPlayer().hasPermission(PermissionKey.IS_ADMIN.getPermission())) {
 					xEssentials.getProtectionDatabase().unregister(e.getPlayer().getName(), e.getBlock());
-					e.getPlayer().sendMessage(ChatColor.GREEN + "unregistered that sign.");
+					e.getPlayer().sendMessage(ChatColor.GREEN + "unregistered that dispenser.");
 				} else {
 					e.getPlayer().sendMessage(Configuration.getProtectionConfig().getDisallowMessage().replace("%BLOCK%", e.getBlock().getType().name()));
 					e.setCancelled(true);
@@ -41,26 +41,27 @@ public class SignProtectedEvent implements Listener {
 			}
 		}
 	}
-	
+
 	@EventHandler(ignoreCancelled = true)
 	public void onInteract(PlayerInteractEvent e) {
 		if(e.getAction() == Action.RIGHT_CLICK_BLOCK) {
-			if(e.getClickedBlock().getType() == Material.SIGN_POST || e.getClickedBlock().getType() == Material.WALL_SIGN) {
+			if(e.getClickedBlock().getType() == Material.DISPENSER) {
 				if(xEssentials.getProtectionDatabase().isRegistered(e.getClickedBlock())) {
 					if(xEssentials.getProtectionDatabase().isOwner(e.getPlayer().getName(), e.getClickedBlock()) || e.getPlayer().hasPermission(PermissionKey.IS_ADMIN.getPermission())) {
-						e.getPlayer().sendMessage(ChatColor.GREEN + "this sign belongs to you");
+						e.getPlayer().sendMessage(ChatColor.GREEN + "opening private dispenser");
 					} else {
 						e.getPlayer().sendMessage(Configuration.getProtectionConfig().getDisallowMessage().replace("%BLOCK%", e.getClickedBlock().getType().name()));
+						e.setCancelled(true);
 					}
 				}
 			}
 		}
 	}
-	
+
 	@EventHandler
 	public void onPiston(BlockPistonExtendEvent e) {
 		for(Block block : e.getBlocks()) {
-			if(block.getType() == Material.SIGN_POST || block.getType() == Material.WALL_SIGN) {
+			if(block.getType() == Material.DISPENSER) {
 				if(xEssentials.getProtectionDatabase().isRegistered(block)) {
 					e.setCancelled(true);
 					break;
@@ -72,7 +73,7 @@ public class SignProtectedEvent implements Listener {
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
 	public void onExplosion(EntityExplodeEvent e) {
 		for(Block block : e.blockList()) {
-			if(block.getType() == Material.SIGN_POST || block.getType() == Material.WALL_SIGN) {
+			if(block.getType() == Material.DISPENSER) {
 				if(xEssentials.getProtectionDatabase().isRegistered(block)) {
 					e.setCancelled(true);
 				}

@@ -76,8 +76,9 @@ import tv.mineinthebox.essentials.events.players.TeleportEvent;
 import tv.mineinthebox.essentials.events.players.TorchEvent;
 import tv.mineinthebox.essentials.events.players.TrollModeEvent;
 import tv.mineinthebox.essentials.events.players.VanishEvent;
-import tv.mineinthebox.essentials.events.protection.BlockProtectEvent;
+import tv.mineinthebox.essentials.events.protection.BlockProtectedEvent;
 import tv.mineinthebox.essentials.events.protection.ChestProtectedEvent;
+import tv.mineinthebox.essentials.events.protection.DispenserProtectionEvent;
 import tv.mineinthebox.essentials.events.protection.FurnaceProtectedEvent;
 import tv.mineinthebox.essentials.events.protection.HopperEvent;
 import tv.mineinthebox.essentials.events.protection.JukeboxProtectedEvent;
@@ -234,13 +235,14 @@ public class Handler {
 		if(Configuration.getProtectionConfig().isProtectionEnabled()) {
 			setListener(new UnregisterProtectionEvent());
 			setListener(new RegisterProtectionEvent());
-			setListener(new BlockProtectEvent());
 			setListener(new ModifyProtectionEvent());
 			setListener(new HopperEvent());
+			setListener(new BlockProtectedEvent());
 			if(Configuration.getProtectionConfig().isSignProtectionEnabled()) {setListener(new SignProtectedEvent());}
 			if(Configuration.getProtectionConfig().isChestProtectionEnabled()) {setListener(new ChestProtectedEvent());}
 			if(Configuration.getProtectionConfig().isFurnaceProtectionEnabled()) {setListener(new FurnaceProtectedEvent());}
 			if(Configuration.getProtectionConfig().isJukeboxProtectionEnabled()) {setListener(new JukeboxProtectedEvent());}
+			if(Configuration.getProtectionConfig().isDispenserEnabled()) {setListener(new DispenserProtectionEvent());}
 		}
 			
 		setListener(new RemoveMemory());

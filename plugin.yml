@@ -283,3 +283,6 @@ commands:
      description: modify a protected block
      aliases: []
      permission: xEssentials.command.cmodify
+  test:
+     description: modify a protected block
+     aliases: []

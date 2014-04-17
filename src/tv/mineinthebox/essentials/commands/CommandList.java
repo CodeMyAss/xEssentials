@@ -70,7 +70,8 @@ public class CommandList {
 			"money",
 			"cprivate",
 			"cremove",
-			"cmodify"
+			"cmodify",
+			"test"
 	};
 
 }

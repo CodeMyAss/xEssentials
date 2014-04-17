@@ -30,8 +30,12 @@ public class BlockProtectedEvent implements Listener {
 		for(BlockFace face : faces) {
 			Block block1 = block.getRelative(face);
 			if(xEssentials.getProtectionDatabase().isRegistered(block1)) {
-				if(!xEssentials.getProtectionDatabase().isOwner(p.getName(), block1) || !p.hasPermission(PermissionKey.IS_ADMIN.getPermission())) {
-					return false;
+				if(p.hasPermission(PermissionKey.IS_ADMIN.getPermission())) {
+					return true;
+				} else {
+					if(!xEssentials.getProtectionDatabase().isOwner(p.getName(), block1)) {
+						return false;
+					}	
 				}
 			}
 		}

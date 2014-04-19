@@ -8,6 +8,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
@@ -41,6 +42,16 @@ public class BlockProtectedEvent implements Listener {
 		}
 		return true;
 	}
+	
+	private boolean canBlockDestroyed(Block block) {
+		for(BlockFace face : faces) {
+			Block block1 = block.getRelative(face);
+			if(xEssentials.getProtectionDatabase().isRegistered(block1)) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onBreak(BlockBreakEvent e) {
@@ -67,4 +78,15 @@ public class BlockProtectedEvent implements Listener {
 			}
 		}
 	}
+	
+	@EventHandler
+	public void onPiston(BlockPistonExtendEvent e) {
+		for(Block block : e.getBlocks()) {
+			if(canBlockDestroyed(block)) {
+				e.setCancelled(true);
+			}
+		}
+	}
+	
+	
 }

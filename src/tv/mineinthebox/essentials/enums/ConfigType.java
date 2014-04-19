@@ -15,6 +15,5 @@ public enum ConfigType {
 	COMMAND,
 	ECONOMY,
 	SHOP,
-	AUCTION,
 	PROTECTION
 }

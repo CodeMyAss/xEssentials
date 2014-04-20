@@ -35,7 +35,7 @@ public class CustomEventHandler {
 		}
 		if(Configuration.getChatConfig().isChatHighLightEnabled()) {setListener(new CallPlayerHighLightEvent());}
 		if(Configuration.getChatConfig().isSmilleysEnabled()) {setListener(new CallPlayerChatSmilleyEvent());}
-		if(Configuration.getBroadcastConfig().isBroadcastEnabled()) {CallEssentialsBroadcastEvent.startBroadcast();}
+		if(Configuration.getBroadcastConfig().isBroadcastEnabled()) {CallEssentialsBroadcastEvent.start();}
 	}
 
 	public void setListener(Listener listener) {

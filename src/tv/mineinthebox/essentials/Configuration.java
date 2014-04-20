@@ -958,15 +958,14 @@ public class Configuration {
 		Handler handler = new Handler();
 		CustomEventHandler customhandler = new CustomEventHandler();
 		handler.stop();
-		CallEssentialsBroadcastEvent.stop();
+		if(CallEssentialsBroadcastEvent.isRunning()) {
+			CallEssentialsBroadcastEvent.stop();
+		}
 		//clear responsible from the deepest tree in the HashMap in case things could get persistent in the jvm things need to be better safe than not.
 		for(ConfigType aEnum : ConfigType.values()) {
 			configure.get(aEnum).clear();
 		}
 		configure.clear();
-		for(ConfigType aEnum : ConfigType.values()) {
-			loadSystemPresets(aEnum);
-		}
 		if(xEssentials.server != null) {
 			if(xEssentials.server.isRunning()) {
 				xEssentials.server.disable();

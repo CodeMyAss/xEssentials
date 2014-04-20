@@ -10,6 +10,8 @@ import tv.mineinthebox.essentials.Warnings;
 import tv.mineinthebox.essentials.xEssentials;
 import tv.mineinthebox.essentials.enums.PermissionKey;
 import tv.mineinthebox.essentials.events.customEvents.VanishChangeEvent;
+import tv.mineinthebox.essentials.hook.Hooks;
+import tv.mineinthebox.essentials.hook.WorldGuardHook;
 import tv.mineinthebox.essentials.instances.xEssentialsPlayer;
 
 public class CmdVanish {
@@ -38,6 +40,8 @@ public class CmdVanish {
 							sender.sendMessage(ChatColor.RED + "Admin: " + ChatColor.GRAY + "/vanish " + ChatColor.WHITE + ": vanish yourself for other players");
 							sender.sendMessage(ChatColor.RED + "Admin: " + ChatColor.GRAY + "/vanish nopickup " + ChatColor.WHITE + ": toggles nopickup or de-toggles nopickup");
 							sender.sendMessage(ChatColor.RED + "Admin: " + ChatColor.GRAY + "/vanish effect " + ChatColor.WHITE + ": toggles the effects of vanish");
+							sender.sendMessage(ChatColor.RED + "Admin: " + ChatColor.GRAY + "/vanish fq " + ChatColor.WHITE + ": fake quit from the server while being vanish");
+							sender.sendMessage(ChatColor.RED + "Admin: " + ChatColor.GRAY + "/vanish fj " + ChatColor.WHITE + ": fake join from the server while being unvanished");
 						} else if(args[0].equalsIgnoreCase("nopickup")) {
 							if(xp.isVanished()) {
 								if(xp.isNoPickUpEnabled()) {
@@ -57,6 +61,40 @@ public class CmdVanish {
 							} else {
 								xp.setVanishEffects(true);
 								sender.sendMessage(ChatColor.GREEN + "successfully enabled vanish effects for yourself");
+							}
+						} else if(args[0].equalsIgnoreCase("fj") || args[0].equalsIgnoreCase("fakejoin")) {
+							if(xp.isVanished()) {
+								xp.unvanish(true);
+								if(Hooks.isWorldGuardEnabled()) {
+									Bukkit.broadcastMessage(WorldGuardHook.sendJoinMessage(xp.getPlayer()));
+								} else {
+									if(xp.isStaff()) {
+										if(xp.getPlayer().getName().equalsIgnoreCase("Xeph0re")) {
+											Bukkit.broadcastMessage(ChatColor.GRAY + "Developer of xEssentials " + ChatColor.GREEN + xp.getPlayer().getName() + ChatColor.GRAY + " has joined the game!");
+										} else {
+											Bukkit.broadcastMessage(ChatColor.GRAY + "Staff member " + ChatColor.GREEN + xp.getPlayer().getName() + ChatColor.GRAY + " has joined the game!");	
+										}
+									} else {
+										Bukkit.broadcastMessage(ChatColor.GREEN + "player " + ChatColor.GRAY + xp.getPlayer().getName() + ChatColor.GREEN + " has joined the game!");
+									}
+								}
+							} else {
+								sender.sendMessage(ChatColor.RED + "you can't fake join a server when you are already unvanished!");
+							}
+						} else if(args[0].equalsIgnoreCase("fq") || args[0].equalsIgnoreCase("fakequit")) {
+							xp.vanish();
+							if(Hooks.isWorldGuardEnabled()) {
+								Bukkit.broadcastMessage(WorldGuardHook.sendQuitMessage(xp.getPlayer()));
+							} else {
+								if(xp.isStaff()) {
+									if(xp.getPlayer().getName().equalsIgnoreCase("Xeph0re")) {
+										Bukkit.broadcastMessage(ChatColor.GRAY + "Developer of xEssentials " + ChatColor.GREEN + xp.getPlayer().getName() + ChatColor.GRAY + " has left the game!");
+									} else {
+										Bukkit.broadcastMessage(ChatColor.GRAY + "Staff member " + ChatColor.GREEN + xp.getPlayer().getName() + ChatColor.GRAY + " has left the game!");	
+									}
+								} else {
+									Bukkit.broadcastMessage(ChatColor.GREEN + "player " + ChatColor.GRAY + xp.getPlayer().getName() + ChatColor.GREEN + " has left the game!");
+								}
 							}
 						}
 					}

@@ -459,8 +459,16 @@ public class xEssentialsPlayer {
 	 * @return void
 	 */
 	public void refreshPlayer() {
-		vanish();
-		unvanish();
+		for(Player p : Bukkit.getOnlinePlayers()) {
+			if(!player.equals(p)) {
+				p.hidePlayer(player);
+			}
+		}
+		for(Player p : Bukkit.getOnlinePlayers()) {
+			if(!player.equals(p)) {
+				p.showPlayer(player);
+			}
+		}
 	}
 
 	/**
@@ -1011,6 +1019,34 @@ public class xEssentialsPlayer {
 			}
 		}
 		if(hasVanishEffects()) {
+			player.getWorld().playSound(player.getLocation(), Sound.WITHER_SPAWN, 1F, 1F);
+			player.getWorld().playSound(player.getLocation(), Sound.WITHER_IDLE, 1F, 1F);
+			player.getWorld().strikeLightning(player.getLocation().add(0, -120, 0));
+		}
+		con.set("isVanished", false);
+		con.set("noPickUp", false);
+		try {
+			con.save(f);
+			update();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * @author xize
+	 * @param unvanish the player for all others
+	 * @return void
+	 */
+	public void unvanish(boolean sillenced) {
+		update();
+		for(Player p : Bukkit.getOnlinePlayers()) {
+			if(!player.equals(p)) {
+				p.showPlayer(player);
+			}
+		}
+		if(hasVanishEffects() && !sillenced) {
 			player.getWorld().playSound(player.getLocation(), Sound.WITHER_SPAWN, 1F, 1F);
 			player.getWorld().playSound(player.getLocation(), Sound.WITHER_IDLE, 1F, 1F);
 			player.getWorld().strikeLightning(player.getLocation().add(0, -120, 0));

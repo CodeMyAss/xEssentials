@@ -195,8 +195,6 @@ public class SignNormalShopOpenEvent implements Listener {
 							e.getPlayer().sendMessage(ChatColor.RED + "you are not allowed todo that!");
 						}
 					}
-				} else {
-					e.getPlayer().sendMessage(ChatColor.RED + "you are not allowed to do that!");
 				}
 			}
 		}

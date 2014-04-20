@@ -59,6 +59,7 @@ import tv.mineinthebox.essentials.events.players.PlayerCheckNameEvent;
 import tv.mineinthebox.essentials.events.players.PlayerDeathBackEvent;
 import tv.mineinthebox.essentials.events.players.PlayerHoldItemsEvent;
 import tv.mineinthebox.essentials.events.players.PlayerJoinMessage;
+import tv.mineinthebox.essentials.events.players.PlayerQuitMessage;
 import tv.mineinthebox.essentials.events.players.PlayerRespawnTeleport;
 import tv.mineinthebox.essentials.events.players.PlayerTaskLogin;
 import tv.mineinthebox.essentials.events.players.PlayerZone;
@@ -131,6 +132,7 @@ public class Handler {
 		setListener(new Firefly());
 		setListener(new FlyEvent());
 		setListener(new PlayerJoinMessage());
+		setListener(new PlayerQuitMessage());
 		setListener(new ModreqJoinEvent());
 		if(Hooks.isProtocolLibEnabled()) {
 			MotdVanishEvent.initPacketListener();

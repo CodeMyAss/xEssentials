@@ -270,6 +270,35 @@ public class xEssentialsOfflinePlayer {
 		}
 		update();
 	}
+	
+	/**
+	 * @author xize
+	 * @param returns true whenever the player has vanish effects
+	 * @return Boolean
+	 */
+	public boolean hasVanishEffects() {
+		update();
+		if(con.getBoolean("vanishEffects")) {
+			return con.getBoolean("vanishEffects");
+		}
+		return false;
+	}
+	
+	/**
+	 * @author xize
+	 * @param sets the vanish effects of this player
+	 * @param bol - the boolean
+	 */
+	public void setVanishEffects(Boolean bol) {
+		con.set("vanishEffects", bol);
+		try {
+			con.save(f);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		update();
+	}
 
 	/**
 	 * 

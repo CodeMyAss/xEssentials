@@ -37,6 +37,7 @@ public class CmdVanish {
 							sender.sendMessage(ChatColor.GOLD + ".oO___[vanish help]___Oo.");
 							sender.sendMessage(ChatColor.RED + "Admin: " + ChatColor.GRAY + "/vanish " + ChatColor.WHITE + ": vanish yourself for other players");
 							sender.sendMessage(ChatColor.RED + "Admin: " + ChatColor.GRAY + "/vanish nopickup " + ChatColor.WHITE + ": toggles nopickup or de-toggles nopickup");
+							sender.sendMessage(ChatColor.RED + "Admin: " + ChatColor.GRAY + "/vanish effect " + ChatColor.WHITE + ": toggles the effects of vanish");
 						} else if(args[0].equalsIgnoreCase("nopickup")) {
 							if(xp.isVanished()) {
 								if(xp.isNoPickUpEnabled()) {
@@ -48,6 +49,14 @@ public class CmdVanish {
 								}
 							} else {
 								sender.sendMessage(ChatColor.RED + "you can only use this option while being vanished!");
+							}
+						} else if(args[0].equalsIgnoreCase("effect")) {
+							if(xp.hasVanishEffects()) {
+								xp.setVanishEffects(false);
+								sender.sendMessage(ChatColor.GREEN + "successfully disabled vanish effects for yourself");
+							} else {
+								xp.setVanishEffects(true);
+								sender.sendMessage(ChatColor.GREEN + "successfully enabled vanish effects for yourself");
 							}
 						}
 					}

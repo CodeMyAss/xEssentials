@@ -11,6 +11,7 @@ import org.bukkit.BanList.Type;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -1003,10 +1004,16 @@ public class xEssentialsPlayer {
 	 * @return void
 	 */
 	public void unvanish() {
+		update();
 		for(Player p : Bukkit.getOnlinePlayers()) {
 			if(!player.equals(p)) {
 				p.showPlayer(player);
 			}
+		}
+		if(hasVanishEffects()) {
+			player.getWorld().playSound(player.getLocation(), Sound.WITHER_SPAWN, 1F, 1F);
+			player.getWorld().playSound(player.getLocation(), Sound.WITHER_IDLE, 1F, 1F);
+			player.getWorld().strikeLightning(player.getLocation().add(0, -120, 0));
 		}
 		con.set("isVanished", false);
 		con.set("noPickUp", false);
@@ -1017,6 +1024,35 @@ public class xEssentialsPlayer {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * @author xize
+	 * @param returns true whenever the player has vanish effects
+	 * @return Boolean
+	 */
+	public boolean hasVanishEffects() {
+		update();
+		if(con.getBoolean("vanishEffects")) {
+			return con.getBoolean("vanishEffects");
+		}
+		return false;
+	}
+	
+	/**
+	 * @author xize
+	 * @param sets the vanish effects of this player
+	 * @param bol - the boolean
+	 */
+	public void setVanishEffects(Boolean bol) {
+		con.set("vanishEffects", bol);
+		try {
+			con.save(f);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		update();
 	}
 
 	/**

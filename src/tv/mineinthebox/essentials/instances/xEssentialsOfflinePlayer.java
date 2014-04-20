@@ -1447,6 +1447,16 @@ public class xEssentialsOfflinePlayer {
 	public List<String> getNameHistory() {
 		return con.getStringList("name-history");
 	}
+	
+	/**
+	 * @author xize
+	 * @param returns true if the player has name history
+	 * @return Boolean
+	 */
+	public boolean hasNameHistory() {
+		return !con.getStringList("name-history").isEmpty();
+	}
+
 
 	/**
 	 * @author xize

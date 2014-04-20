@@ -83,6 +83,12 @@ public class CmdPlayerInfo {
 									sender.sendMessage(ChatColor.GREEN + "- " + c.getCommand());
 								}
 							}
+							if(off.hasNameHistory()) {
+								sender.sendMessage(ChatColor.GREEN + "has name history:");
+								for(String s : off.getNameHistory()) {
+									sender.sendMessage(ChatColor.GREEN + "- " + s);
+								}
+							}
 						} else {
 							Warnings.getWarnings(sender).playerHasNeverPlayedBefore();
 						}

@@ -75,13 +75,13 @@ public class xEssentials extends JavaPlugin {
 		}
 		log("has been disabled!", LogType.INFO);
 		if(Configuration.getChatConfig().isRssBroadcastEnabled()) {CallRssFeedEvent.saveLastFeed();}
-		if(CallEssentialsBroadcastEvent.isRunning()) {
-			CallEssentialsBroadcastEvent.stop();
-		}
 		if(server instanceof GreyListServer) {
 			if(server.isRunning()) {
 				server.disable();
 			}
+		}
+		if(CallEssentialsBroadcastEvent.isRunning()) {
+			CallEssentialsBroadcastEvent.stop();
 		}
 	}
 

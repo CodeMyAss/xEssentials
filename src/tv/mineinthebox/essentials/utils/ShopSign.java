@@ -66,18 +66,26 @@ public class ShopSign {
 			String subdata = split[1];
 			if(isNumber(data)) {
 				Material mat = Material.getMaterial(Integer.parseInt(data));
-				return (mat.name()+":"+subdata);
+				String matname = (mat.name()+":"+subdata).toLowerCase();
+				String output = matname.substring(0, 1).toUpperCase()+matname.substring(1);
+				return output;
 			} else {
 				Material mat = Material.getMaterial(data.toUpperCase());
-				return (mat.name()+":"+subdata);
+				String matname = (mat.name()+":"+subdata).toLowerCase();
+				String output = matname.substring(0, 1).toUpperCase()+matname.substring(1);
+				return output;
 			}
 		} else {
 			if(isNumber(s)) {
 				Material mat = Material.getMaterial(Integer.parseInt(s));
-				return (mat.name()+":0");
+				String matname = (mat.name()+":"+0).toLowerCase();
+				String output = matname.substring(0, 1).toUpperCase()+matname.substring(1);
+				return output;
 			} else {
 				Material mat = Material.getMaterial(s.toUpperCase());
-				return (mat.name()+":0");
+				String matname = (mat.name()+":"+0).toLowerCase();
+				String output = matname.substring(0, 1).toUpperCase()+matname.substring(1);
+				return output;
 			}
 		}
 	}
@@ -143,7 +151,7 @@ public class ShopSign {
 				}
 			}
 		} else {
-			if(s.startsWith("b ") || s.startsWith("s ")) {
+			if(s.toLowerCase().startsWith("b ") || s.toLowerCase().startsWith("s ")) {
 				if(isNumber(s.toLowerCase().replace("b ", ""))) {
 					return true;
 				} else if(isNumber(s.toLowerCase().replace("s ", ""))) {

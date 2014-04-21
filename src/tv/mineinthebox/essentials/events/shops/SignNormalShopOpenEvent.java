@@ -57,8 +57,13 @@ public class SignNormalShopOpenEvent implements Listener {
 								Chest chest = (Chest) shop.getChestFromSign(sign.getBlock());
 								int amount = Integer.parseInt(sign.getLine(1));
 								String[] split = sign.getLine(3).split(":");
-								Material mat = Material.getMaterial(split[0]);
-								Short subdata = Short.parseShort(split[1]);
+								Material mat = Material.getMaterial(split[0].toUpperCase());
+								Short subdata;
+								if(split.length > 1) {
+									subdata = Short.parseShort(split[1]);	
+								} else {
+									subdata = (short)0;
+								}
 								if(chest.getInventory().contains(mat)) {
 									for(ItemStack stack : chest.getInventory()) {
 										if(stack != null) {
@@ -135,8 +140,13 @@ public class SignNormalShopOpenEvent implements Listener {
 								if(sign.getLine(2).contains("s") || sign.getLine(2).contains("S")) {
 									Chest chest = shop.getChestFromSign(sign.getBlock());
 									String[] items = sign.getLine(3).split(":");
-									Material data = Material.getMaterial(items[0]);
-									Short subdata = Short.parseShort(items[1]);
+									Material data = Material.getMaterial(items[0].toUpperCase());
+									Short subdata;
+									if(items.length > 1) {
+										subdata = Short.parseShort(items[1]);
+									} else {
+										subdata = (short) 0;
+									}
 									Double money = shop.getSellPrice(sign.getLine(2));
 									int amount = Integer.parseInt(sign.getLine(1));
 

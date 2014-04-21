@@ -57,8 +57,10 @@ public class SignAdminShopOpenEvent implements Listener {
 							}
 							Inventory inv = Bukkit.createInventory(e.getPlayer(), 36, sign.getLine(0) + " | buy");
 							String[] items = sign.getLine(3).split(":");
-							ItemStack item = new ItemStack(Material.getMaterial(items[0]), Integer.parseInt(sign.getLine(1)));
-							item.setDurability((short)Short.parseShort(items[1]));
+							ItemStack item = new ItemStack(Material.getMaterial(items[0].toUpperCase()), Integer.parseInt(sign.getLine(1)));
+							if(items.length > 1) {
+								item.setDurability((short)Short.parseShort(items[1]));	
+							}
 							for(int i = 0; i < inv.getSize(); i++) {
 								inv.setItem(i, item);
 							}
@@ -83,8 +85,13 @@ public class SignAdminShopOpenEvent implements Listener {
 							if(sign.getLine(2).contains("s") || sign.getLine(2).contains("S")) {
 
 								String[] items = sign.getLine(3).split(":");
-								Material data = Material.getMaterial(items[0]);
-								Short subdata = Short.parseShort(items[1]);
+								Material data = Material.getMaterial(items[0].toUpperCase());
+								Short subdata;
+								if(items.length > 1) {
+									subdata = Short.parseShort(items[1]);
+								} else {
+									subdata = (short)0;
+								}
 								Double money = shop.getSellPrice(sign.getLine(2));
 								int amount = Integer.parseInt(sign.getLine(1));
 
@@ -147,8 +154,13 @@ public class SignAdminShopOpenEvent implements Listener {
 				Double cost = shop.getBuyPrice(sign.getLine(2));
 				int amount = Integer.parseInt(sign.getLine(1));
 				String[] itemdata = sign.getLine(3).split(":");
-				Material mat = Material.getMaterial(itemdata[0]);
-				Short subValue = Short.parseShort(itemdata[1]);
+				Material mat = Material.getMaterial(itemdata[0].toUpperCase());
+				Short subValue;
+				if(itemdata.length > 1) {
+					subValue = Short.parseShort(itemdata[1]);
+				} else {
+					subValue = (short) 0;
+				}
 
 				if(Configuration.getEconomyConfig().isEconomyEnabled()) {
 					xEssentialsPlayer xp = xEssentials.get(p.getName());

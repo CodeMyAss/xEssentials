@@ -119,17 +119,23 @@ public class VanishEvent implements Listener {
 							}
 						} else if(e.getClickedBlock().getType() == Material.TRAP_DOOR) {
 							Location loc = e.getClickedBlock().getRelative(e.getBlockFace().getOppositeFace()).getLocation();
+							loc.setYaw(e.getPlayer().getLocation().getYaw());
+							loc.setPitch(e.getPlayer().getLocation().getPitch());
 							e.getPlayer().sendMessage(ChatColor.GRAY + "you are vanished so we sillenced teleported you " + e.getBlockFace().getOppositeFace() + " face of the trap door");
 							e.getPlayer().teleport(loc);
 							e.setCancelled(true);
 
 						} else if(e.getClickedBlock().getType() == Material.WOODEN_DOOR) {
 							Location loc = e.getClickedBlock().getRelative(e.getBlockFace().getOppositeFace()).getLocation();
+							loc.setYaw(e.getPlayer().getLocation().getYaw());
+							loc.setPitch(e.getPlayer().getLocation().getPitch());
 							e.getPlayer().sendMessage(ChatColor.GRAY + "you are vanished so we sillenced teleported you " + e.getBlockFace().getOppositeFace() + " face of the wooden door");
 							e.getPlayer().teleport(loc);
 							e.setCancelled(true);
 						} else if(e.getClickedBlock().getType() == Material.IRON_DOOR_BLOCK) {
 							Location loc = e.getClickedBlock().getRelative(e.getBlockFace().getOppositeFace()).getLocation();
+							loc.setYaw(e.getPlayer().getLocation().getYaw());
+							loc.setPitch(e.getPlayer().getLocation().getPitch());
 							e.getPlayer().sendMessage(ChatColor.GRAY + "you are vanished so we sillenced teleported you " + e.getBlockFace().getOppositeFace() + " face of the iron door");
 							e.getPlayer().teleport(loc);
 							e.setCancelled(true);

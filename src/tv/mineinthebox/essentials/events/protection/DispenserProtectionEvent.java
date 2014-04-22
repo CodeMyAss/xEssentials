@@ -29,6 +29,9 @@ public class DispenserProtectionEvent implements Listener {
 	
 	@EventHandler(ignoreCancelled = true)
 	public void onBreak(BlockBreakEvent e) {
+		if(e.isCancelled()) {
+			return;
+		}
 		if(e.getBlock().getType() == Material.DISPENSER) {
 			if(xEssentials.getProtectionDatabase().isRegistered(e.getBlock())) {
 				if(xEssentials.getProtectionDatabase().isOwner(e.getPlayer().getName(), e.getBlock()) || e.getPlayer().hasPermission(PermissionKey.IS_ADMIN.getPermission())) {

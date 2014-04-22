@@ -55,6 +55,9 @@ public class BlockProtectedEvent implements Listener {
 
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onBreak(BlockBreakEvent e) {
+		if(e.isCancelled()) {
+			return;
+		}
 		if(!canBlockPlaced(e.getPlayer(), e.getBlock())) {
 			e.getPlayer().sendMessage(Configuration.getProtectionConfig().getDisallowMessage().replace("%BLOCK%", e.getBlock().getType().name()));
 			e.setCancelled(true);

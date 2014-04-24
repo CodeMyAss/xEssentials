@@ -25,13 +25,17 @@ public class PortalActivateEvent implements Listener {
 			List<Portal> portals = Arrays.asList(Configuration.getPortalConfig().getPortals().values().toArray(new Portal[Configuration.getPortalConfig().getPortals().size()]));
 			for(Portal portal : portals) {
 				if(doesMatch(e.getBlock(), portal)) {
-					for(Block block : portal.getInnerBlocks()) {
-						if(block.getType() == Material.AIR) {
-							block.setType(Material.PORTAL);
-						} else if(block.getType() == Material.IRON_FENCE) {
-							block.setType(Material.PORTAL);
-						} else if(block.getType() == Material.PORTAL) {
-							block.setType(Material.IRON_FENCE);
+					if(portal.isClosed()) {
+						portal.setClosed(false);
+						if(portal.isLinked()) {
+							Portal linked = portal.getLinkedPortal();
+							linked.setClosed(false);
+						}
+					} else {
+						portal.setClosed(true);
+						if(portal.isLinked()) {
+							Portal linked = portal.getLinkedPortal();
+							linked.setClosed(true);
 						}
 					}
 					break;

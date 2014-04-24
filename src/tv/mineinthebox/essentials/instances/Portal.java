@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -150,6 +151,36 @@ public class Portal implements Comparable<String> {
 			}
 		} else {
 			throw new NullPointerException("portal name does not exist!");
+		}
+	}
+
+	/**
+	 * @author xize
+	 * @param returns true whenever the portal is closed, else false
+	 * @return Boolean
+	 */
+	public boolean isClosed() {
+		return (getInnerBlocks()[0].getType() == Material.IRON_FENCE || getInnerBlocks()[0].getType() == Material.AIR ? true : false);
+	}
+
+	/**
+	 * @author xize
+	 * @param close or open the portal
+	 * @param bol - when true the portal will be closed, when false the portal will be opened
+	 */
+	public void setClosed(Boolean bol) {
+		if(bol) {
+			if(!isClosed()) {
+				for(Block block : getInnerBlocks()) {
+					block.setType(Material.IRON_FENCE);
+				}	
+			}
+		} else {
+			if(isClosed()) {
+				for(Block block : getInnerBlocks()) {
+					block.setType(Material.PORTAL);
+				}	
+			}
 		}
 	}
 

@@ -86,8 +86,8 @@ public class Portal implements Comparable<String> {
 	public boolean isLinked() {
 		update();
 		if(con.contains("linked")) {
-			File f = new File(xEssentials.getPlugin().getDataFolder() + File.separator + "portals" + File.separator + con.getString("linked") + ".yml");
-			return f.exists();
+			File f1 = new File(xEssentials.getPlugin().getDataFolder() + File.separator + "portals" + File.separator + con.getString("linked") + ".yml");
+			return f1.exists();
 		}
 		return false;
 	}

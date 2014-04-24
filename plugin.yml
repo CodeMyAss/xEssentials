@@ -286,3 +286,6 @@ commands:
   test:
      description: modify a protected block
      aliases: []
+  portals:
+     description: portal and multi world management
+     aliases: [portal]

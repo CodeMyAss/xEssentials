@@ -77,6 +77,9 @@ import tv.mineinthebox.essentials.events.players.TeleportEvent;
 import tv.mineinthebox.essentials.events.players.TorchEvent;
 import tv.mineinthebox.essentials.events.players.TrollModeEvent;
 import tv.mineinthebox.essentials.events.players.VanishEvent;
+import tv.mineinthebox.essentials.events.portals.PortalActivateEvent;
+import tv.mineinthebox.essentials.events.portals.PortalEvent;
+import tv.mineinthebox.essentials.events.portals.PortalSelectedCreateEvent;
 import tv.mineinthebox.essentials.events.protection.BlockProtectedEvent;
 import tv.mineinthebox.essentials.events.protection.ChestProtectedEvent;
 import tv.mineinthebox.essentials.events.protection.DispenserProtectionEvent;
@@ -245,6 +248,13 @@ public class Handler {
 			if(Configuration.getProtectionConfig().isFurnaceProtectionEnabled()) {setListener(new FurnaceProtectedEvent());}
 			if(Configuration.getProtectionConfig().isJukeboxProtectionEnabled()) {setListener(new JukeboxProtectedEvent());}
 			if(Configuration.getProtectionConfig().isDispenserEnabled()) {setListener(new DispenserProtectionEvent());}
+		}
+		
+		//portal events
+		if(Configuration.getPortalConfig().isPortalEnabled()) {
+			setListener(new PortalSelectedCreateEvent());
+			setListener(new PortalEvent());
+			setListener(new PortalActivateEvent());
 		}
 			
 		setListener(new RemoveMemory());

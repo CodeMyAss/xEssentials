@@ -7,7 +7,10 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.WorldCreator;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.FileConfigurationOptions;
@@ -27,6 +30,7 @@ import tv.mineinthebox.essentials.configurations.GreylistConfig;
 import tv.mineinthebox.essentials.configurations.KitConfig;
 import tv.mineinthebox.essentials.configurations.MotdConfig;
 import tv.mineinthebox.essentials.configurations.PlayerConfig;
+import tv.mineinthebox.essentials.configurations.PortalConfig;
 import tv.mineinthebox.essentials.configurations.ProtectionConfig;
 import tv.mineinthebox.essentials.configurations.PvpConfig;
 import tv.mineinthebox.essentials.configurations.RulesConfig;
@@ -70,6 +74,7 @@ public class Configuration {
 		createEconomyConfig();
 		createShopConfig();
 		createProtectionConfig();
+		createPortalConfig();
 		loadSystemPresets(ConfigType.BAN);
 		loadSystemPresets(ConfigType.BROADCAST);
 		loadSystemPresets(ConfigType.CHAT);
@@ -85,6 +90,7 @@ public class Configuration {
 		loadSystemPresets(ConfigType.ECONOMY);
 		loadSystemPresets(ConfigType.SHOP);
 		loadSystemPresets(ConfigType.PROTECTION);
+		loadSystemPresets(ConfigType.PORTAL);
 		for(Material mat : Material.values()) {
 			materials.add(mat.name());
 		}
@@ -93,7 +99,64 @@ public class Configuration {
 	private String serialize_name(String mob) {
 		return mob.toString().toLowerCase();
 	}
-	
+
+	private void createPortalConfig() {
+		System.out.print(Bukkit.getWorldContainer().toString());
+		try {
+			File f = new File(xEssentials.getPlugin().getDataFolder() + File.separator + "portal.yml");
+			if(!f.exists()) {
+				FileConfiguration con = YamlConfiguration.loadConfiguration(f);
+				con.set("portals.enable", false);
+				con.set("portals.cooldown", 1000);
+				World defaultWorld = Bukkit.getWorlds().get(0);
+				for(String world : getWorlds()) {
+					if(world.startsWith(defaultWorld.getName())) {
+						con.set("portals.worlds."+world, true);
+					} else {
+						con.set("portals.worlds."+world, false);	
+					}
+				}
+				con.save(f);
+			} else {
+				FileConfiguration con = YamlConfiguration.loadConfiguration(f);
+				List<String> worlds = new ArrayList<String>(con.getConfigurationSection("portals.worlds").getKeys(false));
+				if(worlds.size() < getWorlds().length) {
+					xEssentials.getPlugin().log("New worlds found for portals!", LogType.INFO);
+					for(String w : getWorlds()) {
+						if(!worlds.contains(w)) {
+							xEssentials.getPlugin().log("Registering world: " + w + " to false", LogType.INFO);
+							con.set("portals.worlds."+w, false);
+						}
+					}	
+					con.save(f);
+				} else {
+					xEssentials.getPlugin().log("No new worlds found for portals", LogType.INFO);
+				}
+				if(con.getBoolean("portals.enable")) {
+					xEssentials.getPlugin().log("Loading worlds for portals!", LogType.INFO);
+					for(String key : worlds) {
+						if(con.getBoolean(key)) {
+							World w = Bukkit.getWorld(key);
+							if(w == null) {
+								xEssentials.getPlugin().log("Loading world " + key, LogType.INFO);
+								Bukkit.createWorld(new WorldCreator(key));
+								xEssentials.getPlugin().log("successfully loaded world " + key, LogType.INFO);
+							} else {
+								xEssentials.getPlugin().log(key + " whas already loaded, probably default world?" + key, LogType.INFO);
+							}
+						} else {
+							xEssentials.getPlugin().log("World " + key + " is not loaded, disabled from portal config.", LogType.INFO);
+						}
+					}
+				} else {
+					xEssentials.getPlugin().log("portals has been disabled, we don't load other worlds now.\nonly update new worlds in the config.", LogType.INFO);
+				}
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	private void createProtectionConfig() {
 		try {
 			File f = new File(xEssentials.getPlugin().getDataFolder() + File.separator + "protection.yml");
@@ -112,7 +175,7 @@ public class Configuration {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private void createShopConfig() {
 		try {
 			File f = new File(xEssentials.getPlugin().getDataFolder() + File.separator + "shops.yml");
@@ -153,7 +216,7 @@ public class Configuration {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private void createEconomyConfig() {
 		try {
 			File f = new File(xEssentials.getPlugin().getDataFolder() + File.separator + "economy.yml");
@@ -178,7 +241,7 @@ public class Configuration {
 				opt.header("here you can specify whenever a command should be unregistered or not\nfor example you got a other plugin which has the /home command this would basicly conflict with xEssentials\nhereby you can change the behaviour by unregistering xEssentials commands here.");
 				CommandList list = new CommandList();
 				for(String command : list.getAllCommands) {
-					if(!(command.equalsIgnoreCase("money") || command.equalsIgnoreCase("cprivate") || command.equalsIgnoreCase("cmodify") || command.equalsIgnoreCase("cremove"))) {
+					if(!(command.equalsIgnoreCase("money") || command.equalsIgnoreCase("cprivate") || command.equalsIgnoreCase("cmodify") || command.equalsIgnoreCase("cremove") || command.equalsIgnoreCase("portals"))) {
 						con.set("command."+command+".enable", true);	
 					}
 				}
@@ -188,10 +251,10 @@ public class Configuration {
 				CommandList commandlist = new CommandList();
 				List<String> commands = Arrays.asList(commandlist.getAllCommands);
 				List<String> orginal = Arrays.asList(con.getConfigurationSection("command").getKeys(false).toArray(new String[0]));
-				if((commands.size()-4) != orginal.size()) {
+				if((commands.size()-5) != orginal.size()) {
 					xEssentials.getPlugin().log("new commands detected!, adding them right now inside the command config!", LogType.INFO);
 					for(String cmd : commands) {
-						if(!orginal.contains(cmd) && (!cmd.equalsIgnoreCase("money") || !cmd.equalsIgnoreCase("cprivate") || !cmd.equalsIgnoreCase("cremove") || !cmd.equalsIgnoreCase("cmodify"))) {
+						if(!orginal.contains(cmd) && (!cmd.equalsIgnoreCase("money") || !cmd.equalsIgnoreCase("cprivate") || !cmd.equalsIgnoreCase("cremove") || !cmd.equalsIgnoreCase("cmodify") || !cmd.equalsIgnoreCase("portals"))) {
 							xEssentials.getPlugin().log("registering new command: " + cmd + " in commands.yml", LogType.INFO);
 							con.set("command."+cmd+".enable", true);
 						}
@@ -652,6 +715,15 @@ public class Configuration {
 			hash.put("dispenserEnable", con.getBoolean("protection.protect.dispenser"));
 			hash.put("messageDisallow", con.getString("protection.message.disallow"));
 			configure.put(ConfigType.PROTECTION, hash);
+		} else if(cfg == ConfigType.PORTAL) {
+			File f = new File(xEssentials.getPlugin().getDataFolder() + File.separator + "portal.yml");
+			FileConfiguration con = YamlConfiguration.loadConfiguration(f);
+			HashMap<String, Object> hash = new HashMap<String, Object>();
+			List<String> list = new ArrayList<String>(con.getConfigurationSection("portals.worlds").getKeys(false));
+			hash.put("enable", con.getBoolean("portals.enable"));
+			hash.put("cooldown", con.getInt("portals.cooldown"));
+			hash.put("worlds", list);
+			configure.put(ConfigType.PORTAL, hash);
 		}
 	}
 
@@ -780,6 +852,25 @@ public class Configuration {
 	public static List<String> getMaterials() {
 		return materials;
 	}
+	
+	/**
+	 * @author xize
+	 * @param returns all the worlds, including worlds who aren't loaded.
+	 * @return String[]
+	 */
+	public String[] getWorlds() {
+		File dir = Bukkit.getWorldContainer();
+		List<String> worlds = new ArrayList<String>();
+		for(File f : dir.listFiles()) {
+			if(f.isDirectory()) {
+				File dat = new File(f.getPath() + File.separator + "level.dat");
+				if(dat.exists()) {
+					worlds.add(f.getName());
+				}
+			}
+		}
+		return worlds.toArray(new String[worlds.size()]);
+	}
 
 	/**
 	 * @author xize
@@ -801,7 +892,7 @@ public class Configuration {
 	public static void setConfigValue(ConfigType type, String hashName, Object value) {
 		configure.get(type).put(hashName, value);
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param get the full memory configuration for protections
@@ -831,7 +922,7 @@ public class Configuration {
 		GreylistConfig grey = new GreylistConfig();
 		return grey;
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param returns the EconomyConfig as memory loaded
@@ -891,7 +982,7 @@ public class Configuration {
 		ChatConfig config = new ChatConfig();
 		return config;
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param returns the full memory configuration for shops
@@ -939,6 +1030,16 @@ public class Configuration {
 	 */
 	public static PvpConfig getPvpConfig() {
 		PvpConfig config = new PvpConfig();
+		return config;
+	}
+	
+	/**
+	 * @author xize
+	 * @param returns the memory portal configuration
+	 * @return PortalConfig
+	 */
+	public static PortalConfig getPortalConfig() {
+		PortalConfig config = new PortalConfig();
 		return config;
 	}
 
@@ -996,10 +1097,10 @@ public class Configuration {
 		CommandList cmdlist = new CommandList();
 		for(String cmd : cmdlist.getAllCommands) {
 			PluginCommand command = xEssentials.getPlugin().getCommand(cmd);
-			if(Configuration.getCommandConfig().getUnregisteredCommands().contains(command.getName()) || (command.getName().equalsIgnoreCase("money") && !Configuration.getEconomyConfig().isEconomyEnabled()) || (command.getName().equalsIgnoreCase("cprivate") && !Configuration.getProtectionConfig().isProtectionEnabled()) || (command.getName().equalsIgnoreCase("cmodify") && !Configuration.getProtectionConfig().isProtectionEnabled()) || (command.getName().equalsIgnoreCase("cremove") && !Configuration.getProtectionConfig().isProtectionEnabled())) {
+			if(Configuration.getCommandConfig().getUnregisteredCommands().contains(command.getName()) || (command.getName().equalsIgnoreCase("money") && !Configuration.getEconomyConfig().isEconomyEnabled()) || (command.getName().equalsIgnoreCase("cprivate") && !Configuration.getProtectionConfig().isProtectionEnabled()) || (command.getName().equalsIgnoreCase("cmodify") && !Configuration.getProtectionConfig().isProtectionEnabled()) || (command.getName().equalsIgnoreCase("cremove") && !Configuration.getProtectionConfig().isProtectionEnabled()) || (command.getName().equalsIgnoreCase("portals") && !Configuration.getPortalConfig().isPortalEnabled())) {
 				Configuration.getCommandConfig().unRegisterBukkitCommand(command);
 			} else {
-				if(!Configuration.getCommandConfig().isRegistered(command) || (command.getName().equalsIgnoreCase("money") && !Configuration.getCommandConfig().isRegistered(command) && Configuration.getEconomyConfig().isEconomyEnabled()) || (command.getName().equalsIgnoreCase("cprivate") && !Configuration.getCommandConfig().isRegistered(command) && Configuration.getProtectionConfig().isProtectionEnabled()) || (command.getName().equalsIgnoreCase("cmodify") && !Configuration.getCommandConfig().isRegistered(command) && Configuration.getProtectionConfig().isProtectionEnabled()) || (command.getName().equalsIgnoreCase("cremove") && !Configuration.getCommandConfig().isRegistered(command) && Configuration.getProtectionConfig().isProtectionEnabled())) {
+				if(!Configuration.getCommandConfig().isRegistered(command) || (command.getName().equalsIgnoreCase("money") && !Configuration.getCommandConfig().isRegistered(command) && Configuration.getEconomyConfig().isEconomyEnabled()) || (command.getName().equalsIgnoreCase("cprivate") && !Configuration.getCommandConfig().isRegistered(command) && Configuration.getProtectionConfig().isProtectionEnabled()) || (command.getName().equalsIgnoreCase("cmodify") && !Configuration.getCommandConfig().isRegistered(command) && Configuration.getProtectionConfig().isProtectionEnabled()) || (command.getName().equalsIgnoreCase("cremove") && !Configuration.getCommandConfig().isRegistered(command) && Configuration.getProtectionConfig().isProtectionEnabled()) && !Configuration.getCommandConfig().isRegistered(command) && Configuration.getPortalConfig().isPortalEnabled()) {
 					Configuration.getCommandConfig().registerBukkitCommand(command);
 				}
 			}

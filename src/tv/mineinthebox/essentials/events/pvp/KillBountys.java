@@ -26,6 +26,7 @@ public class KillBountys implements Listener {
 
 	private HashMap<UUID, UUID> entitys = new HashMap<UUID, UUID>();
 
+	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onDamage(EntityDamageByEntityEvent e) {
 		if(e.getDamager() instanceof Player) {

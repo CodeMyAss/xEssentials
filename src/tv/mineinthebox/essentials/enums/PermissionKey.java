@@ -5,6 +5,7 @@ public enum PermissionKey {
 	
 	IS_ADMIN("xEssentials.isAdmin"),
 	CMD_WILD("xEssentials.command.wild"),
+	CMD_PORTALS("xEssentials.command.portals"),
 	CMD_CPRIVATE("xEssentials.command.cprivate"),
 	CMD_CREMOVE("xEssentials.command.cremove"),
 	CMD_CMODIFY("xEssentials.command.cmodify"),

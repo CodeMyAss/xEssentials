@@ -24,6 +24,7 @@ public class EntityUseHeadOnPlayerDeath implements Listener {
 	private HashMap<String, UUID> entitys = new HashMap<String, UUID>();
 	
 	
+	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onDamage(EntityDamageByEntityEvent e) {
 		if(e.getEntity() instanceof Player) {

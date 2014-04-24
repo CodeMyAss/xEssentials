@@ -11,6 +11,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 public class PvpEvent implements Listener {
 
+	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled=true)
 	public void onDamage(EntityDamageByEntityEvent e) {
 		if(e.getDamager() instanceof Player) {

@@ -75,14 +75,14 @@ public class VanishEvent implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.LOW)
-	public void vanishInteract(PlayerInteractEvent e) {
-			if(xEssentials.contains(e.getPlayer().getName())) {
-				xEssentialsPlayer xp = xEssentials.get(e.getPlayer().getName());
-				if(e.getAction() == Action.RIGHT_CLICK_BLOCK) {
-					if(xp.isPotato()) {
-						e.setCancelled(true);
-						return;
-					}
+	public void vanishInteract(PlayerInteractEvent e) {	
+		if(xEssentials.contains(e.getPlayer().getName())) {
+			xEssentialsPlayer xp = xEssentials.get(e.getPlayer().getName());
+			if(e.getAction() == Action.RIGHT_CLICK_BLOCK) {
+				if(xp.isPotato()) {
+					e.setCancelled(true);
+					return;
+				}
 				if(xp.isVanished()) {
 					if(xp.isNoPickUpEnabled()) {
 						if(e.getClickedBlock().getType() == Material.CHEST) {
@@ -142,19 +142,16 @@ public class VanishEvent implements Listener {
 						}
 					}
 				}
-			}
-		} else if(e.getAction() == Action.PHYSICAL) {
-			if(xEssentials.contains(e.getPlayer().getName())) {
-				xEssentialsPlayer xp = xEssentials.get(e.getPlayer().getName());
-				if(xp.isVanished()) {
-					if(xp.isNoPickUpEnabled()) {
+			} else {
+				if(e.getAction() == Action.PHYSICAL) {
+					if(xp.isVanished() && xp.isNoPickUpEnabled()) {
 						e.setCancelled(true);
 					}
 				}
 			}
 		}
 	}
-	
+
 	@EventHandler
 	public void vanishMessageOnJoin(PlayerJoinEvent e) {
 		if(xEssentials.contains(e.getPlayer().getName())) {
@@ -168,7 +165,7 @@ public class VanishEvent implements Listener {
 			}
 		}
 	}
-	
+
 	@EventHandler
 	public void vanishMessageOnQuit(PlayerQuitEvent e) {
 		if(xEssentials.contains(e.getPlayer().getName())) {
@@ -182,7 +179,7 @@ public class VanishEvent implements Listener {
 			}
 		}
 	}
-	
+
 	@EventHandler
 	public void hideAchievement(PlayerAchievementAwardedEvent e) {
 		xEssentialsPlayer xp = xEssentials.get(e.getPlayer().getName());
@@ -190,7 +187,7 @@ public class VanishEvent implements Listener {
 			e.setCancelled(true);
 		}
 	}
-	
+
 	@EventHandler
 	public void VanishGodMode(EntityDamageEvent e) {
 		if(e.getEntity() instanceof Player) {

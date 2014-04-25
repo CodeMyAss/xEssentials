@@ -101,7 +101,6 @@ public class Configuration {
 	}
 
 	private void createPortalConfig() {
-		System.out.print(Bukkit.getWorldContainer().toString());
 		try {
 			File f = new File(xEssentials.getPlugin().getDataFolder() + File.separator + "portal.yml");
 			if(!f.exists()) {

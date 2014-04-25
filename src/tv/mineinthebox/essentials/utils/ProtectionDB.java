@@ -47,7 +47,7 @@ public class ProtectionDB {
 			Connection con = getConnection();
 			String blockuid = generateBlockUUID(target).toString().replace("-", "");
 			Statement state = con.createStatement();
-			String query = "SELECT * FROM blocks WHERE id='" + blockuid + "'";
+			String query = "SELECT * FROM blocks WHERE uuid='" + blockuid + "'";
 			ResultSet set = state.executeQuery(query);
 			while(set.next()) {
 				if(set.getString("username").equalsIgnoreCase(name)) {
@@ -80,7 +80,7 @@ public class ProtectionDB {
 		try {
 			String blockuid = generateBlockUUID(target).toString().replace("-", "");
 			Statement state = con.createStatement();
-			String query = "SELECT * FROM blocks WHERE id='" + blockuid + "'";
+			String query = "SELECT * FROM blocks WHERE uuid='" + blockuid + "'";
 			ResultSet set = state.executeQuery(query);
 			if(set.next()) {
 				list.add(set.getString("username"));
@@ -105,7 +105,7 @@ public class ProtectionDB {
 		Connection con = getConnection();
 		try {
 			String blockuid = generateBlockUUID(target).toString().replace("-", "");
-			String query = "DELETE FROM blocks WHERE id='" + blockuid + "'";
+			String query = "DELETE FROM blocks WHERE uuid='" + blockuid + "'";
 			Statement state = con.createStatement();
 			state.executeUpdate(query);
 			state.close();
@@ -129,7 +129,7 @@ public class ProtectionDB {
 		try {
 			String blockuid = generateBlockUUID(target).toString().replace("-", "");
 			String values = setValueString(new String[] {blockuid, player, Integer.toString(target.getX()), Integer.toString(target.getY()), Integer.toString(target.getZ()), target.getWorld().getName()});
-			String query = "INSERT INTO blocks(id, username, x, y, z, world) VALUES(" + values + ")";
+			String query = "INSERT INTO blocks(uuid, username, x, y, z, world) VALUES(" + values + ")";
 			Statement state = con.createStatement();
 			state.executeUpdate(query);
 			state.close();
@@ -153,7 +153,7 @@ public class ProtectionDB {
 		try {
 			String blockuid = generateBlockUUID(target).toString().replace("-", "");
 			Statement state = con.createStatement();
-			String query = "SELECT * FROM blocks WHERE id='" + blockuid + "'";
+			String query = "SELECT * FROM blocks WHERE uuid='" + blockuid + "'";
 			ResultSet set = state.executeQuery(query);
 			if(set.isBeforeFirst()) {
 				state.close();
@@ -177,14 +177,14 @@ public class ProtectionDB {
 		Connection con = getConnection();
 		try {
 			String table = "CREATE TABLE IF NOT EXISTS `blocks` ("+ 
-					"`i` TEXT," +
-					"`id` text NOT NULL," +
+					"`id_` INTEGER," +
+					"`uuid` TEXT NOT NULL, " +
 					"`username` text NOT NULL, " +
 					"`x` int NOT NULL, " +
 					"`y` int NOT NULL, " +
 					"`z` int NOT NULL, " +
 					"`world` text NOT NULL, " +
-					"PRIMARY KEY (`i`) " +
+					"PRIMARY KEY (`id_`) " +
 					")";
 			Statement state = con.createStatement();
 			state.executeUpdate(table);

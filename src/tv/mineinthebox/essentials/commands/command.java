@@ -221,6 +221,9 @@ public class command implements CommandExecutor, TabCompleter {
 		} else if(cmd.getName().equalsIgnoreCase("portals")) {
 			CmdPortals portals = new CmdPortals();
 			return portals.execute(sender, cmd, args);
+		} else if(cmd.getName().equalsIgnoreCase("arrow")) {
+			CmdArrow arrow = new CmdArrow();
+			return arrow.execute(sender, cmd, args);
 		}
 		return false;
 	}

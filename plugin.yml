@@ -288,4 +288,7 @@ commands:
      aliases: []
   portals:
      description: portal and multi world management
-     aliases: [portal]
+     aliases: [portal, mvp]
+  arrow:
+     description: a arrow machine gun
+     aliases: []

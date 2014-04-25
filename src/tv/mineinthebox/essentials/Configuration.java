@@ -135,9 +135,9 @@ public class Configuration {
 				if(con.getBoolean("portals.enable")) {
 					xEssentials.getPlugin().log("Loading worlds for portals!", LogType.INFO);
 					for(String key : worlds) {
-						if(con.getBoolean(key)) {
+						if(con.getBoolean("portals.worlds."+key)) {
 							World w = Bukkit.getWorld(key);
-							if(w == null) {
+							if(!(w instanceof World)) {
 								xEssentials.getPlugin().log("Loading world " + key, LogType.INFO);
 								Bukkit.createWorld(new WorldCreator(key));
 								xEssentials.getPlugin().log("successfully loaded world " + key, LogType.INFO);

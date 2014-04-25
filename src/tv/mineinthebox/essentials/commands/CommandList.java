@@ -71,7 +71,6 @@ public class CommandList {
 			"cprivate",
 			"cremove",
 			"cmodify",
-			"test",
 			"portals",
 			"arrow"
 	};

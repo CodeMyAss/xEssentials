@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+
 import org.bukkit.BanList.Type;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -1034,7 +1035,7 @@ public class xEssentialsPlayer {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param unvanish the player for all others
@@ -1062,7 +1063,7 @@ public class xEssentialsPlayer {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param returns true whenever the player has vanish effects
@@ -1075,7 +1076,7 @@ public class xEssentialsPlayer {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param sets the vanish effects of this player
@@ -2155,7 +2156,7 @@ public class xEssentialsPlayer {
 		}
 		update();
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param get all the shop signs from the player
@@ -2164,7 +2165,7 @@ public class xEssentialsPlayer {
 	public List<String> getSignShops() {
 		return con.getStringList("signshops");
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param adds a shop sign to this player
@@ -2184,7 +2185,7 @@ public class xEssentialsPlayer {
 		}
 		update();
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param loc - the Location
@@ -2197,7 +2198,7 @@ public class xEssentialsPlayer {
 		List<String> list = new ArrayList<String>(getSignShops());
 		return list.contains(serialize);
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param removes the sign
@@ -2222,7 +2223,7 @@ public class xEssentialsPlayer {
 			throw new NullPointerException("sign does not exist on this player!");
 		}
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param set the old name in the history
@@ -2243,7 +2244,7 @@ public class xEssentialsPlayer {
 		}
 		update();
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param returns atleast 8 results of this players name history
@@ -2252,7 +2253,7 @@ public class xEssentialsPlayer {
 	public List<String> getNameHistory() {
 		return con.getStringList("name-history");
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param returns true if the player has name history
@@ -2261,7 +2262,7 @@ public class xEssentialsPlayer {
 	public boolean hasNameHistory() {
 		return !con.getStringList("name-history").isEmpty();
 	}
-
+	
 	/**
 	 * @author xize
 	 * @param gets updated at every call so we know that the configuration stored in the memory is still recent with the flat saved file!

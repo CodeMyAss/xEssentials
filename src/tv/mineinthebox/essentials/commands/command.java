@@ -215,9 +215,6 @@ public class command implements CommandExecutor, TabCompleter {
 		} else if(cmd.getName().equalsIgnoreCase("cmodify")) {
 			CmdCmodify modify = new CmdCmodify();
 			return modify.execute(sender, cmd, args);
-		} else if(cmd.getName().equalsIgnoreCase("test")) {
-			CmdTest test = new CmdTest();
-			return test.execute(sender, cmd, args);
 		} else if(cmd.getName().equalsIgnoreCase("portals")) {
 			CmdPortals portals = new CmdPortals();
 			return portals.execute(sender, cmd, args);

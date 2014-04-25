@@ -2,9 +2,9 @@ package tv.mineinthebox.essentials.utils;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -30,9 +30,8 @@ public class LWCRunnable implements Runnable {
 		try {
 			timestart = System.currentTimeMillis();
 			Connection con = DriverManager.getConnection("jdbc:sqlite:plugins/LWC/lwc.db");
-			Statement state = con.createStatement();
-			String query = "SELECT * FROM lwc_protections";
-			ResultSet set = state.executeQuery(query);
+			PreparedStatement state = con.prepareStatement("SELECT * FROM lwc_protections");
+			ResultSet set = state.executeQuery();
 			while(set.next()) {
 				String owner = set.getString("owner");
 				int x = set.getInt("x");

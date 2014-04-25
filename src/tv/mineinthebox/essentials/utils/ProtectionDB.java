@@ -3,8 +3,8 @@ package tv.mineinthebox.essentials.utils;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -46,21 +46,19 @@ public class ProtectionDB {
 		try {
 			Connection con = getConnection();
 			String blockuid = generateBlockUUID(target).toString().replace("-", "");
-			Statement state = con.createStatement();
 			String query = "SELECT * FROM blocks WHERE uuid='" + blockuid + "'";
-			ResultSet set = state.executeQuery(query);
+			PreparedStatement state = con.prepareStatement(query);
+			ResultSet set = state.executeQuery();
 			while(set.next()) {
 				if(set.getString("username").equalsIgnoreCase(name)) {
 					state.close();
-					set.close();
-					
+					set.close();		
 					con.close();
 					return true;
 				}
 			}
 			state.close();
 			set.close();
-			
 			con.close();
 		} catch(Exception e) {
 			return false;
@@ -79,15 +77,14 @@ public class ProtectionDB {
 		Connection con = getConnection();
 		try {
 			String blockuid = generateBlockUUID(target).toString().replace("-", "");
-			Statement state = con.createStatement();
 			String query = "SELECT * FROM blocks WHERE uuid='" + blockuid + "'";
-			ResultSet set = state.executeQuery(query);
+			PreparedStatement state = con.prepareStatement(query);
+			ResultSet set = state.executeQuery();
 			if(set.next()) {
 				list.add(set.getString("username"));
 			}
 			state.close();
 			set.close();
-			
 			con.close();
 		} catch(Exception e) {
 			return list;
@@ -106,8 +103,8 @@ public class ProtectionDB {
 		try {
 			String blockuid = generateBlockUUID(target).toString().replace("-", "");
 			String query = "DELETE FROM blocks WHERE uuid='" + blockuid + "'";
-			Statement state = con.createStatement();
-			state.executeUpdate(query);
+			PreparedStatement state = con.prepareStatement(query);
+			state.executeUpdate();
 			state.close();
 			
 			con.close();
@@ -125,13 +122,16 @@ public class ProtectionDB {
 	 * @return Boolean
 	 */
 	public boolean register(String player, Block target) {
+		if(isNewDatabase()) {
+			createTables();
+		}
 		Connection con = getConnection();
 		try {
 			String blockuid = generateBlockUUID(target).toString().replace("-", "");
 			String values = setValueString(new String[] {blockuid, player, Integer.toString(target.getX()), Integer.toString(target.getY()), Integer.toString(target.getZ()), target.getWorld().getName()});
 			String query = "INSERT INTO blocks(uuid, username, x, y, z, world) VALUES(" + values + ")";
-			Statement state = con.createStatement();
-			state.executeUpdate(query);
+			PreparedStatement state = con.prepareStatement(query);
+			state.executeUpdate();
 			state.close();
 			
 			con.close();
@@ -152,9 +152,9 @@ public class ProtectionDB {
 		Connection con = getConnection();
 		try {
 			String blockuid = generateBlockUUID(target).toString().replace("-", "");
-			Statement state = con.createStatement();
 			String query = "SELECT * FROM blocks WHERE uuid='" + blockuid + "'";
-			ResultSet set = state.executeQuery(query);
+			PreparedStatement state = con.prepareStatement(query);
+			ResultSet set = state.executeQuery();
 			if(set.isBeforeFirst()) {
 				state.close();
 				set.close();
@@ -186,8 +186,8 @@ public class ProtectionDB {
 					"`world` text NOT NULL, " +
 					"PRIMARY KEY (`id_`) " +
 					")";
-			Statement state = con.createStatement();
-			state.executeUpdate(table);
+			PreparedStatement state = con.prepareStatement(table);
+			state.executeUpdate();
 			state.close();
 			
 			con.close();
@@ -205,8 +205,8 @@ public class ProtectionDB {
 	public boolean hasProtectedBlocks(String name) {
 		try {
 			Connection con = getConnection();
-			Statement state = con.createStatement();
-			ResultSet set = state.executeQuery("SELECT * FROM blocks WHERE username='" + name + "'");
+			PreparedStatement state = con.prepareStatement("SELECT * FROM blocks WHERE username='" + name + "'");
+			ResultSet set = state.executeQuery();
 			if(set.first()) {
 				state.close();
 				set.close();
@@ -275,10 +275,9 @@ public class ProtectionDB {
 		try {
 			if(hasProtectedBlocks(oldname)) {
 				String query = "UPDATE blocks SET username='" + newname + "' WHERE username='" + oldname + "'";
-				Statement state = con.createStatement();
+				PreparedStatement state = con.prepareStatement(query);
 				state.executeUpdate(query);
 				state.close();
-				
 				con.close();
 			}
 		} catch(Exception e) {

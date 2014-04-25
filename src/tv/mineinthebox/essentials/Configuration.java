@@ -142,7 +142,7 @@ public class Configuration {
 								Bukkit.createWorld(new WorldCreator(key));
 								xEssentials.getPlugin().log("successfully loaded world " + key, LogType.INFO);
 							} else {
-								xEssentials.getPlugin().log(key + " whas already loaded, probably default world?" + key, LogType.INFO);
+								xEssentials.getPlugin().log(key + " whas already loaded, probably default world? " + key, LogType.INFO);
 							}
 						} else {
 							xEssentials.getPlugin().log("World " + key + " is not loaded, disabled from portal config.", LogType.INFO);

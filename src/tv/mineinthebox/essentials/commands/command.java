@@ -275,6 +275,9 @@ public class command implements CommandExecutor, TabCompleter {
 		} else if(cmd.getName().equalsIgnoreCase("money")) {
 			CmdMoney money = new CmdMoney();
 			return money.onTabComplete(sender, cmd, args);
+		} else if(cmd.getName().equalsIgnoreCase("portals")) {
+			CmdPortals portal = new CmdPortals();
+			return portal.onTabComplete(sender, cmd, args);
 		}
 		return null;
 	}

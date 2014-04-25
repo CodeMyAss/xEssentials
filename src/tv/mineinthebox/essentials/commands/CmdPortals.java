@@ -1,7 +1,9 @@
 package tv.mineinthebox.essentials.commands;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -18,6 +20,65 @@ import tv.mineinthebox.essentials.events.portals.PortalSelectedCreateEvent;
 import tv.mineinthebox.essentials.instances.Portal;
 
 public class CmdPortals {
+	
+	private List<String> getUnloadedWorlds(String p) {
+		List<String> list = new ArrayList<String>();
+		for(String s : Configuration.getPortalConfig().getWorlds()) {
+			if(s.startsWith(p)) {
+				World world = Bukkit.getWorld(s);
+				if(!(world instanceof World)) {
+					list.add(s);
+				}
+			}
+		}
+		return list;
+	}
+	
+	private List<String> getLoadedWorlds(String p) {
+		List<String> list = new ArrayList<String>();
+		for(String s : Configuration.getPortalConfig().getWorlds()) {
+			if(s.startsWith(p)) {
+				World world = Bukkit.getWorld(s);
+				if(world instanceof World) {
+					list.add(s);
+				}
+			}
+		}
+		return list;
+	}
+	
+	private List<String> getPortals(String p) {
+		List<String> list = new ArrayList<String>();
+		for(Portal portal : Configuration.getPortalConfig().getPortals().values()) {
+			if(portal.getPortalName().startsWith(p)) {
+				list.add(portal.getPortalName());
+			}
+		}
+		return list;
+	}
+	
+	public List<String> onTabComplete(CommandSender sender, Command cmd, String[] args) {
+		if(cmd.getName().equalsIgnoreCase("portals")) {
+			if(sender.hasPermission(PermissionKey.CMD_PORTALS.getPermission())) {
+				if(args.length == 2) {
+					if(args[0].equalsIgnoreCase("load")) {
+						return getUnloadedWorlds(args[1]);
+					} else if(args[0].equalsIgnoreCase("unload")) {
+						return getLoadedWorlds(args[1]);
+					} else if(args[0].equalsIgnoreCase("delete")) {
+						return getPortals(args[1]);
+					} else if(args[0].equalsIgnoreCase("link")) {
+						return getPortals(args[1]);
+					}
+				} else if(args.length == 3) {
+					if(args[0].equalsIgnoreCase("link")) {
+						return getPortals(args[2]);
+					}
+				}
+			}
+		}
+		return null;
+	}
 	
 	public boolean execute(CommandSender sender, Command cmd, String[] args) {
 		if(cmd.getName().equalsIgnoreCase("portals")) {

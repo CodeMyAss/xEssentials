@@ -50,6 +50,12 @@ public class MojangUUID {
 
 class CompatUUID implements Callable<UUID> {
 	
+	/**
+	 * @author evilmidget98
+	 * hereby we give credits to evilmidget98 for this UUID lookup parser, this is a highly modified version of his work where the modifications are made by me (xize)
+	 * orginal thread is at http://forums.bukkit.org/threads/player-name-uuid-fetcher.250926.
+	 */
+	
 	private Player p;
 	private final int MAX_SEARCH = 100;
 	private final String REPO = "https://api.mojang.com/profiles/page/";

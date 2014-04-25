@@ -55,7 +55,7 @@ public class FurnaceProtectedEvent implements Listener {
 			if(e.getClickedBlock().getType() == Material.FURNACE) {
 				if(xEssentials.getProtectionDatabase().isRegistered(e.getClickedBlock())) {
 					if(xEssentials.getProtectionDatabase().isOwner(e.getPlayer().getName(), e.getClickedBlock()) || e.getPlayer().hasPermission(PermissionKey.IS_ADMIN.getPermission())) {
-						e.getPlayer().sendMessage(ChatColor.GREEN + "opening private furnace");
+						e.getPlayer().sendMessage(ChatColor.GREEN + "opening privated furnace of " + (xEssentials.getProtectionDatabase().isOwner(e.getPlayer().getName(), e.getClickedBlock()) ? "you" : xEssentials.getProtectionDatabase().getOwners(e.getClickedBlock())));
 					} else {
 						e.getPlayer().sendMessage(Configuration.getProtectionConfig().getDisallowMessage().replace("%BLOCK%", e.getClickedBlock().getType().name()));
 						e.setCancelled(true);

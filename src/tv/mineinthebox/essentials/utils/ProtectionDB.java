@@ -80,7 +80,7 @@ public class ProtectionDB {
 			String query = "SELECT * FROM blocks WHERE uuid='" + blockuid + "'";
 			PreparedStatement state = con.prepareStatement(query);
 			ResultSet set = state.executeQuery();
-			if(set.next()) {
+			while(set.next()) {
 				list.add(set.getString("username"));
 			}
 			state.close();

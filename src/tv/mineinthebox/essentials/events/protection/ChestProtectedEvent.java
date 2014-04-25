@@ -55,7 +55,7 @@ public class ChestProtectedEvent implements Listener {
 			if(e.getClickedBlock().getType() == Material.CHEST || e.getClickedBlock().getType() == Material.TRAPPED_CHEST) {
 				if(xEssentials.getProtectionDatabase().isRegistered(e.getClickedBlock())) {
 					if(xEssentials.getProtectionDatabase().isOwner(e.getPlayer().getName(), e.getClickedBlock()) || e.getPlayer().hasPermission(PermissionKey.IS_ADMIN.getPermission())) {
-						e.getPlayer().sendMessage(ChatColor.GREEN + "opening privated chest");
+						e.getPlayer().sendMessage(ChatColor.GREEN + "opening privated chest of " + (xEssentials.getProtectionDatabase().isOwner(e.getPlayer().getName(), e.getClickedBlock()) ? "you" : xEssentials.getProtectionDatabase().getOwners(e.getClickedBlock())));
 					} else {
 						e.getPlayer().sendMessage(Configuration.getProtectionConfig().getDisallowMessage().replace("%BLOCK%", e.getClickedBlock().getType().name()));
 						e.setCancelled(true);

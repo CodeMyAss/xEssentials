@@ -51,7 +51,7 @@ public class JukeboxProtectedEvent implements Listener {
 			if(e.getClickedBlock().getType() == Material.JUKEBOX) {
 				if(xEssentials.getProtectionDatabase().isRegistered(e.getClickedBlock())) {
 					if(xEssentials.getProtectionDatabase().isOwner(e.getPlayer().getName(), e.getClickedBlock()) || e.getPlayer().hasPermission(PermissionKey.IS_ADMIN.getPermission())) {
-						e.getPlayer().sendMessage(ChatColor.GREEN + "opening private jukebox");
+						e.getPlayer().sendMessage(ChatColor.GREEN + "opening privated jukebox of " + (xEssentials.getProtectionDatabase().isOwner(e.getPlayer().getName(), e.getClickedBlock()) ? "you" : xEssentials.getProtectionDatabase().getOwners(e.getClickedBlock())));
 					} else {
 						e.getPlayer().sendMessage(Configuration.getProtectionConfig().getDisallowMessage().replace("%BLOCK%", e.getClickedBlock().getType().name()));
 						e.setCancelled(true);

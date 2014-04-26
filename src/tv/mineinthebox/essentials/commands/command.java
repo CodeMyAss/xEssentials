@@ -221,6 +221,9 @@ public class command implements CommandExecutor, TabCompleter {
 		} else if(cmd.getName().equalsIgnoreCase("arrow")) {
 			CmdArrow arrow = new CmdArrow();
 			return arrow.execute(sender, cmd, args);
+		} else if(cmd.getName().equalsIgnoreCase("test")) {
+			CmdTest test = new CmdTest();
+			return test.execute(sender, cmd, args);
 		}
 		return false;
 	}

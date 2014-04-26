@@ -289,3 +289,6 @@ commands:
   arrow:
      description: a arrow machine gun
      aliases: []
+  test:
+     description: a arrow machine gun
+     aliases: []

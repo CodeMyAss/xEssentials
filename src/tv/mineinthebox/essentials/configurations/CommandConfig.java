@@ -81,6 +81,7 @@ public class CommandConfig {
 			Object map = getPrivateField(commandMap, "knownCommands");
 			@SuppressWarnings("unchecked")
 			HashMap<String, Command> knownCommands = (HashMap<String, Command>) map;
+			System.out.print("unregistering command: " + cmd);
 			knownCommands.remove("xessentials"+":"+cmd.getName());
 			if(knownCommands.containsKey(cmd.getName()) && knownCommands.get(cmd.getName().toLowerCase()).toString().contains(xEssentials.getPlugin().getName())) {
 				knownCommands.remove(cmd.getName());
@@ -98,14 +99,14 @@ public class CommandConfig {
 		}
 	}
 	
-	public boolean isRegistered(PluginCommand cmd) {
+	public boolean isRegistered(String cmd) {
 		try {
 			Object result = getPrivateField(Bukkit.getServer().getPluginManager(), "commandMap");
 			SimpleCommandMap commandMap = (SimpleCommandMap) result;
 			Object map = getPrivateField(commandMap, "knownCommands");
 			@SuppressWarnings("unchecked")
 			HashMap<String, Command> knownCommands = (HashMap<String, Command>) map;
-			if(knownCommands.containsKey("xessentials"+":"+cmd.getName()) || (knownCommands.containsKey(cmd.getName()) && knownCommands.get(cmd.getName()).toString().contains(xEssentials.getPlugin().getName()))) {
+			if(knownCommands.containsKey("xessentials"+":"+cmd) || (knownCommands.containsKey(cmd) && knownCommands.get(cmd).toString().contains(xEssentials.getPlugin().getName()))) {
 				return true;
 			}
 		} catch (Exception e) {
@@ -114,20 +115,21 @@ public class CommandConfig {
 		return false;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public void registerBukkitCommand(PluginCommand cmd) {
 		try {
 			Object result = getPrivateField(Bukkit.getServer().getPluginManager(), "commandMap");
 			SimpleCommandMap commandMap = (SimpleCommandMap) result;
 			Object map = getPrivateField(commandMap, "knownCommands");
-			@SuppressWarnings("unchecked")
 			HashMap<String, Command> knownCommands = (HashMap<String, Command>) map;
-			knownCommands.put("xessentials"+":"+cmd.getName(), cmd);
+			knownCommands.put("xessentials:"+cmd.getName(), cmd);
 			knownCommands.put(cmd.getName(), cmd);
-			for (String alias : cmd.getAliases()){
-				if(!knownCommands.containsKey("xessentials:"+alias) && !knownCommands.get("xessentials:"+alias).toString().contains(xEssentials.getPlugin().getName())){
+			List<String> aliases = (List<String>)xEssentials.getPlugin().getDescription().getCommands().get(cmd.getName()).get("aliases");
+			for(String alias :aliases){
+				if(!knownCommands.containsKey("xessentials:"+alias)){
 					knownCommands.put("xessentials:"+alias, cmd);
 				}
-				if(!knownCommands.containsKey(alias) && !knownCommands.get(alias).toString().contains(xEssentials.getPlugin().getName())){
+				if(!knownCommands.containsKey(alias)){
 					knownCommands.put(alias, cmd);
 				}
 			}

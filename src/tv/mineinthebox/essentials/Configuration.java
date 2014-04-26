@@ -1,6 +1,9 @@
 package tv.mineinthebox.essentials;
 
 import java.io.File;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumMap;
@@ -17,8 +20,10 @@ import org.bukkit.configuration.file.FileConfigurationOptions;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.Plugin;
 
 import tv.mineinthebox.essentials.commands.CommandList;
+import tv.mineinthebox.essentials.commands.command;
 import tv.mineinthebox.essentials.configurations.BanConfig;
 import tv.mineinthebox.essentials.configurations.BlockConfig;
 import tv.mineinthebox.essentials.configurations.BroadcastConfig;
@@ -239,21 +244,37 @@ public class Configuration {
 				FileConfigurationOptions opt = con.options();
 				opt.header("here you can specify whenever a command should be unregistered or not\nfor example you got a other plugin which has the /home command this would basicly conflict with xEssentials\nhereby you can change the behaviour by unregistering xEssentials commands here.");
 				CommandList list = new CommandList();
-				for(String command : list.getAllCommands) {
-					if(!(command.equalsIgnoreCase("money") || command.equalsIgnoreCase("cprivate") || command.equalsIgnoreCase("cmodify") || command.equalsIgnoreCase("cremove") || command.equalsIgnoreCase("portals"))) {
-						con.set("command."+command+".enable", true);	
-					}
+				List<String> commands = new ArrayList<String>(Arrays.asList(list.getAllCommands));
+
+				//blacklist, this will be handle by the configuration it self.
+				commands.remove("money");
+				commands.remove("cprivate");
+				commands.remove("cmodify");
+				commands.remove("cremove");
+				commands.remove("portals");
+
+				for(String command : commands) {
+					con.set("command."+command+".enable", true);
 				}
 				con.save(f);
 			} else {
 				FileConfiguration con = YamlConfiguration.loadConfiguration(f);
 				CommandList commandlist = new CommandList();
-				List<String> commands = Arrays.asList(commandlist.getAllCommands);
+				List<String> commands = new ArrayList<String>(Arrays.asList(commandlist.getAllCommands));
+
+				//blacklist, this will be handle by the configuration it self.
+				commands.remove("money");
+				commands.remove("cprivate");
+				commands.remove("cmodify");
+				commands.remove("cremove");
+				commands.remove("portals");
+
 				List<String> orginal = Arrays.asList(con.getConfigurationSection("command").getKeys(false).toArray(new String[0]));
-				if((commands.size()-5) != orginal.size()) {
+
+				if(commands.size() != orginal.size()) {
 					xEssentials.getPlugin().log("new commands detected!, adding them right now inside the command config!", LogType.INFO);
 					for(String cmd : commands) {
-						if(!orginal.contains(cmd) && (!cmd.equalsIgnoreCase("money") || !cmd.equalsIgnoreCase("cprivate") || !cmd.equalsIgnoreCase("cremove") || !cmd.equalsIgnoreCase("cmodify") || !cmd.equalsIgnoreCase("portals"))) {
+						if(!orginal.contains(cmd)) {
 							xEssentials.getPlugin().log("registering new command: " + cmd + " in commands.yml", LogType.INFO);
 							con.set("command."+cmd+".enable", true);
 						}
@@ -851,7 +872,7 @@ public class Configuration {
 	public static List<String> getMaterials() {
 		return materials;
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param returns all the worlds, including worlds who aren't loaded.
@@ -1031,7 +1052,7 @@ public class Configuration {
 		PvpConfig config = new PvpConfig();
 		return config;
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param returns the memory portal configuration
@@ -1092,16 +1113,49 @@ public class Configuration {
 	 * @param handles the commands, for disable, enable
 	 * @param this manager manages automaticly the commands defined in the commands.yml
 	 */
+	@SuppressWarnings("unchecked")
 	public static void HandleCommandManager() {
 		CommandList cmdlist = new CommandList();
-		for(String cmd : cmdlist.getAllCommands) {
-			PluginCommand command = xEssentials.getPlugin().getCommand(cmd);
-			if(Configuration.getCommandConfig().getUnregisteredCommands().contains(command.getName()) || (command.getName().equalsIgnoreCase("money") && !Configuration.getEconomyConfig().isEconomyEnabled()) || (command.getName().equalsIgnoreCase("cprivate") && !Configuration.getProtectionConfig().isProtectionEnabled()) || (command.getName().equalsIgnoreCase("cmodify") && !Configuration.getProtectionConfig().isProtectionEnabled()) || (command.getName().equalsIgnoreCase("cremove") && !Configuration.getProtectionConfig().isProtectionEnabled()) || (command.getName().equalsIgnoreCase("portals") && !Configuration.getPortalConfig().isPortalEnabled())) {
-				Configuration.getCommandConfig().unRegisterBukkitCommand(command);
-			} else {
-				if(!Configuration.getCommandConfig().isRegistered(command) || (command.getName().equalsIgnoreCase("money") && !Configuration.getCommandConfig().isRegistered(command) && Configuration.getEconomyConfig().isEconomyEnabled()) || (command.getName().equalsIgnoreCase("cprivate") && !Configuration.getCommandConfig().isRegistered(command) && Configuration.getProtectionConfig().isProtectionEnabled()) || (command.getName().equalsIgnoreCase("cmodify") && !Configuration.getCommandConfig().isRegistered(command) && Configuration.getProtectionConfig().isProtectionEnabled()) || (command.getName().equalsIgnoreCase("cremove") && !Configuration.getCommandConfig().isRegistered(command) && Configuration.getProtectionConfig().isProtectionEnabled()) && !Configuration.getCommandConfig().isRegistered(command) && Configuration.getPortalConfig().isPortalEnabled()) {
-					Configuration.getCommandConfig().registerBukkitCommand(command);
+		List<String> unregCommands = new ArrayList<String>(Configuration.getCommandConfig().getUnregisteredCommands());
+
+		if(!Configuration.getEconomyConfig().isEconomyEnabled()) {
+			unregCommands.add("money");
+		}
+		if(!Configuration.getProtectionConfig().isProtectionEnabled()) {
+			unregCommands.add("cprivate");
+			unregCommands.add("cmodify");
+			unregCommands.add("cremove");
+		}
+		if(!Configuration.getPortalConfig().isPortalEnabled()) {
+			unregCommands.add("portals");
+		}
+
+		for(String cmd : cmdlist.getAllCommands) {			
+			if(!unregCommands.contains(cmd) && !Configuration.getCommandConfig().isRegistered(cmd)) {
+				try{
+					//forcibly make a new PluginCommand object
+					Class<?> clazz = Class.forName("org.bukkit.command.PluginCommand");
+					Constructor<?> constructor = clazz.getDeclaredConstructor(String.class, Plugin.class);
+					constructor.setAccessible(true);
+					Field mf = Constructor.class.getDeclaredField("modifiers");
+					mf.setAccessible(true);
+					mf.setInt(constructor, constructor.getModifiers() &~Modifier.PROTECTED);
+					
+					PluginCommand command = (PluginCommand) constructor.newInstance(cmd, xEssentials.getPlugin());
+					command.setExecutor(new command());
+					List<String> aliases = (List<String>) xEssentials.getPlugin().getDescription().getCommands().get(command.getName()).get("aliases");
+					command.setAliases(aliases);
+					
+					constructor.setAccessible(false);
+					mf.setAccessible(false);
+					
+					Configuration.getCommandConfig().registerBukkitCommand(command);   
+				} catch(Exception e) {
+					e.printStackTrace();
 				}
+			} else if(unregCommands.contains(cmd) && Configuration.getCommandConfig().isRegistered(cmd)) {
+				PluginCommand command = xEssentials.getPlugin().getCommand(cmd);
+				Configuration.getCommandConfig().unRegisterBukkitCommand(command);
 			}
 		}
 	}

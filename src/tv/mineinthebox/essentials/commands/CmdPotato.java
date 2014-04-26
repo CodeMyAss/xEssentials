@@ -71,7 +71,7 @@ public class CmdPotato {
 				xEssentialsPlayer xp = xEssentials.get(player);
 				if(xp instanceof xEssentialsPlayer) {
 					if(xp.isPotato()) {
-						xp.unvanish();
+						xp.unvanish(true);
 						xp.getPlayer().sendMessage(ChatColor.GREEN + "you are not longer cursed as potato!");
 						xp.getPlayer().removePotionEffect(PotionEffectType.BLINDNESS);
 						xp.getPlayer().removePotionEffect(PotionEffectType.INVISIBILITY);

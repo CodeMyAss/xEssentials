@@ -6,6 +6,7 @@ import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityPortalEvent;
@@ -64,6 +65,10 @@ public class PortalEvent implements Listener {
 		for(Portal portal : Configuration.getPortalConfig().getPortals().values()) {
 			List<Block> blocks = Arrays.asList(portal.getInnerBlocks());
 			if(blocks.contains(block)) {
+				if(e.getEntity() instanceof Item) {
+					e.setCancelled(true);
+					return;
+				}
 				e.useTravelAgent(false);
 				if(portal.isLinked()) {
 					Portal linked = portal.getLinkedPortal();

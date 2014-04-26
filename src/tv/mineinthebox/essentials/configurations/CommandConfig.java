@@ -81,7 +81,6 @@ public class CommandConfig {
 			Object map = getPrivateField(commandMap, "knownCommands");
 			@SuppressWarnings("unchecked")
 			HashMap<String, Command> knownCommands = (HashMap<String, Command>) map;
-			System.out.print("unregistering command: " + cmd);
 			knownCommands.remove("xessentials"+":"+cmd.getName());
 			if(knownCommands.containsKey(cmd.getName()) && knownCommands.get(cmd.getName().toLowerCase()).toString().contains(xEssentials.getPlugin().getName())) {
 				knownCommands.remove(cmd.getName());

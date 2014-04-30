@@ -61,17 +61,19 @@ public class Configuration {
 	public void loadMiniGames() {
 		//load spleef minigames :D
 		File dir = new File(xEssentials.getPlugin().getDataFolder() + File.separator + "minigames" + File.separator + "spleef");
-		for(File f : dir.listFiles()) {
-			FileConfiguration con = YamlConfiguration.loadConfiguration(f);
-			SpleefArena arena = new SpleefArena(f, con);
-			HashMap<String, Object> hash = new HashMap<String, Object>();
-			hash.put(arena.getArenaName(), arena);
-			minigames.put(MinigameType.SPLEEF, hash);
+		if(dir.isDirectory()) {
+			for(File f : dir.listFiles()) {
+				FileConfiguration con = YamlConfiguration.loadConfiguration(f);
+				SpleefArena arena = new SpleefArena(f, con);
+				HashMap<String, Object> hash = new HashMap<String, Object>();
+				hash.put(arena.getArenaName(), arena);
+				minigames.put(MinigameType.SPLEEF, hash);
+			}
 		}
 	}
-	
+
 	private static List<String> materials = new ArrayList<String>();
-	
+
 	/**
 	 * 
 	 * @author xize
@@ -1156,15 +1158,15 @@ public class Configuration {
 					Field mf = Constructor.class.getDeclaredField("modifiers");
 					mf.setAccessible(true);
 					mf.setInt(constructor, constructor.getModifiers() &~Modifier.PROTECTED);
-					
+
 					PluginCommand command = (PluginCommand) constructor.newInstance(cmd, xEssentials.getPlugin());
 					command.setExecutor(new command());
 					List<String> aliases = (List<String>) xEssentials.getPlugin().getDescription().getCommands().get(command.getName()).get("aliases");
 					command.setAliases(aliases);
-					
+
 					constructor.setAccessible(false);
 					mf.setAccessible(false);
-					
+
 					Configuration.getCommandConfig().registerBukkitCommand(command);   
 				} catch(Exception e) {
 					e.printStackTrace();

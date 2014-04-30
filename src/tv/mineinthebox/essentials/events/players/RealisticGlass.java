@@ -32,7 +32,6 @@ public class RealisticGlass implements Listener {
 	private static HashMap<Location, MaterialData> blocks = new HashMap<Location, MaterialData>();
 	private HashMap<Location, Block> glasses = new HashMap<Location, Block>();
 
-	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void projectiles(ProjectileHitEvent e) {
 		if(e.getEntity() instanceof Arrow) {

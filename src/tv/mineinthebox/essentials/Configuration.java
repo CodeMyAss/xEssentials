@@ -42,11 +42,13 @@ import tv.mineinthebox.essentials.configurations.RulesConfig;
 import tv.mineinthebox.essentials.configurations.ShopConfig;
 import tv.mineinthebox.essentials.enums.ConfigType;
 import tv.mineinthebox.essentials.enums.LogType;
+import tv.mineinthebox.essentials.enums.MinigameType;
 import tv.mineinthebox.essentials.events.CustomEventHandler;
 import tv.mineinthebox.essentials.events.Handler;
 import tv.mineinthebox.essentials.events.customEvents.CallEssentialsBroadcastEvent;
 import tv.mineinthebox.essentials.greylist.GreyListServer;
 import tv.mineinthebox.essentials.instances.Kit;
+import tv.mineinthebox.essentials.instances.SpleefArena;
 import tv.mineinthebox.essentials.utils.ProtectionDB;
 
 public class Configuration {
@@ -54,8 +56,22 @@ public class Configuration {
 	//this will be the configs loaded in the memory
 	//this will used by events and in events without instancing every time a new object this will be painfully awful in PlayerMoveEvent.
 	private final static EnumMap<ConfigType, HashMap<String, Object>> configure = new EnumMap<ConfigType, HashMap<String, Object>>(ConfigType.class);
-	private static List<String> materials = new ArrayList<String>();
+	private final static EnumMap<MinigameType, HashMap<String, Object>> minigames = new EnumMap<MinigameType, HashMap<String, Object>>(MinigameType.class);
 
+	public void loadMiniGames() {
+		//load spleef minigames :D
+		File dir = new File(xEssentials.getPlugin().getDataFolder() + File.separator + "minigames" + File.separator + "spleef");
+		for(File f : dir.listFiles()) {
+			FileConfiguration con = YamlConfiguration.loadConfiguration(f);
+			SpleefArena arena = new SpleefArena(f, con);
+			HashMap<String, Object> hash = new HashMap<String, Object>();
+			hash.put(arena.getArenaName(), arena);
+			minigames.put(MinigameType.SPLEEF, hash);
+		}
+	}
+	
+	private static List<String> materials = new ArrayList<String>();
+	
 	/**
 	 * 
 	 * @author xize

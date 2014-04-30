@@ -517,7 +517,6 @@ public class xEssentialsPlayer {
 	 * @param returns true whenever the player is fishing
 	 * @return boolean
 	 */
-	@SuppressWarnings("deprecation")
 	public boolean isFishing() {
 		if(player.getItemInHand().getType() == Material.FISHING_ROD) {
 			for(Entity entity : player.getNearbyEntities(16, 16, 16)) {

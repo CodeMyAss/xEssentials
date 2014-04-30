@@ -15,7 +15,6 @@ import tv.mineinthebox.essentials.enums.PermissionKey;
 
 public class CmdArrow {
 	
-	@SuppressWarnings("deprecation")
 	public boolean execute(CommandSender sender, Command cmd, String[] args) {
 		if(cmd.getName().equalsIgnoreCase("arrow")) {
 			if(sender.hasPermission(PermissionKey.CMD_ARROW.getPermission())) {

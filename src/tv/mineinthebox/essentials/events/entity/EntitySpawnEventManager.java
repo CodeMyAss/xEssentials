@@ -12,7 +12,7 @@ public class EntitySpawnEventManager implements Listener {
 	public void onEntitySpawn(CreatureSpawnEvent e) {
 		if(Configuration.getEntityConfig().getEntitys().containsKey(e.getEntityType().name().toLowerCase())) {
 			if(!Configuration.getEntityConfig().getEntitys().get(e.getEntityType().name().toLowerCase())) {
-				e.setCancelled(true);
+				e.getEntity().damage(e.getEntity().getMaxHealth(), e.getEntity());
 			}
 		}
 	}

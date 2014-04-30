@@ -46,6 +46,7 @@ public class xEssentials extends JavaPlugin {
 		pl = this;
 		log("has been enabled", LogType.INFO);
 		conf.createConfigs();
+		conf.loadMiniGames();
 		Handler.start();
 		customhandler.startCustomEvents();
 		if(Bukkit.getOnlinePlayers().length > 0) {

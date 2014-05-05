@@ -8,7 +8,9 @@ import java.util.HashSet;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Effect;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -20,7 +22,6 @@ public class SpleefArena {
 	
 	private FileConfiguration con;
 	private File f;
-	private String arena;
 	
 	public SpleefArena(File f, FileConfiguration con) throws NullPointerException {
 		if(f.exists()) {
@@ -37,7 +38,7 @@ public class SpleefArena {
 	 * @return String
 	 */
 	public String getArenaName() {
-		return arena;
+		return con.getString("arena.name");
 	}
 	
 	/**
@@ -117,7 +118,7 @@ public class SpleefArena {
 	 * @param xp - the essentials player
 	 * @return boolean
 	 */
-	public boolean PlayerSetArena(xEssentialsPlayer xp) {
+	public boolean addPlayer(xEssentialsPlayer xp) {
 		if(players.size() < getMaxPlayersAllowed() || isRunning()) {
 			players.add(xp.getUser());
 			return true;
@@ -127,11 +128,48 @@ public class SpleefArena {
 	
 	/**
 	 * @author xize
+	 * @param removes the player from the arena.
+	 */
+	public void removePlayer(String name) {
+		if(players.contains(name)) {
+			players.remove(name);
+		}
+	}
+	
+	/**
+	 * @author xize
+	 * @param returns the amount of players curently inside the arena
+	 * @return Integer
+	 */
+	public int getJoinedCount() {
+		return players.size();
+	}
+	
+	/**
+	 * @author xize
 	 * @param name - the players name
 	 * @return boolean
 	 */
 	public boolean isPlayerJoined(String name) {
 		return players.contains(name);
+	}
+	
+	@SuppressWarnings("deprecation")
+	public void toggleSnow(boolean bol) {
+		if(bol) {
+			for(Block block : getSnowLayer()) {
+				if(block.getType() == Material.AIR) {
+					block.setType(Material.SNOW_BLOCK);
+					block.getWorld().playEffect(block.getLocation(), Effect.STEP_SOUND, Material.SNOW_BLOCK.getId());
+				}
+			}
+		} else {
+			for(Block block : getSnowLayer()) {
+				if(block.getType() != Material.AIR) {
+					block.setType(Material.AIR);
+				}
+			}
+		}
 	}
 	
 	private void load() {

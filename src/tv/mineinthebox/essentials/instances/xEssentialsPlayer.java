@@ -1334,7 +1334,7 @@ public class xEssentialsPlayer {
 	@SuppressWarnings("unchecked")
 	public Inventory getOfflineInventory() {
 		update();
-		Inventory inv = Bukkit.createInventory(player, InventoryType.PLAYER);
+		Inventory inv = Bukkit.createInventory(null, InventoryType.PLAYER);
 		if(hasOfflineInventory()) {
 			ItemStack[] items = ((List<ItemStack>)con.get("offlineInventory.contents")).toArray(new ItemStack[0]);	
 			inv.setContents(items);
@@ -2260,6 +2260,54 @@ public class xEssentialsPlayer {
 	 */
 	public boolean hasNameHistory() {
 		return !con.getStringList("name-history").isEmpty();
+	}
+	
+	/**
+	 * @author xize
+	 * @param returns true whenever the player has a saved inventory
+	 * @return Boolean
+	 */
+	public boolean hasSavedInventory() {
+		if(con.contains("orginalinv")) {
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * @author xize
+	 * @param saves the inventory of the player, unlike the saveSurvivalInventory, this will be used for minigames.
+	 */
+	public void saveInventory() {
+		con.set("orginalinv.items", player.getInventory().getContents());
+		con.set("orginalinv.armor", player.getInventory().getArmorContents());
+		try {
+			con.save(f);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		update();
+	}
+	
+	/**
+	 * @author xize
+	 * @param loads the inventory of the player, unlike the saveSurvivalInventory, this will be used for minigames.
+	 */
+	@SuppressWarnings("unchecked")
+	public void loadInventory() {
+		ItemStack[] contents = ((List<ItemStack>)con.get("orginalinv.items")).toArray(new ItemStack[0]);
+		ItemStack[] armor = ((List<ItemStack>)con.get("orginalinv.armor")).toArray(new ItemStack[0]);
+		player.getInventory().setContents(contents);
+		player.getInventory().setArmorContents(armor);
+		con.set("orginalinv", null);
+		try {
+			con.save(f);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		update();
 	}
 	
 	/**

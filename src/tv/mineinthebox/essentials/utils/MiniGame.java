@@ -27,7 +27,7 @@ public class MiniGame {
 			if(a instanceof SpleefArena) {
 				SpleefArena arena = (SpleefArena) a;
 				HashMap<String, Object> hasha = new HashMap<String, Object>();
-				hasha.put(arena.getArenaName(), arena);
+				hasha.put(arena.getArenaName().toLowerCase(), arena);
 				hash.put(type, hasha);
 			} else {
 				throw new NullPointerException("this object is not a SpleefArena Object!");
@@ -47,8 +47,8 @@ public class MiniGame {
 		if(type == MinigameType.HUNGERGAMES) {
 			//TO-DO
 		} else if(type == MinigameType.SPLEEF) {
-			if(hash.get(type).containsKey(arena)) {
-				hash.get(type).remove(arena);
+			if(hash.get(type).containsKey(arena.toLowerCase())) {
+				hash.get(type).remove(arena.toLowerCase());
 			} else {
 				throw new NullPointerException("arena does not exist!, and cannot be removed.");
 			}
@@ -90,6 +90,62 @@ public class MiniGame {
 	public static boolean isPlayerInArea(Player p) {
 		//TO-DO return (getArena(p) instanceof SpleefArena || getArena(p) instanceof HungerGamesArena ? true : false)
 		return (getArenaFromPlayer(p) instanceof SpleefArena ? true : false);
+	}
+	
+	/**
+	 * @author xize
+	 * @param s - the arena name
+	 * @param type - the minigame type
+	 * @return Object
+	 */
+	public Object getArena(String s, MinigameType type) {
+		try {
+			EnumMap<MinigameType, HashMap<String, Object>> hash = getReflectedMap();
+			return (SpleefArena)hash.get(type).get(s.toLowerCase());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	/**
+	 * @author xize
+	 * @param s - the arena name
+	 * @param type - the minigame type
+	 * @return Boolean
+	 */
+	public boolean isArena(String s, MinigameType type) {
+		try {
+			EnumMap<MinigameType, HashMap<String, Object>> hash = getReflectedMap();
+			if(hash.get(type).containsKey(s.toLowerCase())) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	/**
+	 * @author xize
+	 * @param returns all the spleef arenas
+	 * @return SpleefArena[]
+	 */
+	public static SpleefArena[] getAllSpleefArenas() {
+		try {
+			EnumMap<MinigameType, HashMap<String, Object>> hash = getReflectedMap();
+			
+			return (SpleefArena[])hash.get(MinigameType.SPLEEF).values().toArray(new Object[hash.get(MinigameType.SPLEEF).values().size()]);
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	/**

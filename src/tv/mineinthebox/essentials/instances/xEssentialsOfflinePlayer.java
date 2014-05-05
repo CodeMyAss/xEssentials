@@ -680,7 +680,7 @@ public class xEssentialsOfflinePlayer {
 	@SuppressWarnings("unchecked")
 	public Inventory getOfflineInventory(Player viewer) {
 		update();
-		Inventory inv = Bukkit.createInventory(viewer, InventoryType.PLAYER);
+		Inventory inv = Bukkit.createInventory(null, InventoryType.PLAYER);
 		if(hasOfflineInventory()) {
 			ItemStack[] items = ((List<ItemStack>)con.get("offlineInventory.contents")).toArray(new ItemStack[0]);	
 			inv.setContents(items);
@@ -1484,6 +1484,18 @@ public class xEssentialsOfflinePlayer {
 	 */
 	public boolean hasNameHistory() {
 		return !con.getStringList("name-history").isEmpty();
+	}
+	
+	/**
+	 * @author xize
+	 * @param returns true whenever the player has a saved inventory
+	 * @return Boolean
+	 */
+	public boolean hasSavedInventory() {
+		if(con.contains("orginalinv")) {
+			return true;
+		}
+		return false;
 	}
 
 

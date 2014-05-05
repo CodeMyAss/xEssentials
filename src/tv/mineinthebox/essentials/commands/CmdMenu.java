@@ -57,7 +57,7 @@ public class CmdMenu {
 						if(xEssentials.isEssentialsPlayer(args[0])) {
 							if(xEssentials.contains(args[0])) {
 								xEssentialsPlayer xp = xEssentials.get(args[0]);
-								Inventory inv = Bukkit.createInventory(p, 36, ChatColor.DARK_PURPLE + "Quick menu: " + xp.getUser());
+								Inventory inv = Bukkit.createInventory(null, 36, ChatColor.DARK_PURPLE + "Quick menu: " + xp.getUser());
 
 								String[] tntLore = {ChatColor.DARK_PURPLE + "when activated this player gets launched high in the air!", ChatColor.DARK_PURPLE + "then as followed the player falls safely on the ground again:)"};
 								ItemStack tnt = makeButton(Material.TNT, ChatColor.GREEN + "activate boom for this player!", tntLore, false);

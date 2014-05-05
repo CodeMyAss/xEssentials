@@ -89,6 +89,7 @@ public class PortalSelectedCreateEvent implements Listener {
 							r.printStackTrace();
 						}
 					}
+					e.setCancelled(true);
 				} else {
 					firstPos.put(e.getPlayer().getName(), e.getClickedBlock());
 					e.getPlayer().sendMessage(ChatColor.GRAY + "you selected the first block(highest)");

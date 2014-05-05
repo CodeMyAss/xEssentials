@@ -66,7 +66,7 @@ public class Configuration {
 				FileConfiguration con = YamlConfiguration.loadConfiguration(f);
 				SpleefArena arena = new SpleefArena(f, con);
 				HashMap<String, Object> hash = new HashMap<String, Object>();
-				hash.put(arena.getArenaName(), arena);
+				hash.put(arena.getArenaName().toLowerCase(), arena);
 				minigames.put(MinigameType.SPLEEF, hash);
 			}
 		}

@@ -11,7 +11,6 @@ import tv.mineinthebox.essentials.enums.MinigameType;
 import tv.mineinthebox.essentials.enums.PermissionKey;
 import tv.mineinthebox.essentials.instances.SpleefArena;
 import tv.mineinthebox.essentials.instances.xEssentialsPlayer;
-import tv.mineinthebox.essentials.utils.MiniGame;
 
 public class CmdSpleef {
 
@@ -47,7 +46,7 @@ public class CmdSpleef {
 						}	
 					} else if(args[0].equalsIgnoreCase("list")) {
 						StringBuilder build = new StringBuilder();
-						SpleefArena[] arenas = MiniGame.getAllSpleefArenas();
+						SpleefArena[] arenas = xEssentials.getPlugin().getAllSpleefArenas();
 						for(int i = 0; i < arenas.length; i++) {
 							if(i == arenas.length) {
 								SpleefArena arena = arenas[i];
@@ -60,8 +59,8 @@ public class CmdSpleef {
 					} else if(args[0].equalsIgnoreCase("quit")) {
 						if(sender instanceof Player) {
 							xEssentialsPlayer xp  = xEssentials.get(sender.getName()); 
-							if(MiniGame.isPlayerInArea(xp.getPlayer())) {
-								 Object obj = MiniGame.getArenaFromPlayer(xp.getPlayer());
+							if(xEssentials.getPlugin().isPlayerInArea(xp.getPlayer())) {
+								 Object obj = xEssentials.getPlugin().getArenaFromPlayer(xp.getPlayer());
 								 if(obj instanceof SpleefArena) {
 									 SpleefArena arena = (SpleefArena) obj;
 									 if(arena.getJoinedCount() == 1) {
@@ -82,7 +81,34 @@ public class CmdSpleef {
 					}
 				} else if(args.length == 2) {
 					if(args[0].equalsIgnoreCase("join")) {
-						
+						if(sender instanceof Player) {
+							Player p = (Player) sender;
+							if(!xEssentials.getPlugin().isPlayerInArea(p)) {
+								if(xEssentials.getPlugin().isArena(args[1])) {
+									Object obj = xEssentials.getPlugin().getArena(args[1]);
+									if(obj instanceof SpleefArena) {
+										SpleefArena arena = (SpleefArena) obj;
+										if(arena.getJoinedCount() < arena.getMaxPlayersAllowed()) {
+											if(!arena.isRunning()) {
+												
+											} else {
+												sender.sendMessage(ChatColor.RED + "arena is already running!");
+											}
+										} else {
+											sender.sendMessage(ChatColor.RED + "this arena is full, you cannot join a full arena!");
+										}
+									} else {
+										//TO-DO hungergames.
+									}
+								} else {
+									sender.sendMessage(ChatColor.RED + "no such arena!, the arena you typed does not exist.");
+								}
+							} else {
+								sender.sendMessage(ChatColor.RED + "you are already inside a arena.");
+							}
+						} else {
+							Warnings.getWarnings(sender).consoleMessage();
+						}
 					} else if(args[0].equalsIgnoreCase("create")) {
 						
 					} else if(args[0].equalsIgnoreCase("remove")) {

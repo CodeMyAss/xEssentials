@@ -7,7 +7,6 @@ import org.bukkit.event.player.PlayerJoinEvent;
 
 import tv.mineinthebox.essentials.xEssentials;
 import tv.mineinthebox.essentials.instances.xEssentialsPlayer;
-import tv.mineinthebox.essentials.utils.MiniGame;
 
 public class PlayerJoinCheckInventory implements Listener {
 	
@@ -15,7 +14,7 @@ public class PlayerJoinCheckInventory implements Listener {
 	public void onJoin(PlayerJoinEvent e) {
 		xEssentialsPlayer xp = xEssentials.get(e.getPlayer().getName());
 		
-		if(xp.hasSavedInventory() && !MiniGame.isPlayerInArea(e.getPlayer())) {
+		if(xp.hasSavedInventory() && !xEssentials.getPlugin().isPlayerInArea(e.getPlayer())) {
 			e.getPlayer().sendMessage(ChatColor.GREEN + "since it seems you have quited before a minigame ended we have backuped your inventory!");
 			xp.loadInventory();
 		}

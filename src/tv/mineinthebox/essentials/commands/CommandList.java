@@ -73,7 +73,8 @@ public class CommandList {
 			"cmodify",
 			"portals",
 			"arrow",
-			"test"
+			"test",
+			"spleef"
 	};
 
 }

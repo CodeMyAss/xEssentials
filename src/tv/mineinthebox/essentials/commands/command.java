@@ -224,6 +224,9 @@ public class command implements CommandExecutor, TabCompleter {
 		} else if(cmd.getName().equalsIgnoreCase("test")) {
 			CmdTest test = new CmdTest();
 			return test.execute(sender, cmd, args);
+		} else if(cmd.getName().equalsIgnoreCase("spleef")) {
+			CmdSpleef spleef = new CmdSpleef();
+			return spleef.execute(sender, cmd, args);
 		}
 		return false;
 	}

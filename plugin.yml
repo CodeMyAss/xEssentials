@@ -292,3 +292,6 @@ commands:
   test:
      description: a arrow machine gun
      aliases: []
+  spleef:
+     description: the spleef minigame command!
+     aliases: []

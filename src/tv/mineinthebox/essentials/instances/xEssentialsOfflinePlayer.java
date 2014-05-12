@@ -22,13 +22,13 @@ import org.bukkit.inventory.ItemStack;
 
 import tv.mineinthebox.essentials.xEssentials;
 import tv.mineinthebox.essentials.enums.PlayerTaskEnum;
-import tv.mineinthebox.essentials.utils.AlternateAccount;
 
 public class xEssentialsOfflinePlayer {
 
 	private final File f;
 	private final FileConfiguration con;
 	private String player;
+	private AlternateAccount accounts;
 
 	/**
 	 * @author xize
@@ -847,8 +847,12 @@ public class xEssentialsOfflinePlayer {
 	 * @return AlternateAccount
 	 */
 	public AlternateAccount getAlternateAccounts() {
-		AlternateAccount alt = new AlternateAccount(this);
-		return alt;
+		if(accounts instanceof AlternateAccount) {
+			return accounts;
+		} else {
+			this.accounts = new AlternateAccount(this);
+			return accounts;
+		}
 	}
 
 	/**

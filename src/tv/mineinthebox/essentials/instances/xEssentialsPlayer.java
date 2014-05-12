@@ -34,7 +34,6 @@ import tv.mineinthebox.essentials.enums.PermissionKey;
 import tv.mineinthebox.essentials.enums.PlayerTaskEnum;
 import tv.mineinthebox.essentials.events.customEvents.PlayerNameChangeEvent;
 import tv.mineinthebox.essentials.events.players.FakeNukeEvent;
-import tv.mineinthebox.essentials.utils.AlternateAccount;
 
 public class xEssentialsPlayer {
 
@@ -42,6 +41,7 @@ public class xEssentialsPlayer {
 	private File f;
 	private FileConfiguration con;
 	private Item Potato;
+	private AlternateAccount accounts;
 
 	/**
 	 * 
@@ -1544,8 +1544,12 @@ public class xEssentialsPlayer {
 	 * @return AlternateAccount
 	 */
 	public AlternateAccount getAlternateAccounts() {
-		AlternateAccount alt = new AlternateAccount(this);
-		return alt;
+		if(accounts instanceof AlternateAccount) {
+			return accounts;
+		} else {
+			this.accounts = new AlternateAccount(this);
+			return accounts;
+		}
 	}
 
 	/**

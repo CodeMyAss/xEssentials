@@ -11,9 +11,9 @@ import tv.mineinthebox.essentials.Configuration;
 import tv.mineinthebox.essentials.Warnings;
 import tv.mineinthebox.essentials.xEssentials;
 import tv.mineinthebox.essentials.enums.PermissionKey;
+import tv.mineinthebox.essentials.instances.AlternateAccount;
 import tv.mineinthebox.essentials.instances.RestrictedCommand;
 import tv.mineinthebox.essentials.instances.xEssentialsOfflinePlayer;
-import tv.mineinthebox.essentials.utils.AlternateAccount;
 
 public class CmdPlayerInfo {
 	

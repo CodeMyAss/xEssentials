@@ -1,15 +1,15 @@
 package tv.mineinthebox.essentials;
 
 import java.io.File;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Bukkit;
@@ -33,6 +33,7 @@ import tv.mineinthebox.essentials.instances.SpleefArena;
 import tv.mineinthebox.essentials.instances.Warp;
 import tv.mineinthebox.essentials.instances.xEssentialsOfflinePlayer;
 import tv.mineinthebox.essentials.instances.xEssentialsPlayer;
+import tv.mineinthebox.essentials.interfaces.Minigame;
 import tv.mineinthebox.essentials.utils.ProtectionDB;
 import tv.mineinthebox.essentials.utils.TPS;
 
@@ -59,7 +60,7 @@ public class xEssentials extends JavaPlugin {
 			reloadPlayerBase();
 		}
 		for(String cmd : cmdlist.getAllCommands) {
-				getCommand(cmd).setExecutor(new command());	
+			getCommand(cmd).setExecutor(new command());	
 		}
 		if(Configuration.getPlayerConfig().isRealisticGlassEnabled()) {
 			glass.loadGlassBlocks();	
@@ -335,7 +336,7 @@ public class xEssentials extends JavaPlugin {
 		xEssentialsPlayer[] users = players.values().toArray(new xEssentialsPlayer[players.size()]);
 		return users;
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param get all the warps
@@ -381,7 +382,7 @@ public class xEssentials extends JavaPlugin {
 		}
 		throw new NullPointerException("warp does not exist");
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param player - the players name, can also be a offline players name
@@ -399,7 +400,7 @@ public class xEssentials extends JavaPlugin {
 		}
 		throw new NullPointerException("this player has never played before!");
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param player - the player name, can be a offline player to
@@ -428,7 +429,7 @@ public class xEssentials extends JavaPlugin {
 			throw new NullPointerException("this player has never played before!");
 		}
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param player - the player name, can be a offline player to
@@ -451,7 +452,7 @@ public class xEssentials extends JavaPlugin {
 			throw new NullPointerException("this player has never played before!");
 		}
 	}
-	
+
 	/**
 	 * @author xize
 	 * @param returns the database
@@ -460,7 +461,7 @@ public class xEssentials extends JavaPlugin {
 	public static ProtectionDB getProtectionDatabase() {
 		return protectiondb;
 	}
-	
+
 
 	/**
 	 * @author xize
@@ -469,22 +470,17 @@ public class xEssentials extends JavaPlugin {
 	 * @param a - the arena.
 	 * @throws NullPointerException when the object is something else rather than the Arena Object
 	 */
-	public boolean addGame(Object a, MinigameType typ) throws Exception {
-		EnumMap<MinigameType, HashMap<String, Object>> hash = getReflectedMap();
-		if(a instanceof SpleefArena) {
-			SpleefArena arena = (SpleefArena) a;
-			for(MinigameType type : MinigameType.values()) {
-				if(hash.get(type).containsKey(arena.getArenaName().toLowerCase())) {
-					return false;
-				}
+	public boolean addGame(Minigame a, MinigameType typ) throws Exception {
+		EnumMap<MinigameType, HashMap<String, Minigame>> hash = getMinigameMap();
+		for(MinigameType type : MinigameType.values()) {
+			if(a.getType() == type) {
+				HashMap<String, Minigame> arena = new HashMap<String, Minigame>();
+				hash.put(type, arena);
+				
+				return true;
 			}
-			HashMap<String, Object> hasha = new HashMap<String, Object>();
-			hasha.put(arena.getArenaName().toLowerCase(), arena);
-			hash.put(typ, hasha);
-			return true;
-		} else {
-			throw new NullPointerException("this object is not a Arena Object!");
 		}
+		return false;
 	}
 
 	/**
@@ -494,16 +490,12 @@ public class xEssentials extends JavaPlugin {
 	 * @param arena - the arena name
 	 * @throws NullPointerException - when the arena does not exist!
 	 */
-	public void removeGame(MinigameType type, String arena) throws Exception {
-		EnumMap<MinigameType, HashMap<String, Object>> hash = getReflectedMap();
-		if(type == MinigameType.HUNGERGAMES) {
-			//TO-DO
-		} else if(type == MinigameType.SPLEEF) {
-			if(hash.get(type).containsKey(arena.toLowerCase())) {
-				hash.get(type).remove(arena.toLowerCase());
-			} else {
-				throw new NullPointerException("arena does not exist!, and cannot be removed.");
-			}
+	public void removeGame(String arena) throws Exception {
+		if(isArena(arena)) {
+			Minigame game = getArena(arena);
+			game.remove();
+		} else {
+			throw new NullPointerException("cannot remove a game which doesn't exist!");
 		}
 	}
 
@@ -511,24 +503,18 @@ public class xEssentials extends JavaPlugin {
 	 * @author xize
 	 * @param gets the Arena specified by the player
 	 * @param p - the player
-	 * @return Object - this could be HungerGamesArena or SpleefArena
+	 * @return Minigame - this could be HungerGamesArena or SpleefArena
 	 */
-	public Object getArenaFromPlayer(Player p) {
-		try {
-			EnumMap<MinigameType, HashMap<String, Object>> hash = getReflectedMap();
-			if(hash.containsKey(MinigameType.HUNGERGAMES)) {
-				//TO-DO
-			}
-			if(hash.containsKey(MinigameType.SPLEEF)) {
-				for(Object obj : hash.get(MinigameType.SPLEEF).values()) {
-					SpleefArena arena = (SpleefArena) obj;
-					if(arena.isPlayerJoined(p.getName())) {
-						return arena;
+	public Minigame getArenaFromPlayer(Player p) {
+		EnumMap<MinigameType, HashMap<String, Minigame>> hash = getMinigameMap();
+		for(MinigameType type : MinigameType.values()) {
+			if(hash.containsKey(type)) {
+				for(Minigame game : hash.get(type).values()) {
+					if(game.isPlayerJoined(p.getName())) {
+						return game;
 					}
 				}
 			}
-		} catch(Exception e) {
-			e.printStackTrace();
 		}
 		return null;
 	}
@@ -540,30 +526,25 @@ public class xEssentials extends JavaPlugin {
 	 * @return Boolean
 	 */
 	public boolean isPlayerInArea(Player p) {
-		//TO-DO return (getArena(p) instanceof SpleefArena || getArena(p) instanceof HungerGamesArena ? true : false)
-		return (getArenaFromPlayer(p) instanceof SpleefArena ? true : false);
+		return (getArenaFromPlayer(p) instanceof Minigame ? true : false);
 	}
 
 	/**
 	 * @author xize
-	 * @param s - the arena name
-	 * @param type - the minigame type
-	 * @return Object
+	 * @param s - the possible arena name
+	 * @return Minigame - the super class of arena types.
+	 * @throws NullPointerException
 	 */
-	public Object getArena(String s) {
-		try {
-			EnumMap<MinigameType, HashMap<String, Object>> hash = getReflectedMap();
-
-			for(MinigameType type : MinigameType.values()) {
-				if(hash.get(type).containsKey(s)) {
-					return hash.get(type).get(s.toLowerCase());
+	public Minigame getArena(String s) {
+		EnumMap<MinigameType, HashMap<String, Minigame>> hash = getMinigameMap();
+		for(MinigameType type : MinigameType.values()) {
+			if(hash.containsKey(type)) {
+				if(hash.get(type).containsKey(s.toLowerCase())) {
+					return (Minigame) hash.get(type).get(s.toLowerCase());
 				}
 			}
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
-		return null;
+		throw new NullPointerException("arena name does not exist!, please use isArena() first!");
 	}
 
 	/**
@@ -573,16 +554,13 @@ public class xEssentials extends JavaPlugin {
 	 * @return Boolean
 	 */
 	public boolean isArena(String s) {
-		try {
-			EnumMap<MinigameType, HashMap<String, Object>> hash = getReflectedMap();
-			for(MinigameType type : MinigameType.values()) {
+		EnumMap<MinigameType, HashMap<String, Minigame>> hash = getMinigameMap();
+		for(MinigameType type : MinigameType.values()) {
+			if(hash.containsKey(type)) {
 				if(hash.get(type).containsKey(s.toLowerCase())) {
 					return true;
-				}	
+				}
 			}
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 		return false;
 	}
@@ -593,35 +571,26 @@ public class xEssentials extends JavaPlugin {
 	 * @return SpleefArena[]
 	 */
 	public SpleefArena[] getAllSpleefArenas() {
-		try {
-			EnumMap<MinigameType, HashMap<String, Object>> hash = getReflectedMap();
-
-			return (SpleefArena[])hash.get(MinigameType.SPLEEF).values().toArray(new Object[hash.get(MinigameType.SPLEEF).values().size()]);
-
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		EnumMap<MinigameType, HashMap<String, Minigame>> hash = getMinigameMap();
+		List<SpleefArena> arenas = new ArrayList<SpleefArena>();
+		if(hash.containsKey(MinigameType.SPLEEF)) {
+			Iterator<Entry<String, Minigame>> it = hash.get(MinigameType.SPLEEF).entrySet().iterator();
+			while(it.hasNext()) {
+				Entry<String, Minigame> entry = it.next();
+				if(entry.getValue() instanceof SpleefArena) {
+					arenas.add((SpleefArena)entry.getValue());
+				}
+			}
 		}
-		return null;
+		return arenas.toArray(new SpleefArena[arenas.size()]);
 	}
 
 	/**
 	 * @author xize
-	 * @param tries to resolve a reflected map in a not cloned way!
+	 * @param gets the Enum map holding all loaded minigames, in a abstract way.
 	 * @return EnumMap<MinigameType, HashMap<String, Object>>()
-	 * @throws Exception
 	 */
-	@SuppressWarnings("unchecked")
-	private EnumMap<MinigameType, HashMap<String, Object>> getReflectedMap() throws Exception {
-		Class<?> clazz = Class.forName("tv.mineinthebox.essentials.Configuration");
-		Field f1 = clazz.getDeclaredField("minigames");
-		f1.setAccessible(true);
-		Field f2 = clazz.getDeclaredField("modifiers");
-		f2.setAccessible(true);
-		f2.setInt(f1, f1.getModifiers() &~Modifier.FINAL &~Modifier.STATIC);
-		EnumMap<MinigameType, HashMap<String, Object>> hash = (EnumMap<MinigameType, HashMap<String, Object>>) f1.get("minigames");
-		f1.setAccessible(false);
-		f2.setAccessible(false);
-		return hash;
+	private EnumMap<MinigameType, HashMap<String, Minigame>> getMinigameMap() {
+		return Configuration.getMinigameMap();
 	}
 }

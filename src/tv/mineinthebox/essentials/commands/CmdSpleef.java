@@ -1,6 +1,12 @@
 package tv.mineinthebox.essentials.commands;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -9,8 +15,10 @@ import tv.mineinthebox.essentials.Warnings;
 import tv.mineinthebox.essentials.xEssentials;
 import tv.mineinthebox.essentials.enums.MinigameType;
 import tv.mineinthebox.essentials.enums.PermissionKey;
+import tv.mineinthebox.essentials.events.spleef.CreateSpleefArenaEvent;
 import tv.mineinthebox.essentials.instances.SpleefArena;
 import tv.mineinthebox.essentials.instances.xEssentialsPlayer;
+import tv.mineinthebox.essentials.interfaces.Minigame;
 
 public class CmdSpleef {
 
@@ -60,21 +68,19 @@ public class CmdSpleef {
 						if(sender instanceof Player) {
 							xEssentialsPlayer xp  = xEssentials.get(sender.getName()); 
 							if(xEssentials.getPlugin().isPlayerInArea(xp.getPlayer())) {
-								 Object obj = xEssentials.getPlugin().getArenaFromPlayer(xp.getPlayer());
-								 if(obj instanceof SpleefArena) {
-									 SpleefArena arena = (SpleefArena) obj;
-									 if(arena.getJoinedCount() == 1) {
-										 arena.removePlayer(sender.getName());
-										 sender.sendMessage(ChatColor.GREEN + "you successfully left the arena!");
-										 arena.setRunning(false);
-										 xp.getPlayer().performCommand("spawn");
-									 }
-								 } else {
-									 //TO-DO
-								 }
-							 } else {
-								 sender.sendMessage(ChatColor.RED + "you aren't joined inside a arena!");
-							 }
+								Object obj = xEssentials.getPlugin().getArenaFromPlayer(xp.getPlayer());
+								if(obj instanceof SpleefArena) {
+									SpleefArena arena = (SpleefArena) obj;
+									if(arena.getJoinedCount() == 1) {
+										arena.removePlayer(sender.getName());
+										sender.sendMessage(ChatColor.GREEN + "you successfully left the arena!");
+										arena.setRunning(false);
+										xp.getPlayer().performCommand("spawn");
+									}
+								}
+							} else {
+								sender.sendMessage(ChatColor.RED + "you aren't joined inside a arena!");
+							}
 						} else {
 							Warnings.getWarnings(sender).consoleMessage();
 						}
@@ -82,42 +88,120 @@ public class CmdSpleef {
 				} else if(args.length == 2) {
 					if(args[0].equalsIgnoreCase("join")) {
 						if(sender instanceof Player) {
-							Player p = (Player) sender;
-							if(!xEssentials.getPlugin().isPlayerInArea(p)) {
-								if(xEssentials.getPlugin().isArena(args[1])) {
-									Object obj = xEssentials.getPlugin().getArena(args[1]);
-									if(obj instanceof SpleefArena) {
-										SpleefArena arena = (SpleefArena) obj;
-										if(arena.getJoinedCount() < arena.getMaxPlayersAllowed()) {
-											if(!arena.isRunning()) {
-												
-											} else {
-												sender.sendMessage(ChatColor.RED + "arena is already running!");
-											}
-										} else {
-											sender.sendMessage(ChatColor.RED + "this arena is full, you cannot join a full arena!");
-										}
+							xEssentialsPlayer xp = xEssentials.get(sender.getName());
+							if(xEssentials.getPlugin().isArena(args[1])) {
+								SpleefArena arena = (SpleefArena) xEssentials.getPlugin().getArena(args[1]);
+								if(arena instanceof SpleefArena) {
+									if(arena.addPlayer(xp)) {
+										Location loc = arena.getPlayerSpawnPoint(xp.getPlayer());
+										loc.getWorld().refreshChunk(loc.getChunk().getX(), loc.getChunk().getZ());
+										xp.getPlayer().teleport(loc);
+										sender.sendMessage(ChatColor.GREEN + "you have successfully joined the " + arena.getArenaName() + " arena!");
 									} else {
-										//TO-DO hungergames.
+										sender.sendMessage(ChatColor.RED + "the arena is full!");
 									}
-								} else {
-									sender.sendMessage(ChatColor.RED + "no such arena!, the arena you typed does not exist.");
 								}
 							} else {
-								sender.sendMessage(ChatColor.RED + "you are already inside a arena.");
+								sender.sendMessage(ChatColor.RED + "this arena does not exist!");
 							}
 						} else {
 							Warnings.getWarnings(sender).consoleMessage();
 						}
 					} else if(args[0].equalsIgnoreCase("create")) {
-						
+						if(sender.hasPermission(PermissionKey.IS_ADMIN.getPermission())) {
+							if(sender instanceof Player) {
+								if(!(xEssentials.getPlugin().isArena(args[1]))) {
+									CreateSpleefArenaEvent.hash.put(sender.getName(), args[1]);
+									sender.sendMessage(ChatColor.GREEN + "please select the x pos, and then the z pos by right clicking.");
+								} else {
+									sender.sendMessage(ChatColor.RED + "the arena does already exist with that name!");
+								}
+							} else {
+								Warnings.getWarnings(sender).consoleMessage();
+							}
+						} else {
+							Warnings.getWarnings(sender).noPermission();
+						}
 					} else if(args[0].equalsIgnoreCase("remove")) {
-						
+						if(xEssentials.getPlugin().isArena(args[0])) {
+							Minigame game = (Minigame) xEssentials.getPlugin().getArena(args[0]);
+							game.remove();
+							sender.sendMessage(ChatColor.GREEN + "arena has been successfully removed!");
+						} else {
+							sender.sendMessage(ChatColor.RED + "arena name does not exist!");
+						}
 					}
 				} else if(args.length == 3) {
-
+					if(args[0].equalsIgnoreCase("sp") && args[1].equalsIgnoreCase("add")) {
+						if(sender instanceof Player) {
+							Player p = (Player) sender;
+							Block snow = p.getLocation().getBlock().getRelative(BlockFace.DOWN);
+							if(xEssentials.getPlugin().isArena(args[2])) {
+								SpleefArena arena = (SpleefArena)xEssentials.getPlugin().getArena(args[2]);
+								if(arena instanceof SpleefArena) {
+									for(Block block : arena.getSnowLayer()) {
+										if(block.getLocation().equals(snow.getLocation())) {
+											arena.setSpawnPoint(p.getLocation());
+											sender.sendMessage(ChatColor.GREEN + "spawnpoint successfully set for arena " + arena.getArenaName());
+											return false;
+										}
+									}
+									sender.sendMessage(ChatColor.RED + "this is not a arena block!");
+								} else {
+									sender.sendMessage(ChatColor.RED + "invalid arena type given in!, this is not a Spleef arena!");	
+								}
+							} else {
+								sender.sendMessage(ChatColor.RED + "this arena does not exist!");
+							}
+						} else {
+							Warnings.getWarnings(sender).consoleMessage();
+						}
+					} else if(args[0].equalsIgnoreCase("sp") && args[1].equalsIgnoreCase("list")) {
+						if(xEssentials.getPlugin().isArena(args[2])) {
+							SpleefArena arena = (SpleefArena) xEssentials.getPlugin().getArena(args[2]);
+							if(arena instanceof SpleefArena) {
+								StringBuilder build = new StringBuilder();
+								List<Location> list = Arrays.asList(arena.getSpawnPoints());
+								if(!list.isEmpty()) {
+									sender.sendMessage(ChatColor.GOLD + ".oO___[Spleef spawnpoint list]___Oo.");
+									for(int i = 0; i < list.size(); i++) {
+										Location loc = list.get(i);
+										build.append(ChatColor.GRAY + "ID:"+ChatColor.GREEN+i+ChatColor.GRAY+":"+loc.getWorld().getName() + " x:" + loc.getBlockX() + " y:" + loc.getBlockY() + " z:" + loc.getBlockZ());
+									}
+									sender.sendMessage(build.toString());
+								} else {
+									sender.sendMessage(ChatColor.RED + "no spawnpoints defined!");
+								}
+							} else {
+								sender.sendMessage(ChatColor.RED + "this arena is not a SpleefArena!");
+							}
+						} else {
+							sender.sendMessage(ChatColor.RED + "this arena does not exist");
+						}
+					}
 				} else if(args.length == 4) {
-
+					if(args[0].equalsIgnoreCase("sp") && args[1].equalsIgnoreCase("remove")) {
+						try {
+							int id = Integer.parseInt(args[2]);
+							if(xEssentials.getPlugin().isArena(args[3])) {
+								SpleefArena arena = (SpleefArena) xEssentials.getPlugin().getArena(args[3]);
+								if(arena instanceof SpleefArena) {
+									try {
+										arena.removeSpawnPoint(id);
+										sender.sendMessage(ChatColor.GREEN + "you have successfully removed spawnpoint " + id);
+									} catch(IndexOutOfBoundsException e) {
+										sender.sendMessage(ChatColor.RED + "invalid id number!");
+									}
+								} else {
+									sender.sendMessage(ChatColor.RED + "this is an Arena but not a SpleefArena");
+								}
+							} else {
+								sender.sendMessage(ChatColor.RED + "this arena does not exist!");
+							}
+						} catch(NumberFormatException e) {
+							e.printStackTrace();
+						}
+					}
 				}
 			} else {
 				Warnings.getWarnings(sender).noPermission();

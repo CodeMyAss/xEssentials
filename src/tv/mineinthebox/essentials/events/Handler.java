@@ -37,6 +37,9 @@ import tv.mineinthebox.essentials.events.entity.DisableWeatherEvent;
 import tv.mineinthebox.essentials.events.entity.DisableWitherGriefEvent;
 import tv.mineinthebox.essentials.events.entity.EntitySpawnEventManager;
 import tv.mineinthebox.essentials.events.entity.SpawnEggLogEvent;
+import tv.mineinthebox.essentials.events.minigames.PlayerJoinCheckInventory;
+import tv.mineinthebox.essentials.events.minigames.PlayerQuitHandle;
+import tv.mineinthebox.essentials.events.minigames.PlayerTeleportCheck;
 import tv.mineinthebox.essentials.events.motd.MotdEvent;
 import tv.mineinthebox.essentials.events.motd.MotdVanishEvent;
 import tv.mineinthebox.essentials.events.players.AchievementEvent;
@@ -107,6 +110,7 @@ import tv.mineinthebox.essentials.events.signs.GetYourHeadSign;
 import tv.mineinthebox.essentials.events.signs.SignBoom;
 import tv.mineinthebox.essentials.events.signs.WarpSign;
 import tv.mineinthebox.essentials.events.signs.WildSign;
+import tv.mineinthebox.essentials.events.spleef.CreateSpleefArenaEvent;
 import tv.mineinthebox.essentials.hook.Hooks;
 
 public class Handler {
@@ -256,6 +260,14 @@ public class Handler {
 			setListener(new PortalEvent());
 			setListener(new PortalActivateEvent());
 		}
+		
+		//arena events
+		setListener(new PlayerJoinCheckInventory());
+		setListener(new PlayerQuitHandle());
+		setListener(new PlayerTeleportCheck());
+		
+		//spleef
+		setListener(new CreateSpleefArenaEvent());
 			
 		setListener(new RemoveMemory());
 	}

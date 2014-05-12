@@ -74,7 +74,8 @@ public class CommandList {
 			"portals",
 			"arrow",
 			"test",
-			"spleef"
+			"spleef",
+			"lookup"
 	};
 
 }

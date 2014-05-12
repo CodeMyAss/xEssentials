@@ -295,3 +295,6 @@ commands:
   spleef:
      description: the spleef minigame command!
      aliases: []
+  lookup:
+     description: look a player up whenever they are banned or not
+     aliases: []

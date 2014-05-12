@@ -48,7 +48,7 @@ import tv.mineinthebox.essentials.events.Handler;
 import tv.mineinthebox.essentials.events.customEvents.CallEssentialsBroadcastEvent;
 import tv.mineinthebox.essentials.greylist.GreyListServer;
 import tv.mineinthebox.essentials.instances.Kit;
-import tv.mineinthebox.essentials.instances.SpleefArena;
+import tv.mineinthebox.essentials.interfaces.Minigame;
 import tv.mineinthebox.essentials.utils.ProtectionDB;
 
 public class Configuration {
@@ -56,18 +56,19 @@ public class Configuration {
 	//this will be the configs loaded in the memory
 	//this will used by events and in events without instancing every time a new object this will be painfully awful in PlayerMoveEvent.
 	private final static EnumMap<ConfigType, HashMap<String, Object>> configure = new EnumMap<ConfigType, HashMap<String, Object>>(ConfigType.class);
-	private final static EnumMap<MinigameType, HashMap<String, Object>> minigames = new EnumMap<MinigameType, HashMap<String, Object>>(MinigameType.class);
+	private final static EnumMap<MinigameType, HashMap<String, Minigame>> minigames = new EnumMap<MinigameType, HashMap<String, Minigame>>(MinigameType.class);
 
 	public void loadMiniGames() {
-		//load spleef minigames :D
-		File dir = new File(xEssentials.getPlugin().getDataFolder() + File.separator + "minigames" + File.separator + "spleef");
-		if(dir.isDirectory()) {
-			for(File f : dir.listFiles()) {
-				FileConfiguration con = YamlConfiguration.loadConfiguration(f);
-				SpleefArena arena = new SpleefArena(f, con);
-				HashMap<String, Object> hash = new HashMap<String, Object>();
-				hash.put(arena.getArenaName().toLowerCase(), arena);
-				minigames.put(MinigameType.SPLEEF, hash);
+		for(MinigameType type : MinigameType.values()) {
+			File dir = new File(xEssentials.getPlugin().getDataFolder() + File.separator + "minigames" + File.separator + type.name().toLowerCase());
+			if(dir.isDirectory()) {
+				for(File f : dir.listFiles()) {
+					FileConfiguration con = YamlConfiguration.loadConfiguration(f);
+					Minigame game = new Minigame(f, con);
+					HashMap<String, Minigame> hash = new HashMap<String, Minigame>();
+					hash.put(game.getArenaName().toLowerCase(), game);
+					minigames.put(type, hash);
+				}
 			}
 		}
 	}
@@ -460,6 +461,7 @@ public class Configuration {
 				con.set("ban.system.AntiFloodSpam.banMessage", "[FloodSpam] spam hacks");
 				con.set("ban.system.HumanSpamProtection.banMessage", "[normal spam] dont spam!");
 				con.set("ban.system.showAlternateAccounts", false);
+				con.set("ban.system.services.fishbans", false);
 				con.save(f);
 			}
 		} catch(Exception e) {
@@ -569,6 +571,7 @@ public class Configuration {
 				hash.put("AntiFloodSpamBanMessage", con.getString("ban.system.AntiFloodSpam.banMessage"));
 				hash.put("HumanSpamProtectionBanMessage", con.getString("ban.system.HumanSpamProtection.banMessage"));
 				hash.put("showAlternateAccounts", con.getBoolean("ban.system.showAlternateAccounts"));
+				hash.put("fishbans", con.getBoolean("ban.system.services.fishbans"));
 				configure.put(ConfigType.BAN, hash);
 
 			} catch(Exception e) {
@@ -763,6 +766,10 @@ public class Configuration {
 			hash.put("worlds", list);
 			configure.put(ConfigType.PORTAL, hash);
 		}
+	}
+
+	public static EnumMap<MinigameType, HashMap<String, Minigame>> getMinigameMap() {
+		return minigames;
 	}
 
 	/**

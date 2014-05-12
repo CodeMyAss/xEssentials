@@ -87,4 +87,13 @@ public class BanConfig {
 		Boolean bol = (Boolean) Configuration.getConfigValue(ConfigType.BAN, "showAlternateAccounts");
 		return bol;
 	}
+	
+	/**
+	 * @author xize
+	 * @param returns true if fishbans lookup service is enabled!
+	 * @return Boolean
+	 */
+	public boolean isFishbansEnabled() {
+		return (Boolean) Configuration.getConfigValue(ConfigType.BAN, "fishbans");
+	}
 }

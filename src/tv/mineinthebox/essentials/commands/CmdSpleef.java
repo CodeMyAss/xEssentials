@@ -68,7 +68,7 @@ public class CmdSpleef {
 						if(sender instanceof Player) {
 							xEssentialsPlayer xp  = xEssentials.get(sender.getName()); 
 							if(xEssentials.getPlugin().isPlayerInArea(xp.getPlayer())) {
-								Object obj = xEssentials.getPlugin().getArenaFromPlayer(xp.getPlayer());
+								Minigame obj = xEssentials.getPlugin().getArenaFromPlayer(xp.getPlayer());
 								if(obj instanceof SpleefArena) {
 									SpleefArena arena = (SpleefArena) obj;
 									if(arena.getJoinedCount() == 1) {
@@ -90,7 +90,7 @@ public class CmdSpleef {
 						if(sender instanceof Player) {
 							xEssentialsPlayer xp = xEssentials.get(sender.getName());
 							if(xEssentials.getPlugin().isArena(args[1])) {
-								SpleefArena arena = (SpleefArena) xEssentials.getPlugin().getArena(args[1]);
+								Minigame arena = xEssentials.getPlugin().getArena(args[1]);
 								if(arena instanceof SpleefArena) {
 									if(arena.addPlayer(xp)) {
 										Location loc = arena.getPlayerSpawnPoint(xp.getPlayer());
@@ -137,8 +137,9 @@ public class CmdSpleef {
 							Player p = (Player) sender;
 							Block snow = p.getLocation().getBlock().getRelative(BlockFace.DOWN);
 							if(xEssentials.getPlugin().isArena(args[2])) {
-								SpleefArena arena = (SpleefArena)xEssentials.getPlugin().getArena(args[2]);
-								if(arena instanceof SpleefArena) {
+								Minigame obj = xEssentials.getPlugin().getArena(args[2]);
+								if(obj instanceof SpleefArena) {
+									SpleefArena arena = (SpleefArena) obj;
 									for(Block block : arena.getSnowLayer()) {
 										if(block.getLocation().equals(snow.getLocation())) {
 											arena.setSpawnPoint(p.getLocation());
@@ -158,7 +159,7 @@ public class CmdSpleef {
 						}
 					} else if(args[0].equalsIgnoreCase("sp") && args[1].equalsIgnoreCase("list")) {
 						if(xEssentials.getPlugin().isArena(args[2])) {
-							SpleefArena arena = (SpleefArena) xEssentials.getPlugin().getArena(args[2]);
+							Minigame arena = (Minigame) xEssentials.getPlugin().getArena(args[2]);
 							if(arena instanceof SpleefArena) {
 								StringBuilder build = new StringBuilder();
 								List<Location> list = Arrays.asList(arena.getSpawnPoints());
@@ -184,7 +185,7 @@ public class CmdSpleef {
 						try {
 							int id = Integer.parseInt(args[2]);
 							if(xEssentials.getPlugin().isArena(args[3])) {
-								SpleefArena arena = (SpleefArena) xEssentials.getPlugin().getArena(args[3]);
+								Minigame arena = (Minigame) xEssentials.getPlugin().getArena(args[3]);
 								if(arena instanceof SpleefArena) {
 									try {
 										arena.removeSpawnPoint(id);

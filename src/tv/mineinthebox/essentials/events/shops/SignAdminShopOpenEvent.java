@@ -23,6 +23,7 @@ import tv.mineinthebox.essentials.enums.LogType;
 import tv.mineinthebox.essentials.enums.PermissionKey;
 import tv.mineinthebox.essentials.hook.Hooks;
 import tv.mineinthebox.essentials.hook.VaultHook;
+import tv.mineinthebox.essentials.instances.BackPack;
 import tv.mineinthebox.essentials.instances.xEssentialsPlayer;
 import tv.mineinthebox.essentials.utils.ShopSign;
 
@@ -37,7 +38,7 @@ public class SignAdminShopOpenEvent implements Listener {
 			//buy items
 			if(e.getClickedBlock().getState() instanceof Sign) {
 				Sign sign = (Sign) e.getClickedBlock().getState();
-				if(sign.getLine(0).equalsIgnoreCase(Configuration.getShopConfig().getAdminPrefix())) {
+				if(sign.getLine(0).equalsIgnoreCase(Configuration.getShopConfig().getAdminPrefix()) || sign.getLine(0).equalsIgnoreCase(ChatColor.GOLD + "[backpack]")) {
 					if(e.getPlayer().hasPermission(PermissionKey.SIGN_SHOP_USE.getPermission())) {
 						if(sign.getLine(2).contains("b") || sign.getLine(2).contains("B")) {
 							Double cost = shop.getBuyPrice(sign.getLine(2));
@@ -55,7 +56,7 @@ public class SignAdminShopOpenEvent implements Listener {
 									return;
 								}
 							}
-							Inventory inv = Bukkit.createInventory(e.getPlayer(), 36, sign.getLine(0) + " | buy");
+							Inventory inv = Bukkit.createInventory(null, 36, ChatColor.stripColor(sign.getLine(0)) + " | buy");
 							String[] items = sign.getLine(3).split(":");
 							ItemStack item = new ItemStack(Material.getMaterial(items[0].toUpperCase()), Integer.parseInt(sign.getLine(1)));
 							if(items.length > 1) {
@@ -79,7 +80,7 @@ public class SignAdminShopOpenEvent implements Listener {
 		} else if(e.getAction() == Action.LEFT_CLICK_BLOCK) {
 			if(e.getClickedBlock().getState() instanceof Sign) {
 				Sign sign = (Sign) e.getClickedBlock().getState();
-				if(sign.getLine(0).equalsIgnoreCase(Configuration.getShopConfig().getAdminPrefix())) {
+				if(sign.getLine(0).equalsIgnoreCase(Configuration.getShopConfig().getAdminPrefix()) || sign.getLine(0).equalsIgnoreCase(ChatColor.GOLD + "[backpack]")) {
 					if(e.getPlayer().hasPermission(PermissionKey.SIGN_SHOP_USE.getPermission())) {
 						if(!e.getPlayer().isSneaking()) {
 							if(sign.getLine(2).contains("s") || sign.getLine(2).contains("S")) {
@@ -197,6 +198,57 @@ public class SignAdminShopOpenEvent implements Listener {
 					}
 				}
 				e.setCancelled(true);
+			} else if(e.getInventory().getTitle().equalsIgnoreCase("[backpack]" + " | buy")) {
+				Player p = (Player) e.getWhoClicked();
+				Sign sign = signData.get(p.getName());
+
+				Double cost = shop.getBuyPrice(sign.getLine(2));
+				int amount = Integer.parseInt(sign.getLine(1));
+				String[] itemdata = sign.getLine(3).split(":");
+				Material mat = Material.getMaterial(itemdata[0].toUpperCase());
+				Short subValue;
+				if(itemdata.length > 1) {
+					subValue = Short.parseShort(itemdata[1]);
+				} else {
+					subValue = (short) 0;
+				}
+
+				if(Configuration.getEconomyConfig().isEconomyEnabled()) {
+					xEssentialsPlayer xp = xEssentials.get(p.getName());
+					if(e.getCurrentItem().getType() == mat && e.getCurrentItem().getDurability() == subValue && e.getCurrentItem().getAmount() == amount) {
+						if((xp.getTotalEssentialsMoney()-cost) > -1) {
+							xp.payEssentialsMoney(cost);
+							ItemStack item = e.getCurrentItem().clone();
+							BackPack backpack = new BackPack(item.getType(), item.getDurability(), item.getAmount());
+							p.getInventory().addItem(backpack);
+							p.playSound(p.getLocation(), Sound.VILLAGER_YES, 1F, 1F);
+							p.sendMessage(ChatColor.GREEN + "you have successfully bought " + ChatColor.GRAY + item.getType().name() + "(" + sign.getLine(1) + "x)" + ChatColor.GREEN + " from the " + Configuration.getShopConfig().getAdminPrefix() + "!");
+						} else {
+							p.closeInventory();
+							p.sendMessage(ChatColor.RED + "you don't have enough money to afford this!");
+						}
+					}
+				} else {
+					if(Hooks.isVaultEnabled()) {
+						if(e.getCurrentItem().getType() == mat && e.getCurrentItem().getDurability() == subValue && e.getCurrentItem().getAmount() == amount) {
+							if(VaultHook.hasEnough(p.getName(), cost)) {
+								VaultHook.withdraw(p.getName(), cost);
+								ItemStack item = e.getCurrentItem().clone();
+								p.getInventory().addItem(item);
+								p.playSound(p.getLocation(), Sound.VILLAGER_YES, 1F, 1F);
+								p.sendMessage(ChatColor.GREEN + "you have successfully bought " + ChatColor.GRAY + item.getType().name() + "(" + sign.getLine(1) + "x)" + ChatColor.GREEN + " from the " + Configuration.getShopConfig().getAdminPrefix() + "!");
+							} else {
+								p.closeInventory();
+								p.sendMessage(ChatColor.RED + "you don't have enough money to afford this!");
+							}
+						}
+					} else {
+						xEssentials.getPlugin().log(p.getName() + " tried to buy something, but failed because there whas no Economy plugin found!, is Vault installed?", LogType.SEVERE);
+						p.closeInventory();
+						p.sendMessage(ChatColor.RED + "there is no such economy system enabled on the server!");
+					}
+				}
+				e.setCancelled(true);
 			}
 		}
 	}
@@ -204,6 +256,10 @@ public class SignAdminShopOpenEvent implements Listener {
 	@EventHandler
 	public void onClose(InventoryCloseEvent e) {
 		if(e.getInventory().getTitle().equalsIgnoreCase(Configuration.getShopConfig().getAdminPrefix() + " | buy")) {
+			Player p = (Player) e.getPlayer();
+			p.playSound(p.getPlayer().getLocation(), Sound.VILLAGER_NO, 1F, 1F);
+			signData.remove(e.getPlayer().getName());
+		} else if(e.getInventory().getTitle().equalsIgnoreCase("[backpack]" + " | buy")) {
 			Player p = (Player) e.getPlayer();
 			p.playSound(p.getPlayer().getLocation(), Sound.VILLAGER_NO, 1F, 1F);
 			signData.remove(e.getPlayer().getName());

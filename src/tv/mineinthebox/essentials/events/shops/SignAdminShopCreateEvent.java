@@ -15,10 +15,24 @@ public class SignAdminShopCreateEvent implements Listener {
 	
 	@EventHandler
 	public void onSignCreate(SignChangeEvent e) {
-		if(e.getLine(0).equalsIgnoreCase(Configuration.getShopConfig().getAdminPrefix())) {
+		if(e.getLine(0).equalsIgnoreCase(Configuration.getShopConfig().getAdminPrefix()) || e.getLine(0).equalsIgnoreCase("[backpack]")) {
 			if(e.getPlayer().hasPermission(PermissionKey.IS_ADMIN.getPermission())) {
+				
+				if(e.getLine(0).equalsIgnoreCase("[backpack]")) {
+					e.setLine(0, ChatColor.GOLD + "[backpack]");
+				}
+				
 				int amount = shop.getNumberFromString(e.getLine(1));
-				if(!(amount > 64 || amount == 0)) {
+				if(!(amount > 64 || amount < 0 || amount == 0)) {
+					
+					if(ChatColor.stripColor(e.getLine(0)).equalsIgnoreCase("[backpack]")) {
+						if(amount != 1) {
+							e.getBlock().breakNaturally();
+							e.getPlayer().sendMessage(ChatColor.RED + "you can only set 1 as amount for backpacks only, this is against serious problems.");
+							return;
+						}
+					}
+					
 					if(shop.validateBuyAndSell(e.getLine(2))) {
 						if(shop.isValidMaterial(e.getLine(3))) {
 							e.setLine(3, shop.getItemFromSign(e.getLine(3).toUpperCase()));

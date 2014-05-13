@@ -58,10 +58,10 @@ public class CmdSpleef {
 						for(int i = 0; i < arenas.length; i++) {
 							if(i == arenas.length) {
 								SpleefArena arena = arenas[i];
-								build.append(MinigameType.SPLEEF.getPrefix() + arena.getArenaName());
+								build.append((arena.isActive() ? MinigameType.SPLEEF.getPrefix() + arena.getArenaName() : ChatColor.GRAY + "[not active]" + arena.getArenaName()));
 							} else {
 								SpleefArena arena = arenas[i];
-								build.append(MinigameType.SPLEEF.getPrefix() + arena.getArenaName() + ChatColor.WHITE + ", ");
+								build.append((arena.isActive() ? MinigameType.SPLEEF.getPrefix() + arena.getArenaName() + ChatColor.WHITE + ", " : ChatColor.GRAY + "[not active]" + arena.getArenaName() + ChatColor.WHITE + ", "));
 							}
 						}
 					} else if(args[0].equalsIgnoreCase("quit")) {
@@ -92,13 +92,18 @@ public class CmdSpleef {
 							if(xEssentials.getPlugin().isArena(args[1])) {
 								Minigame arena = xEssentials.getPlugin().getArena(args[1]);
 								if(arena instanceof SpleefArena) {
-									if(arena.addPlayer(xp)) {
-										Location loc = arena.getPlayerSpawnPoint(xp.getPlayer());
-										loc.getWorld().refreshChunk(loc.getChunk().getX(), loc.getChunk().getZ());
-										xp.getPlayer().teleport(loc);
-										sender.sendMessage(ChatColor.GREEN + "you have successfully joined the " + arena.getArenaName() + " arena!");
+									if(arena.isActive()) {
+										if(arena.addPlayer(xp)) {
+											Location loc = arena.getPlayerSpawnPoint(xp.getPlayer());
+											loc.getWorld().refreshChunk(loc.getChunk().getX(), loc.getChunk().getZ());
+											xp.getPlayer().teleport(loc);
+											sender.sendMessage(ChatColor.GREEN + "you have successfully joined the " + arena.getArenaName() + " arena!");
+											
+										} else {
+											sender.sendMessage(ChatColor.RED + "the arena is full!");
+										}
 									} else {
-										sender.sendMessage(ChatColor.RED + "the arena is full!");
+										sender.sendMessage(ChatColor.RED + "this arena is under construction, the spawnpoints aren't set yet.");
 									}
 								}
 							} else {

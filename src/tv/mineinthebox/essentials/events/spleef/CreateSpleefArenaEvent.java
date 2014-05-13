@@ -32,7 +32,7 @@ public class CreateSpleefArenaEvent implements Listener {
 	@EventHandler
 	public void onInteract(PlayerInteractEvent e) {
 		if(e.isCancelled()) {
-			e.setCancelled(true);
+			return;
 		}
 		if(e.getAction() == Action.RIGHT_CLICK_BLOCK) {
 			if(hash.containsKey(e.getPlayer().getName())) {
@@ -69,6 +69,7 @@ public class CreateSpleefArenaEvent implements Listener {
 					firstPos.put(e.getPlayer().getName(), e.getClickedBlock().getLocation());
 					e.getPlayer().sendMessage(ChatColor.GREEN + "you selected " + ChatColor.GRAY + "pos1" + ChatColor.GREEN + " now right click again");
 				}
+				e.setCancelled(true);
 			}
 		}
 	}

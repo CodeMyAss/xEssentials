@@ -234,7 +234,8 @@ public class SignAdminShopOpenEvent implements Listener {
 							if(VaultHook.hasEnough(p.getName(), cost)) {
 								VaultHook.withdraw(p.getName(), cost);
 								ItemStack item = e.getCurrentItem().clone();
-								p.getInventory().addItem(item);
+								BackPack backpack = new BackPack(item.getType(), item.getDurability(), item.getAmount());
+								p.getInventory().addItem(backpack);
 								p.playSound(p.getLocation(), Sound.VILLAGER_YES, 1F, 1F);
 								p.sendMessage(ChatColor.GREEN + "you have successfully bought " + ChatColor.GRAY + item.getType().name() + "(" + sign.getLine(1) + "x)" + ChatColor.GREEN + " from the " + Configuration.getShopConfig().getAdminPrefix() + "!");
 							} else {

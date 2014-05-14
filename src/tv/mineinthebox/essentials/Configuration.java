@@ -58,22 +58,27 @@ public class Configuration {
 	private final static EnumMap<ConfigType, HashMap<String, Object>> configure = new EnumMap<ConfigType, HashMap<String, Object>>(ConfigType.class);
 	private final static EnumMap<MinigameType, HashMap<String, Minigame>> minigames = new EnumMap<MinigameType, HashMap<String, Minigame>>(MinigameType.class);
 
-	public void loadMiniGames() {
-		for(MinigameType type : MinigameType.values()) {
-			File dir = new File(xEssentials.getPlugin().getDataFolder() + File.separator + "minigames" + File.separator + type.name().toLowerCase());
-			if(dir.isDirectory()) {
-				for(File f : dir.listFiles()) {
-					FileConfiguration con = YamlConfiguration.loadConfiguration(f);
-					Minigame game = new Minigame(f, con);
-					HashMap<String, Minigame> hash = new HashMap<String, Minigame>();
-					hash.put(game.getArenaName().toLowerCase(), game);
-					minigames.put(type, hash);
-				}
-			}
-		}
-	}
+	//use these configuration files as a singleton, this prevent smilliar problems for inside the jvm.
+	//one of these problems is that CreatureSpawnEvent runs at every tick, its bad to use this for a factory method
+	//which only returns a new instance of that config instead we only instance it as it isn't,
+	private static BanConfig banconfig;
+	private static BlockConfig blockconfig;
+	private static BroadcastConfig broadcastconfig;
+	private static ChatConfig chatconfig;
+	private static CommandConfig commandconfig;
+	private static EconomyConfig economyconfig;
+	private static EntityConfig entityconfig;
+	private static GreylistConfig greylistconfig;
+	private static KitConfig kitconfig;
+	private static MotdConfig motdconfig;
+	private static PlayerConfig playerconfig;
+	private static PortalConfig portalconfig;
+	private static ProtectionConfig protectionconfig;
+	private static PvpConfig pvpconfig;
+	private static RulesConfig rulesconfig;
+	private static ShopConfig shopconfig;
 
-	private static List<String> materials = new ArrayList<String>();
+
 
 	/**
 	 * 
@@ -917,6 +922,23 @@ public class Configuration {
 		return worlds.toArray(new String[worlds.size()]);
 	}
 
+	public void loadMiniGames() {
+		for(MinigameType type : MinigameType.values()) {
+			File dir = new File(xEssentials.getPlugin().getDataFolder() + File.separator + "minigames" + File.separator + type.name().toLowerCase());
+			if(dir.isDirectory()) {
+				for(File f : dir.listFiles()) {
+					FileConfiguration con = YamlConfiguration.loadConfiguration(f);
+					Minigame game = new Minigame(f, con);
+					HashMap<String, Minigame> hash = new HashMap<String, Minigame>();
+					hash.put(game.getArenaName().toLowerCase(), game);
+					minigames.put(type, hash);
+				}
+			}
+		}
+	}
+
+	private static List<String> materials = new ArrayList<String>();
+
 	/**
 	 * @author xize
 	 * @param type
@@ -944,8 +966,12 @@ public class Configuration {
 	 * @return ProtectionConfig
 	 */
 	public static ProtectionConfig getProtectionConfig() {
-		ProtectionConfig config = new ProtectionConfig();
-		return config;
+		if(protectionconfig instanceof ProtectionConfig) {
+			return protectionconfig;
+		} else {
+			protectionconfig = new ProtectionConfig();
+			return protectionconfig;
+		}
 	}
 
 	/**
@@ -954,8 +980,12 @@ public class Configuration {
 	 * @return BanConfig
 	 */
 	public static BanConfig getBanConfig() {
-		BanConfig config = new BanConfig();
-		return config;
+		if(banconfig instanceof BanConfig) {
+			return banconfig;
+		} else {
+			banconfig = new BanConfig();
+			return banconfig;
+		}
 	}
 
 	/**
@@ -964,8 +994,12 @@ public class Configuration {
 	 * @return GreylistConfig
 	 */
 	public static GreylistConfig getGrayListConfig() {
-		GreylistConfig grey = new GreylistConfig();
-		return grey;
+		if(greylistconfig instanceof GreylistConfig) {
+			return greylistconfig;
+		} else {
+			greylistconfig = new GreylistConfig();
+			return greylistconfig;
+		}
 	}
 
 	/**
@@ -974,8 +1008,12 @@ public class Configuration {
 	 * @return EconomyConfig
 	 */
 	public static EconomyConfig getEconomyConfig() {
-		EconomyConfig econ = new EconomyConfig();
-		return econ;
+		if(economyconfig instanceof EconomyConfig) {
+			return economyconfig;
+		} else {
+			economyconfig = new EconomyConfig();
+			return economyconfig;
+		}
 	}
 
 	/**
@@ -984,8 +1022,12 @@ public class Configuration {
 	 * @return BlockConfig
 	 */
 	public static BlockConfig getBlockConfig() {
-		BlockConfig config = new BlockConfig();
-		return config;
+		if(blockconfig instanceof BlockConfig) {
+			return blockconfig;
+		} else {
+			blockconfig = new BlockConfig();
+			return blockconfig;
+		}
 	}
 
 	/**
@@ -994,8 +1036,12 @@ public class Configuration {
 	 * @return BroadcastConfig
 	 */
 	public static BroadcastConfig getBroadcastConfig() {
-		BroadcastConfig config = new BroadcastConfig();
-		return config;
+		if(broadcastconfig instanceof BroadcastConfig) {
+			return broadcastconfig;
+		} else {
+			broadcastconfig = new BroadcastConfig();
+			return broadcastconfig;
+		}
 	}
 
 	/**
@@ -1004,8 +1050,12 @@ public class Configuration {
 	 * @return CommandConfig
 	 */
 	public static CommandConfig getCommandConfig() {
-		CommandConfig config = new CommandConfig();
-		return config;
+		if(commandconfig instanceof CommandConfig) {
+			return commandconfig;
+		} else {
+			commandconfig = new CommandConfig();
+			return commandconfig;
+		}
 	}
 
 	/**
@@ -1014,8 +1064,12 @@ public class Configuration {
 	 * @return KitConfig
 	 */
 	public static KitConfig getKitConfig() {
-		KitConfig config = new KitConfig();
-		return config;
+		if(kitconfig instanceof KitConfig) {
+			return kitconfig;
+		} else {
+			kitconfig = new KitConfig();
+			return kitconfig;
+		}
 	}
 
 	/**
@@ -1024,8 +1078,12 @@ public class Configuration {
 	 * @return ChatConfig
 	 */
 	public static ChatConfig getChatConfig() {
-		ChatConfig config = new ChatConfig();
-		return config;
+		if(chatconfig instanceof ChatConfig) {
+			return chatconfig;
+		} else {
+			chatconfig = new ChatConfig();
+			return chatconfig;
+		}
 	}
 
 	/**
@@ -1034,8 +1092,12 @@ public class Configuration {
 	 * @return ShopConfig
 	 */
 	public static ShopConfig getShopConfig() {
-		ShopConfig shop = new ShopConfig();
-		return shop;
+		if(shopconfig instanceof ShopConfig) {
+			return shopconfig;
+		} else {
+			shopconfig = new ShopConfig();
+			return shopconfig;
+		}
 	}
 
 	/**
@@ -1044,8 +1106,12 @@ public class Configuration {
 	 * @return enityConfig
 	 */
 	public static EntityConfig getEntityConfig() {
-		EntityConfig config = new EntityConfig();
-		return config;
+		if(entityconfig instanceof EntityConfig) {
+			return entityconfig;
+		} else {
+			entityconfig = new EntityConfig();
+			return entityconfig;
+		}
 	}
 
 	/**
@@ -1054,8 +1120,12 @@ public class Configuration {
 	 * @return motdConfig
 	 */
 	public static MotdConfig getMotdConfig() {
-		MotdConfig config = new MotdConfig();
-		return config;
+		if(motdconfig instanceof MotdConfig) {
+			return motdconfig;
+		} else {
+			motdconfig = new MotdConfig();
+			return motdconfig;
+		}
 	}
 
 	/**
@@ -1064,8 +1134,12 @@ public class Configuration {
 	 * @return playerConfig
 	 */
 	public static PlayerConfig getPlayerConfig() {
-		PlayerConfig config = new PlayerConfig();
-		return config;
+		if(playerconfig instanceof PlayerConfig) {
+			return playerconfig;
+		} else {
+			playerconfig = new PlayerConfig();
+			return playerconfig;
+		}
 	}
 
 	/**
@@ -1074,8 +1148,12 @@ public class Configuration {
 	 * @return pvpConfig
 	 */
 	public static PvpConfig getPvpConfig() {
-		PvpConfig config = new PvpConfig();
-		return config;
+		if(pvpconfig instanceof PvpConfig) {
+			return pvpconfig;
+		} else {
+			pvpconfig = new PvpConfig();
+			return pvpconfig;
+		}
 	}
 
 	/**
@@ -1084,8 +1162,12 @@ public class Configuration {
 	 * @return PortalConfig
 	 */
 	public static PortalConfig getPortalConfig() {
-		PortalConfig config = new PortalConfig();
-		return config;
+		if(portalconfig instanceof PortalConfig) {
+			return portalconfig;
+		} else {
+			portalconfig = new PortalConfig();
+			return portalconfig;
+		}
 	}
 
 	/**
@@ -1094,8 +1176,12 @@ public class Configuration {
 	 * @return rulesConfig
 	 */
 	public static RulesConfig getRulesConfig() {
-		RulesConfig config = new RulesConfig();
-		return config;
+		if(rulesconfig instanceof RulesConfig) {
+			return rulesconfig;
+		} else {
+			rulesconfig = new RulesConfig();
+			return rulesconfig;
+		}
 	}
 
 	public static boolean isSilenceToggled = false;

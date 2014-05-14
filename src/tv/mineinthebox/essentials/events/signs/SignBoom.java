@@ -15,18 +15,20 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerKickEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
+
 import tv.mineinthebox.essentials.xEssentials;
 import tv.mineinthebox.essentials.enums.PermissionKey;
-import tv.mineinthebox.essentials.events.customEvents.EssentialsPlayerMoveEvent;
 import tv.mineinthebox.essentials.instances.xEssentialsPlayer;
 
 public class SignBoom implements Listener {
 
 	@EventHandler
-	public void m(EssentialsPlayerMoveEvent e) {
-		if(e.getPlayer().isBoom()) {
+	public void m(PlayerMoveEvent e) {
+		xEssentialsPlayer xp = xEssentials.get(e.getPlayer().getName());
+		if(xp.isBoom()) {
 			if(e.getPlayer().getPlayer().getLocation().getBlock().getRelative(BlockFace.SELF).getType() == Material.WEB) {
-				e.getPlayer().removeBoom();
+				xp.removeBoom();
 			} else {
 				e.getPlayer().getPlayer().getWorld().createExplosion(e.getPlayer().getPlayer().getLocation(), 0.0F, false);
 			}

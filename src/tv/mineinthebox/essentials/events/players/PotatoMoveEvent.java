@@ -11,22 +11,23 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerKickEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
 import tv.mineinthebox.essentials.xEssentials;
-import tv.mineinthebox.essentials.events.customEvents.EssentialsPlayerMoveEvent;
 import tv.mineinthebox.essentials.instances.xEssentialsPlayer;
 
 public class PotatoMoveEvent implements Listener {
 
 	@EventHandler
-	public void onPotatoMove(EssentialsPlayerMoveEvent e) {
-		if(e.getPlayer().isPotato()) {
+	public void onPotatoMove(PlayerMoveEvent e) {
+		xEssentialsPlayer xp = xEssentials.get(e.getPlayer().getName());
+		if(xp.isPotato()) {
 			if(e.getFrom().distanceSquared(e.getTo()) > 0) {
-				Item item = e.getPlayer().getPotato();
+				Item item = xp.getPotato();
 				Vector direction = e.getTo().toVector().subtract(item.getLocation().toVector()).normalize();
 				item.setVelocity(direction.multiply(0.5));
 			}

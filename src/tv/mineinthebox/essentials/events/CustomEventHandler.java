@@ -8,7 +8,6 @@ import tv.mineinthebox.essentials.xEssentials;
 import tv.mineinthebox.essentials.events.customEvents.CallAfkSchedulerEvent;
 import tv.mineinthebox.essentials.events.customEvents.CallChunkMoveEvent;
 import tv.mineinthebox.essentials.events.customEvents.CallEssentialsBroadcastEvent;
-import tv.mineinthebox.essentials.events.customEvents.CallEssentialsPlayerMoveEvent;
 import tv.mineinthebox.essentials.events.customEvents.CallMojangStatus;
 import tv.mineinthebox.essentials.events.customEvents.CallPlayerChatSmilleyEvent;
 import tv.mineinthebox.essentials.events.customEvents.CallPlayerHighLightEvent;
@@ -20,7 +19,6 @@ public class CustomEventHandler {
 	public void startCustomEvents() {
 		//this will loadup our custom movement for players
 		setListener(new CallChunkMoveEvent());
-		setListener(new CallEssentialsPlayerMoveEvent());
 		setListener(new CallPlayerOpenBookEvent());
 		CallAfkSchedulerEvent scheduler = new CallAfkSchedulerEvent();
 		setListener(scheduler);

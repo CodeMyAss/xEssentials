@@ -16,7 +16,7 @@ import tv.mineinthebox.essentials.instances.xEssentialsPlayer;
 
 public class CallAfkSchedulerEvent implements Listener {
 
-	private transient HashMap<String, Location> PlayerLocations = new HashMap<String, Location>();
+	private HashMap<String, Location> PlayerLocations = new HashMap<String, Location>();
 
 	public void onStartAfkScheduler() {
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(xEssentials.getPlugin(), new Runnable() {

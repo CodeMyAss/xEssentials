@@ -322,7 +322,7 @@ public class xEssentials extends JavaPlugin {
 	public static void reloadPlayerBase() {
 		players.clear();
 		for(Player p : Bukkit.getOnlinePlayers()) {
-			xEssentialsPlayer xp = new xEssentialsPlayer(p, xEssentials.getOfflinePlayer(p.getName()).getUniqueId());
+			xEssentialsPlayer xp = new xEssentialsPlayer(p, xEssentials.getOfflinePlayer(p.getName()).getUniqueId().replaceAll("-", ""));
 			players.put(p.getName().toLowerCase(), xp);
 		}
 	}

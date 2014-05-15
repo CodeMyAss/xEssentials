@@ -65,7 +65,6 @@ public class BackPack extends ItemStack {
 					String uuid = (uid.substring(0, 8) + "-" + uid.substring(8, 12) + "-" + uid.substring(12, 16) + "-" + uid.substring(16, 20) + "-" +uid.substring(20, 32));
 					this.f = new File(xEssentials.getPlugin().getDataFolder() + File.separator + "backpacks" + File.separator + uuid + ".yml");
 					this.con = YamlConfiguration.loadConfiguration(f);
-					
 					int stacksize = getFixedSize();
 					ItemMeta meta = super.getItemMeta();
 					List<String> lores = new ArrayList<String>(meta.getLore());
@@ -73,7 +72,6 @@ public class BackPack extends ItemStack {
 					lores.add("amount: " + stacksize);
 					meta.setLore(lores);
 					super.setItemMeta(meta);
-					System.out.print("lore: " + lores.get(6));
 					return;
 			}
 		}

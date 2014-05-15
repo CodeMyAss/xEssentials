@@ -40,10 +40,10 @@ public class MojangUUID {
 	 */
 	public String getUniqueId() throws Exception {
 		if(isVersionSupported()) {
-			return p.getUniqueId().toString().replace("-", "");
+			return p.getUniqueId().toString().replaceAll("-", "");
 		} else {
 			Callable<UUID> getUUID = new CompatUUID(p);
-			return getUUID.call().toString().replace("-", "");
+			return getUUID.call().toString().replaceAll("-", "");
 		}
 	}
 }

@@ -13,7 +13,6 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.WorldCreator;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.FileConfigurationOptions;
@@ -167,7 +166,7 @@ public class Configuration {
 							World w = Bukkit.getWorld(key);
 							if(!(w instanceof World)) {
 								xEssentials.getPlugin().log("Loading world " + key, LogType.INFO);
-								Bukkit.createWorld(new WorldCreator(key));
+								//Bukkit.createWorld(new WorldCreator(key));
 								xEssentials.getPlugin().log("successfully loaded world " + key, LogType.INFO);
 							} else {
 								xEssentials.getPlugin().log(key + " whas already loaded, probably default world? " + key, LogType.INFO);

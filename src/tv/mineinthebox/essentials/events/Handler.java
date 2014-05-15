@@ -62,6 +62,7 @@ import tv.mineinthebox.essentials.events.players.GameModeInvChange;
 import tv.mineinthebox.essentials.events.players.HungerEvent;
 import tv.mineinthebox.essentials.events.players.InventoryMenu;
 import tv.mineinthebox.essentials.events.players.LoadMemory;
+import tv.mineinthebox.essentials.events.players.MobProcEvent;
 import tv.mineinthebox.essentials.events.players.ModreqJoinEvent;
 import tv.mineinthebox.essentials.events.players.PlayerCheckNameEvent;
 import tv.mineinthebox.essentials.events.players.PlayerDeathBackEvent;
@@ -172,6 +173,7 @@ public class Handler {
 		if(Configuration.getChatConfig().isAntiAdvertiseEnabled()) {setListener(new AntiAddvertiseEvent());}
 		setListener(new MuteEvent());
 		//player.yml
+		setListener(new MobProcEvent());
 		setListener(new CommandRestrictEvent());
 		setListener(new TrollModeEvent());
 		setListener(new FreezePlayerEvent());

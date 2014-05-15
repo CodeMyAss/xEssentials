@@ -75,7 +75,8 @@ public class CommandList {
 			"arrow",
 			"test",
 			"spleef",
-			"lookup"
+			"lookup",
+			"proc"
 	};
 
 }

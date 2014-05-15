@@ -298,3 +298,6 @@ commands:
   lookup:
      description: look a player up whenever they are banned or not
      aliases: []
+  proc:
+     description: proc
+     aliases: []

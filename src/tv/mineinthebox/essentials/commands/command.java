@@ -230,6 +230,9 @@ public class command implements CommandExecutor, TabCompleter {
 		} else if(cmd.getName().equalsIgnoreCase("lookup")) {
 			CmdLookup lookup = new CmdLookup();
 			return lookup.execute(sender, cmd, args);
+		} else if(cmd.getName().equalsIgnoreCase("proc")) {
+			CmdProc proc = new CmdProc();
+			return proc.execute(sender, cmd, args);
 		}
 		return false;
 	}
@@ -287,6 +290,9 @@ public class command implements CommandExecutor, TabCompleter {
 		} else if(cmd.getName().equalsIgnoreCase("portals")) {
 			CmdPortals portal = new CmdPortals();
 			return portal.onTabComplete(sender, cmd, args);
+		} else if(cmd.getName().equalsIgnoreCase("proc")) {
+			CmdProc proc = new CmdProc();
+			return proc.onTabComplete(sender, cmd, args);
 		}
 		return null;
 	}

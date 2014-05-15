@@ -1501,6 +1501,33 @@ public class xEssentialsOfflinePlayer {
 		}
 		return false;
 	}
+	
+	/**
+	 * @author xize
+	 * @param bol - when the boolean is true enable procs, else disable procs
+	 */
+	public void setProc(boolean bol) {
+		con.set("proc.enable", bol);
+		try {
+			con.save(f);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		update();
+	}
+	
+	/**
+	 * @author xize
+	 * @param return true when the player has procs
+	 * @return Boolean
+	 */
+	public boolean hasProc() {
+		if(con.contains("proc.enable")) {
+			return con.getBoolean("proc.enable");
+		}
+		return false;
+	}
 
 
 	/**

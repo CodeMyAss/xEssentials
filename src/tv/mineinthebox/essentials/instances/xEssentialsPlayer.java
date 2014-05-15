@@ -2316,6 +2316,33 @@ public class xEssentialsPlayer {
 	
 	/**
 	 * @author xize
+	 * @param bol - when the boolean is true enable procs, else disable procs
+	 */
+	public void setProc(boolean bol) {
+		con.set("proc.enable", bol);
+		try {
+			con.save(f);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		update();
+	}
+	
+	/**
+	 * @author xize
+	 * @param return true when the player has procs
+	 * @return Boolean
+	 */
+	public boolean hasProc() {
+		if(con.contains("proc.enable")) {
+			return con.getBoolean("proc.enable");
+		}
+		return false;
+	}
+	
+	/**
+	 * @author xize
 	 * @param gets updated at every call so we know that the configuration stored in the memory is still recent with the flat saved file!
 	 * @return void
 	 */

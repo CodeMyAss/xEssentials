@@ -92,7 +92,6 @@ import tv.mineinthebox.essentials.events.protection.BlockProtectedEvent;
 import tv.mineinthebox.essentials.events.protection.ChestProtectedEvent;
 import tv.mineinthebox.essentials.events.protection.DispenserProtectionEvent;
 import tv.mineinthebox.essentials.events.protection.FurnaceProtectedEvent;
-import tv.mineinthebox.essentials.events.protection.HopperEvent;
 import tv.mineinthebox.essentials.events.protection.JukeboxProtectedEvent;
 import tv.mineinthebox.essentials.events.protection.ModifyProtectionEvent;
 import tv.mineinthebox.essentials.events.protection.RegisterProtectionEvent;
@@ -250,7 +249,7 @@ public class Handler {
 			setListener(new UnregisterProtectionEvent());
 			setListener(new RegisterProtectionEvent());
 			setListener(new ModifyProtectionEvent());
-			setListener(new HopperEvent());
+			//setListener(new HopperEvent());
 			setListener(new BlockProtectedEvent());
 			if(Configuration.getProtectionConfig().isSignProtectionEnabled()) {setListener(new SignProtectedEvent());}
 			if(Configuration.getProtectionConfig().isChestProtectionEnabled()) {setListener(new ChestProtectedEvent());}

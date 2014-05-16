@@ -98,6 +98,17 @@ public class PlayerChatSmilleyEvent extends PlayerEvent implements Cancellable {
 		}
 		return ""+ChatColor.WHITE;	
 	}
+	
+	@SuppressWarnings("unused")
+	private String getFirstColor(String s) {
+		char code = s.toCharArray()[0];
+		char color = s.toCharArray()[1];
+		if(Character.isDigit(color) && code == ChatColor.COLOR_CHAR) {
+			return Character.toString(code)+Character.toString(color);
+		} else {
+			return ChatColor.RESET+"";
+		}
+	}
 
 	@Override
 	public boolean isCancelled() {

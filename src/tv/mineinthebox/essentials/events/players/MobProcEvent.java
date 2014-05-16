@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
@@ -53,6 +54,11 @@ public class MobProcEvent implements Listener, Runnable {
 		if(e.getEntity() instanceof Monster) {
 			if(e.getEntity().getKiller() instanceof Player) {
 				Player p = (Player) e.getEntity().getKiller();
+				if(p.getItemInHand() != null) {
+					if(p.getItemInHand().getType() == Material.BOW) {
+						return;
+					}
+				}
 				xEssentialsPlayer xp = xEssentials.get(p.getName());
 				if(xp.hasProc()) {
 					Random rand = new Random();

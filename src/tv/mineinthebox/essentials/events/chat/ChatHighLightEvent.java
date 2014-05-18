@@ -33,7 +33,11 @@ public class ChatHighLightEvent implements Listener {
 						e.setMessage(e.getMessage().replaceAll(name, e.getHashTag()+name+e.getSuffix()));	
 					}
 				} else {
-					e.setMessage(e.getMessage().replaceAll(name, ChatColor.GRAY+"[offline]"+e.getHashTag()+name+e.getSuffix()));
+					if(name.startsWith("town-")) {
+						e.setMessage(e.getMessage().replaceAll(name, ChatColor.DARK_GREEN+"[Town]"+e.getHashTag()+name+e.getSuffix()));
+					} else {
+						e.setMessage(e.getMessage().replaceAll(name, ChatColor.GRAY+"[offline]"+e.getHashTag()+name+e.getSuffix()));	
+					}
 				}
 			}
 		}

@@ -88,14 +88,6 @@
 			<url>http://nexus.theyeticave.net/content/repositories/pub_releases</url>
 		</repository>
 		<repository>
-			<id>bPermissions-Repo</id>
-			<url>http://dev.drdanick.com/repo/content/groups/public</url>
-		</repository>
-		<repository>
-			<id>permissionsEx</id>
-			<url>https://github.com/PEXPlugins/PermissionsEx</url>
-		</repository>
-		<repository>
 			<id>comphenix-repo</id>
 			<url>http://repo.comphenix.net/content/groups/public</url>
 		</repository>
@@ -109,11 +101,6 @@
 			<dependency>
 			<groupId>org.bukkit</groupId>
 			<artifactId>craftbukkit</artifactId>
-			<version>LATEST</version>
-		</dependency>
-		<dependency>
-			<groupId>de.bananaco</groupId>
-			<artifactId>bPermissions</artifactId>
 			<version>LATEST</version>
 		</dependency>
 		<dependency>
@@ -132,19 +119,6 @@
 			<version>LATEST</version>
 		</dependency>
 		<dependency>
-			<groupId>com.earth2me</groupId>
-			<artifactId>GroupManager</artifactId>
-			<version>2.11.1</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/repo/EssentialsGroupManager.jar</systemPath>
-		</dependency>
-
-		<dependency>
-			<groupId>net.milkbowl.vault</groupId>
-			<artifactId>Vault</artifactId>
-			<version>LATEST</version>
-		</dependency>
-		<dependency>
 			<groupId>com.googlecode.json-simple</groupId>
 			<artifactId>json-simple</artifactId>
 			<version>LATEST</version>
@@ -155,13 +129,6 @@
 			<scope>system</scope>
 			<systemPath>${project.basedir}/repo/ManCo.jar</systemPath>
 			<version>0.0.8-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>PermissionsEx</groupId>
-			<artifactId>PermissionsEx</artifactId>
-			<version>2.11.1</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/repo/PermissionsEx.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.jetty</groupId>
@@ -177,6 +144,11 @@
 			<groupId>org.eclipse.jetty.orbit</groupId>
 			<artifactId>javax.servlet</artifactId>
 			<version>3.0.0.v201112011016</version>
+		</dependency>
+		<dependency>
+			<groupId>net.milkbowl.vault</groupId>
+			<artifactId>Vault</artifactId>
+			<version>1.2.30</version>
 		</dependency>
 	</dependencies>
 	<scm>

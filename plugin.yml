@@ -8,7 +8,7 @@ website:
 main: tv.mineinthebox.essentials.xEssentials
 database: false
 depend: []
-softdepend: [bPermissions, GroupManager, ManCo, PermissionsEx, Vault, WorldEdit, WorldGuard]
+softdepend: [ManCo, Vault, WorldEdit, WorldGuard, Towny]
 
 commands:
   home:

@@ -112,6 +112,24 @@ public class xEssentialsPlayer {
 		}
 		update();
 	}
+	
+	public xEssentialsPlayer(String fake) {
+		this.f = new File(xEssentials.getPlugin().getDataFolder() + File.separator + "players" + File.separator + fake + ".yml");
+		if(!this.f.exists()) {
+			this.con = YamlConfiguration.loadConfiguration(this.f);
+			this.con.set("isDefault", true);
+			this.con.set("ip", player.getAddress().getAddress().getHostAddress());
+			this.con.set("user", player.getName());
+			this.con.set("fly", false);
+			this.con.set("torch", false);
+			this.con.set("firefly", false);
+			this.con.set("uuid", player.getUniqueId().toString());
+			if(Configuration.getEconomyConfig().isEconomyEnabled()){
+				this.con.set("money", Configuration.getEconomyConfig().getStartersMoney());
+			}
+			update();
+		}
+	}
 
 	/**
 	 * @author xize

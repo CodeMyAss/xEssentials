@@ -29,6 +29,9 @@ import tv.mineinthebox.essentials.events.customEvents.CallEssentialsBroadcastEve
 import tv.mineinthebox.essentials.events.customEvents.CallRssFeedEvent;
 import tv.mineinthebox.essentials.events.players.RealisticGlass;
 import tv.mineinthebox.essentials.greylist.GreyListServer;
+import tv.mineinthebox.essentials.hook.Hooks;
+import tv.mineinthebox.essentials.hook.VaultHook;
+import tv.mineinthebox.essentials.instances.Bank;
 import tv.mineinthebox.essentials.instances.SpleefArena;
 import tv.mineinthebox.essentials.instances.Warp;
 import tv.mineinthebox.essentials.instances.xEssentialsOfflinePlayer;
@@ -46,8 +49,9 @@ public class xEssentials extends JavaPlugin {
 	private final CustomEventHandler customhandler = new CustomEventHandler();
 	private final CommandList cmdlist = new CommandList();
 	private final RealisticGlass glass = new RealisticGlass();
-	public static GreyListServer server = null;
-	public static ProtectionDB protectiondb = null;
+	private static GreyListServer server = null;
+	private static ProtectionDB protectiondb = null;
+	private static VaultHook vault = null;
 
 	public void onEnable() {
 		pl = this;
@@ -73,6 +77,13 @@ public class xEssentials extends JavaPlugin {
 		server = new GreyListServer(Configuration.getGrayListConfig().getPort());
 		if(Configuration.getGrayListConfig().isEnabled()) {
 			server.createServer();
+		}
+
+		if(Hooks.isVaultEnabled()) {
+			vault = new VaultHook();
+			if(Configuration.getEconomyConfig().isEconomyEnabled()) {
+				vault.hookEconomyInVault();
+			}
 		}
 	}
 
@@ -462,6 +473,14 @@ public class xEssentials extends JavaPlugin {
 		return protectiondb;
 	}
 
+	/**
+	 * @author xize
+	 * @param sets the database
+	 */
+	public static void setProtectionDatabase(ProtectionDB db) {
+		protectiondb = db;
+	}
+
 
 	/**
 	 * @author xize
@@ -476,7 +495,7 @@ public class xEssentials extends JavaPlugin {
 			if(a.getType() == type) {
 				HashMap<String, Minigame> arena = new HashMap<String, Minigame>();
 				hash.put(type, arena);
-				
+
 				return true;
 			}
 		}
@@ -592,5 +611,86 @@ public class xEssentials extends JavaPlugin {
 	 */
 	private EnumMap<MinigameType, HashMap<String, Minigame>> getMinigameMap() {
 		return Configuration.getMinigameMap();
+	}
+
+	/**
+	 * @author xize
+	 * @param returns the GreyListServer
+	 * @return GreyListServer
+	 */
+	public static GreyListServer getGreyListServer() {
+		return server;
+	}
+
+	/**
+	 * @author xize
+	 * @param returns the vault hook
+	 * @return VaultHook
+	 * @throws NullPointerException - if Vault is not installed.
+	 */
+	public static VaultHook getVault() {
+		if(Hooks.isVaultEnabled()) {
+			return vault;
+		}
+		throw new NullPointerException("Vault is not installed!, please update vault if possible!");
+	}
+	
+	/**
+	 * @author xize
+	 * @param bank - the bank account
+	 * @param p - the player
+	 */
+	public static void createBank(String bank, String playername) {
+		try {
+			File f = new File(xEssentials.getPlugin().getDataFolder() + File.separator + "banks" + File.separator + bank.toLowerCase() + ".yml");
+			if(!f.exists()) {
+				FileConfiguration con = YamlConfiguration.loadConfiguration(f);
+				con.set("bank.owner", playername);
+				con.set("bank.name", bank);
+				con.set("bank.amount", 0.0);
+				con.save(f);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * @author xize
+	 * @param returns true whenever the bank account is found!
+	 * @param name - the banks name
+	 * @return Boolean
+	 */
+	public static boolean isBank(String name) {
+		File f = new File(xEssentials.getPlugin().getDataFolder() + File.separator + "banks" + File.separator + name.toLowerCase() + ".yml");
+		return f.exists();
+	}
+	
+	/**
+	 * @author xize
+	 * @param returns the Bank object.
+	 * @param name - the banks account
+	 * @return Bank
+	 * @throws NullPointerException - when the name doesn't exist
+	 */
+	public static Bank getBank(String name) {
+		if(isBank(name)) {
+			File f = new File(xEssentials.getPlugin().getDataFolder() + File.separator + "banks" + File.separator + name.toLowerCase()+".yml");
+			FileConfiguration con = YamlConfiguration.loadConfiguration(f);
+			Bank bank = new Bank(f, con);
+			return bank;
+		}
+		throw new NullPointerException("bank does not exist with that name!");
+	}
+	
+	/**
+	 * @author xize
+	 * @param bank - the bank name
+	 */
+	public static void deleteBank(String bank) {
+		File f = new File(xEssentials.getPlugin().getDataFolder() + File.separator + "banks" + File.separator + bank.toLowerCase()+".yml");
+		if(f.exists()) {
+			f.delete();
+		}
 	}
 }

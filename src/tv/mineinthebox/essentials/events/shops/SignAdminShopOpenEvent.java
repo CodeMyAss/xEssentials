@@ -22,7 +22,6 @@ import tv.mineinthebox.essentials.xEssentials;
 import tv.mineinthebox.essentials.enums.LogType;
 import tv.mineinthebox.essentials.enums.PermissionKey;
 import tv.mineinthebox.essentials.hook.Hooks;
-import tv.mineinthebox.essentials.hook.VaultHook;
 import tv.mineinthebox.essentials.instances.BackPack;
 import tv.mineinthebox.essentials.instances.xEssentialsPlayer;
 import tv.mineinthebox.essentials.utils.ShopSign;
@@ -50,7 +49,7 @@ public class SignAdminShopOpenEvent implements Listener {
 									return;
 								}
 							} else if(Hooks.isVaultEnabled()) {
-								if(!VaultHook.hasEnough(e.getPlayer().getName(), cost)) {
+								if(!xEssentials.getVault().hasEnough(e.getPlayer().getName(), cost)) {
 									e.getPlayer().sendMessage(ChatColor.RED + "you cannot afford this!");
 									e.setCancelled(true);
 									return;
@@ -111,7 +110,7 @@ public class SignAdminShopOpenEvent implements Listener {
 												}
 											} else {
 												if(Hooks.isVaultEnabled()) {
-													VaultHook.desposit(e.getPlayer(), money);
+													xEssentials.getVault().desposit(e.getPlayer(), money);
 													e.getPlayer().sendMessage(ChatColor.GREEN + "you have successfully sold your item to the shop!");
 													if(e.getItem().getAmount() == amount) {
 														e.getPlayer().getInventory().setItemInHand(null);
@@ -180,8 +179,8 @@ public class SignAdminShopOpenEvent implements Listener {
 				} else {
 					if(Hooks.isVaultEnabled()) {
 						if(e.getCurrentItem().getType() == mat && e.getCurrentItem().getDurability() == subValue && e.getCurrentItem().getAmount() == amount) {
-							if(VaultHook.hasEnough(p.getName(), cost)) {
-								VaultHook.withdraw(p.getName(), cost);
+							if(xEssentials.getVault().hasEnough(p.getName(), cost)) {
+								xEssentials.getVault().withdraw(p.getName(), cost);
 								ItemStack item = e.getCurrentItem().clone();
 								p.getInventory().addItem(item);
 								p.playSound(p.getLocation(), Sound.VILLAGER_YES, 1F, 1F);
@@ -231,8 +230,8 @@ public class SignAdminShopOpenEvent implements Listener {
 				} else {
 					if(Hooks.isVaultEnabled()) {
 						if(e.getCurrentItem().getType() == mat && e.getCurrentItem().getDurability() == subValue && e.getCurrentItem().getAmount() == amount) {
-							if(VaultHook.hasEnough(p.getName(), cost)) {
-								VaultHook.withdraw(p.getName(), cost);
+							if(xEssentials.getVault().hasEnough(p.getName(), cost)) {
+								xEssentials.getVault().withdraw(p.getName(), cost);
 								ItemStack item = e.getCurrentItem().clone();
 								BackPack backpack = new BackPack(item.getType(), item.getDurability(), item.getAmount());
 								p.getInventory().addItem(backpack);

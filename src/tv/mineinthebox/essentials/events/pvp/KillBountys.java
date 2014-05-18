@@ -7,8 +7,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 
 import tv.mineinthebox.essentials.Configuration;
+import tv.mineinthebox.essentials.xEssentials;
 import tv.mineinthebox.essentials.hook.Hooks;
-import tv.mineinthebox.essentials.hook.VaultHook;
 
 public class KillBountys implements Listener {
 	
@@ -17,7 +17,7 @@ public class KillBountys implements Listener {
 		if(e.getEntity().getKiller() instanceof Player) {
 			Player p = (Player) e.getEntity().getKiller();
 			if(Hooks.isVaultEnabled()) {
-				VaultHook.desposit(p, Configuration.getPvpConfig().getKillBountyPrice());
+				xEssentials.getVault().desposit(p, Configuration.getPvpConfig().getKillBountyPrice());
 				p.sendMessage(ChatColor.GOLD + "you earned " + Configuration.getPvpConfig().getKillBountyPrice() + "$! by killing " + ChatColor.GREEN + e.getEntity().getType().name().toLowerCase().replace("_", " "));
 			}
 		}

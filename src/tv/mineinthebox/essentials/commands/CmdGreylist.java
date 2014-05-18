@@ -9,13 +9,10 @@ import tv.mineinthebox.essentials.Configuration;
 import tv.mineinthebox.essentials.Warnings;
 import tv.mineinthebox.essentials.xEssentials;
 import tv.mineinthebox.essentials.enums.GreyListCause;
-import tv.mineinthebox.essentials.enums.HookEnum;
 import tv.mineinthebox.essentials.enums.PermissionKey;
 import tv.mineinthebox.essentials.events.customEvents.OfflinePlayerGreyListedEvent;
 import tv.mineinthebox.essentials.events.customEvents.PlayerGreyListedEvent;
-import tv.mineinthebox.essentials.hook.BPermissionsHook;
-import tv.mineinthebox.essentials.hook.GroupManagerHook;
-import tv.mineinthebox.essentials.hook.PermissionsExHook;
+import tv.mineinthebox.essentials.hook.Hooks;
 import tv.mineinthebox.essentials.instances.xEssentialsOfflinePlayer;
 import tv.mineinthebox.essentials.instances.xEssentialsPlayer;
 public class CmdGreylist {
@@ -59,41 +56,27 @@ public class CmdGreylist {
 							if(xEssentials.contains(args[1])) {
 								xEssentialsPlayer xp = xEssentials.get(args[1]);
 								xp.setGreyListed(true);
-								if(Bukkit.getPluginManager().isPluginEnabled("bPermissions")) {
-									String oldGroup = BPermissionsHook.getGroup(xp.getUser());
-									String newgroup = Configuration.getGrayListConfig().getGroup();
-									BPermissionsHook.setGroup(xp.getUser(), Configuration.getGrayListConfig().getGroup());
-									Bukkit.getPluginManager().callEvent(new PlayerGreyListedEvent(xp.getPlayer(), newgroup, oldGroup, HookEnum.BPERMISSIONS, GreyListCause.COMMAND));
-								} else if(Bukkit.getPluginManager().isPluginEnabled("PermissionsEx")) {
-									String oldGroup = PermissionsExHook.getGroup(xp.getUser());
-									String newgroup = Configuration.getGrayListConfig().getGroup();
-									PermissionsExHook.setGroup(xp.getUser(), Configuration.getGrayListConfig().getGroup());
-									Bukkit.getPluginManager().callEvent(new PlayerGreyListedEvent(xp.getPlayer(), newgroup, oldGroup, HookEnum.PERMISSIONSEX, GreyListCause.COMMAND));
-								} else if(Bukkit.getPluginManager().isPluginEnabled("GroupManager")) {
-									String oldGroup = GroupManagerHook.getGroup(xp.getUser());
-									String newgroup = Configuration.getGrayListConfig().getGroup();
-									GroupManagerHook.setGroup(xp.getUser(), Configuration.getGrayListConfig().getGroup());
-									Bukkit.getPluginManager().callEvent(new PlayerGreyListedEvent(xp.getPlayer(), newgroup, oldGroup, HookEnum.GROUPMANAGER, GreyListCause.COMMAND));
+								if(Hooks.isVaultEnabled()) {
+									String oldGroup = xEssentials.getVault().getGroup(xp.getPlayer());
+									String newGroup = Configuration.getGrayListConfig().getGroup();
+									xEssentials.getVault().setGroup(Bukkit.getWorlds().get(0), xp.getUser(), newGroup);
+									Bukkit.getPluginManager().callEvent(new PlayerGreyListedEvent(xp.getPlayer(), newGroup, oldGroup, GreyListCause.COMMAND));
+								} else {
+									sender.sendMessage(ChatColor.RED + "no vault installed!");
+									return false;
 								}
 								sender.sendMessage(ChatColor.GREEN + "you successfully greylisted " + xp.getUser());
 							} else {
 								xEssentialsOfflinePlayer off = xEssentials.getOfflinePlayer(args[1]);
 								off.setGreyListed(true);
-								if(Bukkit.getPluginManager().isPluginEnabled("bPermissions")) {
-									String oldGroup = BPermissionsHook.getGroup(off.getUser());
-									String newgroup = Configuration.getGrayListConfig().getGroup();
-									BPermissionsHook.setGroup(off.getUser(), Configuration.getGrayListConfig().getGroup());
-									Bukkit.getPluginManager().callEvent(new OfflinePlayerGreyListedEvent(off.getUser(), newgroup, oldGroup, HookEnum.BPERMISSIONS, GreyListCause.COMMAND));
-								} else if(Bukkit.getPluginManager().isPluginEnabled("PermissionsEx")) {
-									String oldGroup = PermissionsExHook.getGroup(off.getUser());
-									String newgroup = Configuration.getGrayListConfig().getGroup();
-									PermissionsExHook.setGroup(off.getUser(), Configuration.getGrayListConfig().getGroup());
-									Bukkit.getPluginManager().callEvent(new OfflinePlayerGreyListedEvent(off.getUser(), newgroup, oldGroup, HookEnum.PERMISSIONSEX, GreyListCause.COMMAND));
-								} else if(Bukkit.getPluginManager().isPluginEnabled("GroupManager")) {
-									String oldGroup = GroupManagerHook.getGroup(off.getUser());
-									String newgroup = Configuration.getGrayListConfig().getGroup();
-									GroupManagerHook.setGroup(off.getUser(), Configuration.getGrayListConfig().getGroup());
-									Bukkit.getPluginManager().callEvent(new OfflinePlayerGreyListedEvent(off.getUser(), newgroup, oldGroup, HookEnum.GROUPMANAGER, GreyListCause.COMMAND));
+								if(Hooks.isVaultEnabled()) {
+									String oldGroup = xEssentials.getVault().getGroup(Bukkit.getWorlds().get(0), off.getUser());
+									String newGroup = Configuration.getGrayListConfig().getGroup();
+									xEssentials.getVault().setGroup(Bukkit.getWorlds().get(0), off.getUser(), newGroup);
+									Bukkit.getPluginManager().callEvent(new OfflinePlayerGreyListedEvent(off.getUser(), newGroup, oldGroup, GreyListCause.COMMAND));
+								} else {
+									sender.sendMessage(ChatColor.RED + "no vault installed!");
+									return false;
 								}
 								sender.sendMessage(ChatColor.GREEN + "you successfully greylisted offline player " + off.getUser());
 							}
@@ -105,29 +88,23 @@ public class CmdGreylist {
 							if(xEssentials.contains(args[1])) {
 								xEssentialsPlayer xp = xEssentials.get(args[1]);
 								xp.setGreyListed(false);
-								if(Bukkit.getPluginManager().isPluginEnabled("bPermissions")) {
-									String DefaultGroup = BPermissionsHook.getDefaultGroup();
-									BPermissionsHook.setGroup(xp.getUser(), DefaultGroup);
-								} else if(Bukkit.getPluginManager().isPluginEnabled("PermissionsEx")) {
-									String DefaultGroup = PermissionsExHook.getDefaultGroup();
-									PermissionsExHook.setGroup(xp.getUser(), DefaultGroup);
-								} else if(Bukkit.getPluginManager().isPluginEnabled("GroupManager")) {
-									String DefaultGroup = GroupManagerHook.getDefaultGroup();
-									GroupManagerHook.setGroup(xp.getUser(), DefaultGroup);
+								if(Hooks.isVaultEnabled()) {
+									String DefaultGroup = xEssentials.getVault().getDefaultGroup();
+									xEssentials.getVault().setGroup(Bukkit.getWorlds().get(0), xp.getUser(), DefaultGroup);
+								} else {
+									sender.sendMessage(ChatColor.RED + "no vault intalled!");
+									return false;
 								}
 								sender.sendMessage(ChatColor.GREEN + "you have successfully removed " + xp.getUser() + " from the greylist!");
 							} else {
 								xEssentialsOfflinePlayer off = xEssentials.getOfflinePlayer(args[1]);
 								off.setGreyListed(false);
-								if(Bukkit.getPluginManager().isPluginEnabled("bPermissions")) {
-									String DefaultGroup = BPermissionsHook.getDefaultGroup();
-									BPermissionsHook.setGroup(off.getUser(), DefaultGroup);
-								} else if(Bukkit.getPluginManager().isPluginEnabled("PermissionsEx")) {
-									String DefaultGroup = PermissionsExHook.getDefaultGroup();
-									PermissionsExHook.setGroup(off.getUser(), DefaultGroup);
-								} else if(Bukkit.getPluginManager().isPluginEnabled("GroupManager")) {
-									String DefaultGroup = GroupManagerHook.getDefaultGroup();
-									GroupManagerHook.setGroup(off.getUser(), DefaultGroup);
+								if(Hooks.isVaultEnabled()) {
+									String DefaultGroup = xEssentials.getVault().getDefaultGroup();
+									xEssentials.getVault().setGroup(Bukkit.getWorlds().get(0), off.getUser(), DefaultGroup);
+								} else {
+									sender.sendMessage(ChatColor.RED + "no vault intalled!");
+									return false;
 								}
 								sender.sendMessage(ChatColor.GREEN + "you have successfully removed " + off.getUser() + " from the greylist!");
 							}

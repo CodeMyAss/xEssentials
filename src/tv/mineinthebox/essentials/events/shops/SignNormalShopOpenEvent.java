@@ -15,7 +15,6 @@ import tv.mineinthebox.essentials.xEssentials;
 import tv.mineinthebox.essentials.enums.LogType;
 import tv.mineinthebox.essentials.enums.PermissionKey;
 import tv.mineinthebox.essentials.hook.Hooks;
-import tv.mineinthebox.essentials.hook.VaultHook;
 import tv.mineinthebox.essentials.instances.xEssentialsPlayer;
 import tv.mineinthebox.essentials.utils.ShopSign;
 
@@ -48,7 +47,7 @@ public class SignNormalShopOpenEvent implements Listener {
 										return;
 									}
 								} else if(Hooks.isVaultEnabled()) {
-									if(!VaultHook.hasEnough(e.getPlayer().getName(), cost)) {
+									if(!xEssentials.getVault().hasEnough(e.getPlayer().getName(), cost)) {
 										e.getPlayer().sendMessage(ChatColor.RED + "you cannot afford this!");
 										e.setCancelled(true);
 										return;
@@ -86,7 +85,7 @@ public class SignNormalShopOpenEvent implements Listener {
 														e.getPlayer().sendMessage(ChatColor.RED + "you don't have enough money to afford this!");
 													}
 												} else if(Hooks.isVaultEnabled()) {
-													if(VaultHook.hasEnough(e.getPlayer().getName(), cost)) {
+													if(xEssentials.getVault().hasEnough(e.getPlayer().getName(), cost)) {
 														ItemStack item = stack.clone();
 														item.setAmount(amount);
 														if(stack.getAmount() == amount) {
@@ -94,7 +93,7 @@ public class SignNormalShopOpenEvent implements Listener {
 														} else {
 															stack.setAmount((stack.getAmount()-amount));	
 														}
-														VaultHook.withdraw(e.getPlayer().getName(), cost);
+														xEssentials.getVault().withdraw(e.getPlayer().getName(), cost);
 														e.getPlayer().getInventory().addItem(item);
 														e.getPlayer().updateInventory();
 														e.getPlayer().sendMessage(ChatColor.GREEN + "you have successfully bought " + ChatColor.GRAY + item.getType().name() + "(" + sign.getLine(1) + "x)" + ChatColor.GREEN + " from the " + sign.getLine(0) + "!");
@@ -168,7 +167,7 @@ public class SignNormalShopOpenEvent implements Listener {
 													}
 												} else {
 													if(Hooks.isVaultEnabled()) {
-														VaultHook.desposit(e.getPlayer(), money);
+														xEssentials.getVault().desposit(e.getPlayer(), money);
 														e.getPlayer().sendMessage(ChatColor.GREEN + "you have successfully sold your item to the shop!");
 														stack.setAmount(amount);
 														chest.getInventory().addItem(stack);

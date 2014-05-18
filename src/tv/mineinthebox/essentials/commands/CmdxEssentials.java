@@ -24,7 +24,7 @@ public class CmdxEssentials {
 					sender.sendMessage(ChatColor.RED + "Admin: " + ChatColor.GRAY + "/xEssentials reload " + ChatColor.WHITE + ": reloads the plugin");
 					sender.sendMessage(ChatColor.RED + "Admin: " + ChatColor.GRAY + "/xEssentials help " + ChatColor.WHITE + ": shows help");
 					sender.sendMessage(ChatColor.RED + "Admin: " + ChatColor.GRAY + "/xEssentials tps " + ChatColor.WHITE + ": shows tps of the server");
-					sender.sendMessage(ChatColor.RED + "Admin: " + ChatColor.GRAY + "/xEssentials convert <type> " + ChatColor.WHITE + ": current only supports lwc as type");
+					sender.sendMessage(ChatColor.RED + "Admin: " + ChatColor.GRAY + "/xEssentials convert <type> " + ChatColor.WHITE + ": current only supports lwc and iconomy as type");
 				} else if(args.length == 1) {
 					if(args[0].equalsIgnoreCase("help")) {
 						sender.sendMessage(ChatColor.GOLD + ".oO___[xEssentials version " + xEssentials.getPlugin().getDescription().getVersion() + "___Oo.");
@@ -32,7 +32,7 @@ public class CmdxEssentials {
 						sender.sendMessage(ChatColor.RED + "Admin: " + ChatColor.GRAY + "/xEssentials reload " + ChatColor.WHITE + ": reloads the plugin");
 						sender.sendMessage(ChatColor.RED + "Admin: " + ChatColor.GRAY + "/xEssentials help " + ChatColor.WHITE + ": shows help");
 						sender.sendMessage(ChatColor.RED + "Admin: " + ChatColor.GRAY + "/xEssentials tps " + ChatColor.WHITE + ": shows tps of the server");
-						sender.sendMessage(ChatColor.RED + "Admin: " + ChatColor.GRAY + "/xEssentials convert <type> " + ChatColor.WHITE + ": current only supports lwc as type");
+						sender.sendMessage(ChatColor.RED + "Admin: " + ChatColor.GRAY + "/xEssentials convert <type> " + ChatColor.WHITE + ": current only supports lwc and iconomy as type");
 					} else if(args[0].equalsIgnoreCase("reload")) {
 						sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&2[&3xEssentials&2]&f " + ChatColor.GRAY + "reloading xEssentials version " + xEssentials.getPlugin().getDescription().getVersion()));
 						Configuration.reloadConfiguration();

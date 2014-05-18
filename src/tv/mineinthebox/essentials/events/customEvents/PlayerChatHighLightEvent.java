@@ -13,10 +13,7 @@ import org.bukkit.event.player.PlayerEvent;
 
 import tv.mineinthebox.essentials.Configuration;
 import tv.mineinthebox.essentials.xEssentials;
-import tv.mineinthebox.essentials.hook.BPermissionsHook;
-import tv.mineinthebox.essentials.hook.GroupManagerHook;
 import tv.mineinthebox.essentials.hook.Hooks;
-import tv.mineinthebox.essentials.hook.PermissionsExHook;
 import tv.mineinthebox.essentials.instances.xEssentialsOfflinePlayer;
 
 public class PlayerChatHighLightEvent extends PlayerEvent implements Cancellable {
@@ -98,24 +95,10 @@ public class PlayerChatHighLightEvent extends PlayerEvent implements Cancellable
 	 * @return
 	 */
 	public String getSuffix() {
-		if(Hooks.isbPermissionsEnabled()) {
-			return ChatColor.translateAlternateColorCodes('&', BPermissionsHook.getSuffix(getPlayer()));
-		} else if(Hooks.isGroupManagerEnabled()) {
-			return ChatColor.translateAlternateColorCodes('&', GroupManagerHook.getSuffix(getPlayer()));
-		} else if(Hooks.isPexEnabled()) {
-			return ChatColor.translateAlternateColorCodes('&', PermissionsExHook.getSuffx(getPlayer()));
-		}
-		return ""+ChatColor.WHITE;	
-	}
-	
-	@SuppressWarnings("unused")
-	private String getFirstColor(String s) {
-		char code = s.toCharArray()[0];
-		char color = s.toCharArray()[1];
-		if(Character.isDigit(color) && code == ChatColor.COLOR_CHAR) {
-			return Character.toString(code)+Character.toString(color);
+		if(Hooks.isVaultEnabled()) {
+			return ChatColor.translateAlternateColorCodes('&', xEssentials.getVault().getSuffix(getPlayer().getName(), xEssentials.getVault().getGroup(getPlayer())));
 		} else {
-			return ChatColor.RESET + "";
+			return ChatColor.WHITE+"";
 		}
 	}
 

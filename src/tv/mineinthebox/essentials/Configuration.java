@@ -45,7 +45,6 @@ import tv.mineinthebox.essentials.enums.MinigameType;
 import tv.mineinthebox.essentials.events.CustomEventHandler;
 import tv.mineinthebox.essentials.events.Handler;
 import tv.mineinthebox.essentials.events.customEvents.CallEssentialsBroadcastEvent;
-import tv.mineinthebox.essentials.greylist.GreyListServer;
 import tv.mineinthebox.essentials.instances.Kit;
 import tv.mineinthebox.essentials.interfaces.Minigame;
 import tv.mineinthebox.essentials.utils.ProtectionDB;
@@ -1197,22 +1196,21 @@ public class Configuration {
 			configure.get(aEnum).clear();
 		}
 		configure.clear();
-		if(xEssentials.server != null) {
-			if(xEssentials.server.isRunning()) {
-				xEssentials.server.disable();
+		if(xEssentials.getGreyListServer() != null) {
+			if(xEssentials.getGreyListServer().isRunning()) {
+				xEssentials.getGreyListServer().disable();
 			}
 		}
 		createConfigs();
 		HandleCommandManager();
 		if(Configuration.getGrayListConfig().isEnabled()) {
-			xEssentials.server = new GreyListServer(Configuration.getGrayListConfig().getPort());
-			xEssentials.server.createServer();
+			xEssentials.getGreyListServer().createServer();
 		}
 		xEssentials.reloadPlayerBase(); 
 		handler.start();
 		customhandler.startCustomEvents();
 		if(Configuration.getProtectionConfig().isProtectionEnabled()) {
-			xEssentials.protectiondb = new ProtectionDB();	
+			xEssentials.setProtectionDatabase(new ProtectionDB());	
 		}
 
 		return true;

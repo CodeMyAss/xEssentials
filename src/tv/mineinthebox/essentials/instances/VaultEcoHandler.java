@@ -4,6 +4,7 @@ import java.text.DecimalFormat;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 
 import tv.mineinthebox.essentials.Configuration;
@@ -14,7 +15,7 @@ import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import net.milkbowl.vault.economy.EconomyResponse.ResponseType;
 
-public class VaultEcoHandler implements Economy {
+public class VaultEcoHandler implements Economy, Listener {
 
 	 private final String name = "xEssentials-Eco";
 	 private Plugin pl;

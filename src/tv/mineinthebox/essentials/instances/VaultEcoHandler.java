@@ -3,6 +3,7 @@ package tv.mineinthebox.essentials.instances;
 import java.text.DecimalFormat;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
 import tv.mineinthebox.essentials.Configuration;
@@ -43,7 +44,8 @@ public class VaultEcoHandler implements Economy {
 
 	    @Override
 	    public String format(double amount) {
-	       DecimalFormat format = new DecimalFormat(("#,##0.00"));
+	    	xEssentials.getPlugin().log("line 46 has been activated, it may means that the formatting is broken!", LogType.INFO);
+	    	DecimalFormat format = new DecimalFormat(("#,##0.00"));
 	       String formatted = format.format(amount);
 	       if(formatted.endsWith(".")) {
 	    	   formatted = formatted.substring(0, formatted.length() - 1);
@@ -243,13 +245,17 @@ public class VaultEcoHandler implements Economy {
 	    }
 
 
-	    @Override
+	    @SuppressWarnings("deprecation")
+		@Override
 	    public boolean createPlayerAccount(String playerName) {
-	        if (hasAccount(playerName)) {
+	        xEssentials.getPlugin().log("test: 248", LogType.INFO);
+	    	if (hasAccount(playerName)) {
 	            return false;
 	        }
 	        //creates a fake player.
-	        return (new xEssentialsPlayer(playerName) instanceof xEssentialsPlayer);
+	    	xEssentialsOfflinePlayer off = new xEssentialsOfflinePlayer(Bukkit.getOfflinePlayer(playerName));
+	    	
+	        return (off instanceof xEssentialsOfflinePlayer);
 	    }
 
 
@@ -267,7 +273,7 @@ public class VaultEcoHandler implements Economy {
 
 	    @Override
 	    public double getBalance(String playerName, String world) {
-	        return getBalance(playerName);
+	    	return getBalance(playerName);
 	    }
 
 
@@ -291,6 +297,7 @@ public class VaultEcoHandler implements Economy {
 
 	    @Override
 	    public boolean createPlayerAccount(String playerName, String worldName) {
-	        return createPlayerAccount(playerName);
+	        xEssentials.getPlugin().log("test: 295", LogType.INFO);
+	    	return createPlayerAccount(playerName);
 	    }
 }

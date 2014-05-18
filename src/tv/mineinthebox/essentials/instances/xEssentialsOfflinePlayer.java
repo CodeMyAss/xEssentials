@@ -12,6 +12,7 @@ import java.util.UUID;
 import org.bukkit.BanList.Type;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -20,6 +21,7 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import tv.mineinthebox.essentials.Configuration;
 import tv.mineinthebox.essentials.xEssentials;
 import tv.mineinthebox.essentials.enums.PlayerTaskEnum;
 
@@ -47,6 +49,32 @@ public class xEssentialsOfflinePlayer {
 			}
 		} else {
 			throw new NullPointerException();
+		}
+	}
+	
+	public xEssentialsOfflinePlayer(OfflinePlayer offliner) {
+		this.f = new File(xEssentials.getPlugin().getDataFolder() + File.separator + "players" + File.separator + offliner.getName() + ".yml");
+		if(!this.f.exists()) {
+			this.con = YamlConfiguration.loadConfiguration(this.f);
+			this.con.set("isDefault", true);
+			this.con.set("ip", "fake");
+			this.con.set("user", offliner.getName());
+			this.con.set("fly", false);
+			this.con.set("torch", false);
+			this.con.set("firefly", false);
+			this.con.set("uuid", offliner.getUniqueId().toString());
+			if(Configuration.getEconomyConfig().isEconomyEnabled()){
+				this.con.set("money", Configuration.getEconomyConfig().getStartersMoney());
+			}
+			try {
+				this.con.save(this.f);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			update();
+		} else {
+			this.con = YamlConfiguration.loadConfiguration(this.f);
 		}
 	}
 
